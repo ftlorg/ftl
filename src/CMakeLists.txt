@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.17)
 
 add_library(ftl ftl.cpp)
 
+target_compile_features(ftl PUBLIC cxx_std_17)
+
 target_include_directories(ftl 
   PUBLIC
   $<BUILD_INTERFACE:${ftl_BINARY_DIR}/include/>
@@ -9,7 +11,10 @@ target_include_directories(ftl
   $<INSTALL_INTERFACE:include/>
 )
 
-target_compile_features(ftl PUBLIC cxx_std_17)
+target_link_libraries(ftl
+  PRIVATE
+    $<BUILD_INTERFACE:project_options>
+    $<BUILD_INTERFACE:project_warnings>)
 
 install(TARGETS ftl EXPORT ftlTargets
   LIBRARY DESTINATION lib
@@ -23,9 +28,11 @@ install(EXPORT ftlTargets
   DESTINATION lib/cmake/ftl)
 
 include(CMakePackageConfigHelpers)
-write_basic_package_version_file("ftlConfigVersion.cmake"
+write_basic_package_version_file(
+  ftlConfigVersion.cmake
   VERSION ${ftl_VERSION}
   COMPATIBILITY SameMajorVersion)
 
-install(FILES "ftlConfig.cmake" "ftlConfigVersion.cmake"
+install(
+  FILES "ftlConfig.cmake" "ftlConfigVersion.cmake"
   DESTINATION lib/cmake/ftl)
