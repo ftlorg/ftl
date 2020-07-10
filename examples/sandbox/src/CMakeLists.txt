@@ -11,4 +11,4 @@ target_include_directories(sandbox
   ${CMAKE_CURRENT_SOURCE_DIR}/../include/
 )
 
-target_link_libraries(sandbox PRIVATE ftl)
+target_link_libraries(sandbox PRIVATE project_options project_warnings ftl)

@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.17)
 
 add_library(ftl ftl.cpp)
 
-target_compile_features(ftl PUBLIC cxx_std_17)
-
 target_include_directories(ftl 
   PUBLIC
   $<BUILD_INTERFACE:${ftl_BINARY_DIR}/include/>
