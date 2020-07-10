@@ -1,5 +1,4 @@
 #include <ftl/ftl.hpp>
-#include <iostream>
 
 namespace ftl {
 

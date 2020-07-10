@@ -5,11 +5,6 @@ function(enable_doxygen)
     set(DOXYGEN_CALL_GRAPH YES)
     set(DOXYGEN_EXTRACT_ALL YES)
     find_package(Doxygen REQUIRED dot)
-    doxygen_add_docs(docs 
-      ${mylib_SOURCE_DIR}/include/mylib/core.hpp
-      ${mylib_SOURCE_DIR}/docs/mainpage.md
-      WORKING_DIRECTORY 
-      ${mylib_SOURCE_DIR}/include
-    )
+    add_subdirectory(docs)
   endif()
 endfunction()
