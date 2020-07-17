@@ -14,6 +14,7 @@ public:
   using difference_type = std::ptrdiff_t;
   using pointer = Item*;
   using reference = Item&;
+  using size_type = std::size_t;
 
   /**
    * @brief Advances the iterator and returns the next value.
@@ -41,7 +42,7 @@ public:
   /**
    * @brief Retruns number of the items in collection.
   */
-  std::size_t count() const;
+  size_type count() const;
 
 private:
   Item *m_item;
