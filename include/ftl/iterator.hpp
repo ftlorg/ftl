@@ -2,7 +2,6 @@
 
 #include <optional>
 #include <tuple>
-#include <iterator>
 
 namespace ftl {
 
