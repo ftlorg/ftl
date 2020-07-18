@@ -2,6 +2,8 @@
 
 #include <optional>
 
+#include <ftl/iterator.hpp>
+
 namespace ftl {
 
 /// \brief Factorial

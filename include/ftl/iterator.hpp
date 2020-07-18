@@ -1,8 +1,8 @@
 #pragma once
+
 #include <optional>
 #include <tuple>
-
-#include <ftl/iterator_traits.hpp>
+#include <iterator>
 
 namespace ftl {
 
@@ -25,12 +25,12 @@ template<typename Item>
 class take_iterator;
 
 template<typename Item>
-class iterator : public iterator_traits<iterator>
+class iterator_trait
 {
 public:
-  using iterator_category = Iterator::iterator_category;
-  using value_type = Item;
-  using difference_type = std::ptrdiff_t;
+  using iterator_category = /* ... */ void;
+  using value_type = std::remove_cv_t<Item>;
+  using difference_type = /* ... */ void;
   using pointer = Item *;
   using reference = Item &;
   using size_type = std::size_t;
