@@ -3,6 +3,7 @@
 #include <optional>
 
 #include <ftl/iterator.hpp>
+#include <ftl/array.hpp>
 
 namespace ftl {
 
