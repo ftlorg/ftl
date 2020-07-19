@@ -161,7 +161,7 @@ template<typename T, std::size_t N>
 }
 
 template<typename T, std::size_t N>
-[[nodiscard]] constexpr static ftl::array<T, N> to_array(const std::array<T, N> &arr)
+[[nodiscard]] constexpr ftl::array<T, N> to_array(const std::array<T, N> &arr)
 {
   array<T, N> result;
   std::copy(arr.data(), arr.data() + arr.size(), result.data());
