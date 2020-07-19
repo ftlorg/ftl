@@ -107,13 +107,13 @@ public:
 
   [[nodiscard]] constexpr bool empty() const noexcept { return false; }
 
-  [[nodiscard]] void fill(const T &value)
+  constexpr void fill(const T &value)
   {
     // TODO: Use begin() instead of data once we sort out iterators.
     std::fill_n(data_, N, value);
   }
 
-  [[nodiscard]] void swap(array &other)
+  constexpr void swap(array &other)
   {
     // TODO: Use begin() and end() instead of raw once we sort out iterators.
     std::swap_ranges(data(), data() + size(), other.data());
