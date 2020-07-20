@@ -19,9 +19,9 @@ public:
   using value_type = T;
   using size_type = std::size_t;
   using difference_type = std::ptrdiff_t;
-  using reference = value_type &;
-  using const_reference = const value_type &;
-  using pointer = value_type *;
+  using reference = typename value_type &;
+  using const_reference = typename const value_type &;
+  using pointer = typename value_type *;
   using const_pointer = const value_type *;
   using iterator = typename ftl::array_iterator<T>;
   using const_iterator = typename ftl::array_const_iterator<T>;
@@ -161,8 +161,10 @@ template<typename T, std::size_t N>
   return result;
 }
 
+}// namespace ftl
+
 template<typename T, std::size_t N>
-struct into_iterator_trait<array<T, N>>
+struct ftl::into_iterator_trait<ftl::array<T, N>>
 {
   using iterator = typename array<T, N>::iterator;
   using const_iterator = typename array<T, N>::const_iterator;
@@ -177,5 +179,3 @@ struct into_iterator_trait<array<T, N>>
     return const_iterator{ arr.data(), arr.data() + arr.size() };
   }
 };
-
-}// namespace ftl

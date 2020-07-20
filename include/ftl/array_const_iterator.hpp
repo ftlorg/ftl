@@ -15,7 +15,7 @@ public:
   using reference = const value_type &;
   using size_type = std::size_t;
 
-  array_const_iterator(pointer const begin, pointer const end) : begin_{ begin }, end_{ end } {}
+  array_const_iterator(pointer const begin, pointer const end) : position_{ 0 }, begin_{ begin }, end_{ end } {}
 
   [[nodiscard]] std::optional<Item> next() const override
   {

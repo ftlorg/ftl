@@ -15,7 +15,7 @@ public:
   using reference = value_type &;
   using size_type = std::size_t;
 
-  array_reverse_iterator(pointer const rbegin, pointer const rend) : rbegin_{ rbegin }, rend_{ rend }, position_{ std::distance(rbegin, rend) } {}
+  array_reverse_iterator(pointer const rbegin, pointer const rend) : position_{ std::distance(rbegin, rend) }, rbegin_{ rbegin }, rend_{ rend } {}
 
   [[nodiscard]] virtual std::optional<value_type> next() override
   {
