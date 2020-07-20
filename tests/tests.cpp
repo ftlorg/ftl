@@ -173,7 +173,7 @@ TEST_CASE("next const", "[array_iterator]")
   REQUIRE(arr.data() + 1 == iter.get());
 }
 
-TEST_CASE("collect", "[array_iterator]")
+TEST_CASE("collect", "[iterator]")
 {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
