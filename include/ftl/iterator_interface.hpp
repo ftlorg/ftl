@@ -368,7 +368,7 @@ class map_iterator : public iterator_interface<Item>
 public:
   using value_type = std::remove_cv_t<Item>;
 
-  [[nodiscard]] map_iterator(Callable callable) : iterator_interface<Item>{ nullptr }, callable_{ std::move(callable) } {}
+  map_iterator(Callable callable) : iterator_interface<Item>{ nullptr }, callable_{ std::move(callable) } {}
 
   [[nodiscard]] virtual std::optional<value_type> next()
   {
