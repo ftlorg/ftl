@@ -23,10 +23,10 @@ public:
   using const_reference = const value_type &;
   using pointer = value_type *;
   using const_pointer = const value_type *;
-  using iterator = typename ftl::array_iterator<T>;
-  using const_iterator = typename const ftl::array_const_iterator<T>;
-  using reverse_iterator = typename ftl::array_reverse_iterator<T>;
-  using const_reverse_iterator = typename const ftl::array_reverse_const_iterator<T>;
+  using iterator = ftl::array_iterator<T>;
+  using const_iterator = ftl::array_const_iterator<T>;
+  using reverse_iterator = ftl::array_reverse_iterator<T>;
+  using const_reverse_iterator = ftl::array_reverse_const_iterator<T>;
 
   [[nodiscard]] constexpr reference operator[](size_type pos) noexcept
   {
