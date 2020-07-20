@@ -17,7 +17,7 @@ public:
 
   array_reverse_const_iterator(pointer const rbegin, pointer const rend) : position_{ std::distance(rbegin, rend) }, rbegin_{ rbegin }, rend_{ rend } {}
 
-  [[nodiscard]] virtual std::optional<reference> next() const override
+  [[nodiscard]] virtual std::optional<value_type> next() const override
   {
     --position_;
 

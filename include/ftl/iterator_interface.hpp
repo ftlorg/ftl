@@ -90,7 +90,7 @@ public:
    * @param predicate 
   */
   template<typename Predicate>
-  [[nodiscard]] std::optional<reference> find(Predicate &&predicate) const;
+  [[nodiscard]] std::optional<value_type> find(Predicate &&predicate) const;
 
   /**
    * @brief Creates an iterator that flattens nested structure.
@@ -133,12 +133,12 @@ public:
   /**
    * @brief Returns the maximum element of an iterator.
   */
-  [[nodiscard]] std::optional<reference> max() const;
+  [[nodiscard]] std::optional<value_type> max() const;
 
   /**
    * @brief Returns the minimum element of an iterator.
   */
-  [[nodiscard]] std::optional<reference> min() const;
+  [[nodiscard]] std::optional<value_type> min() const;
 
   /**
    * @brief Consumes an iterator, creating two collections from it.
@@ -178,12 +178,11 @@ class iterator_interface : public iterator_interface_base<Item>
 {
 public:
   using value_type = std::remove_cv_t<Item>;
-  using reference = value_type &;
 
   /**
    * @brief Advances the iterator and returns the next value.
   */
-  [[nodiscard]] virtual std::optional<reference> next() = 0;
+  [[nodiscard]] virtual std::optional<value_type> next() = 0;
 };
 
 template<typename Item>
@@ -191,12 +190,11 @@ class const_iterator_interface : public iterator_interface_base<Item>
 {
 public:
   using value_type = std::remove_cv_t<Item>;
-  using reference = const value_type &;
 
   /**
    * @brief Advances the iterator and returns the next value.
   */
-  [[nodiscard]] virtual std::optional<reference> next() const = 0;
+  [[nodiscard]] virtual std::optional<value_type> next() const = 0;
 };
 
 }// namespace ftl

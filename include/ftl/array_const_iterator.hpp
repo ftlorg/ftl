@@ -17,7 +17,7 @@ public:
 
   array_const_iterator(pointer const begin, pointer const end) : position_{ 0 }, begin_{ begin }, end_{ end } {}
 
-  [[nodiscard]] std::optional<reference> next() const override
+  [[nodiscard]] std::optional<value_type> next() const override
   {
     ++position_;
 
