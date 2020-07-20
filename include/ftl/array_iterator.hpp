@@ -5,7 +5,7 @@
 namespace ftl {
 
 template<typename Item>
-class array_iterator final :  public iterator_interface<Item>
+class array_iterator final : public iterator_interface<Item>
 {
 public:
   using iterator_category = /* */ void;
@@ -27,7 +27,10 @@ public:
     return std::nullopt;
   }
 
-  reference operator*() { return *(begin_ + position_); }
+  std::optional<value_type> operator*() override
+  {
+    return std::optional{ *(begin_ + position_) };
+  }
 
   pointer get() const { return begin_ + position_; }
 

@@ -27,9 +27,12 @@ public:
     return std::nullopt;
   }
 
-    reference operator*() const { return *(begin_ + position_); }
+  std::optional<value_type> operator*() const override
+  {
+    return std::optional{ *(begin_ + position_) };
+  }
 
-    pointer get() { return begin_ + position_; }
+  pointer get() { return begin_ + position_; }
 
 private:
   mutable size_type position_;
