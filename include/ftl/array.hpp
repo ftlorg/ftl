@@ -6,6 +6,7 @@
 #include <ftl/array_const_iterator.hpp>
 #include <ftl/array_reverse_iterator.hpp>
 #include <ftl/array_reverse_const_iterator.hpp>
+#include <ftl/from_iterator_trait.hpp>
 #include <ftl/into_iterator_trait.hpp>
 
 namespace ftl {
@@ -163,6 +164,24 @@ template<typename T, std::size_t N>
 
 }// namespace ftl
 
+template<typename Item>
+struct ftl::from_iterator_trait<ftl::array_iterator<Item>>
+{
+  [[nodiscard]] constexpr static ftl::array<int, 5> from_iter(ftl::array_iterator<Item> &iter)
+  {
+    ftl::array<int, 5> result{};
+
+    auto begin = iter.begin_;
+    auto end = iter.end_;
+
+    for (; begin != end; begin++) {
+      result[5 - std::distance(begin, end)] = *begin;
+    }
+
+    return result;
+  }
+};
+
 template<typename T, std::size_t N>
 struct ftl::into_iterator_trait<ftl::array<T, N>>
 {
@@ -179,3 +198,4 @@ struct ftl::into_iterator_trait<ftl::array<T, N>>
     return const_iterator{ arr.data(), arr.data() + arr.size() };
   }
 };
+

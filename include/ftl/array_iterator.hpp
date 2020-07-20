@@ -30,7 +30,8 @@ public:
     return std::nullopt;
   }
 
-private:
+  // TODO: Make this private and implement begin(), and end() methods as well as comparators.
+public:
   mutable size_type position_;
   pointer const begin_;
   pointer const end_;
