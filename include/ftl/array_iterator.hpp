@@ -30,8 +30,15 @@ public:
     return std::nullopt;
   }
 
-  // TODO: Make this private and implement begin(), and end() methods as well as comparators.
-public:
+  [[nodiscard]] pointer begin() noexcept { return begin_; }
+
+  [[nodiscard]] pointer const cbegin() const noexcept { return begin_; }
+
+  [[nodiscard]] pointer end() noexcept { return end_; }
+
+  [[nodiscard]] pointer const cend() const noexcept { return end_; }
+
+private:
   mutable size_type position_;
   pointer const begin_;
   pointer const end_;

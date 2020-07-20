@@ -171,11 +171,10 @@ struct ftl::from_iterator_trait<ftl::array_iterator<Item>>
   {
     ftl::array<int, 5> result{};
 
-    auto begin = iter.begin_;
-    auto end = iter.end_;
-
-    for (; begin != end; begin++) {
-      result[5 - std::distance(begin, end)] = *begin;
+    std::size_t i = 0;
+    for (auto &&item : iter) {
+      result[i] = item;
+      ++i;
     }
 
     return result;
@@ -198,4 +197,3 @@ struct ftl::into_iterator_trait<ftl::array<T, N>>
     return const_iterator{ arr.data(), arr.data() + arr.size() };
   }
 };
-
