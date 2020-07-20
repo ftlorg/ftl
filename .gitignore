@@ -411,6 +411,7 @@ nbdist/
 
 # CMake
 cmake-build-*/
+CMakeSettings.json
 
 # CLion
 .idea/

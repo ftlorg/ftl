@@ -2,6 +2,8 @@
 
 #include <optional>
 
+#include <ftl/iterator.hpp>
+
 namespace ftl {
 
 /// \brief Factorial
@@ -20,5 +22,5 @@ constexpr std::optional<int> get_optional() {
 
 int fun();
 
-}// namespace mylib
+}// namespace ftl
 

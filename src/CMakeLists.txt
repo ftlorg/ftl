@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.17)
 
-add_library(ftl ftl.cpp)
+add_library(ftl 
+    ftl.cpp
+    ${ftl_SOURCE_DIR}/include/ftl/ftl.hpp
+    ${ftl_SOURCE_DIR}/include/ftl/iterator.hpp
+    )
 
 target_include_directories(ftl 
   PUBLIC
