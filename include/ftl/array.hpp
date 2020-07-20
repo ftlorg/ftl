@@ -2,7 +2,10 @@
 
 #include <algorithm>
 
-#include <ftl/iterator_interface.hpp>
+#include <ftl/array_iterator.hpp>
+#include <ftl/array_const_iterator.hpp>
+#include <ftl/array_reverse_iterator.hpp>
+#include <ftl/array_reverse_const_iterator.hpp>
 #include <ftl/into_iterator_trait.hpp>
 
 namespace ftl {
@@ -22,8 +25,8 @@ public:
   using const_pointer = const value_type *;
   using iterator = typename ftl::array_iterator<T>;
   using const_iterator = typename const ftl::array_const_iterator<T>;
-  using reverse_iterator = typename ftl::reverse_array_iterator<T>;
-  using const_reverse_iterator = typename const ftl::reverse_array_const_iterator<T>;
+  using reverse_iterator = typename ftl::array_reverse_iterator<T>;
+  using const_reverse_iterator = typename const ftl::array_reverse_const_iterator<T>;
 
   [[nodiscard]] constexpr reference operator[](size_type pos) noexcept
   {
