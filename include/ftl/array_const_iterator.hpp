@@ -15,29 +15,25 @@ public:
   using reference = const value_type &;
   using size_type = std::size_t;
 
-  array_const_iterator(pointer const begin, pointer const end) : position_{ 0 }, begin_{ begin }, end_{ end } {}
+  array_const_iterator(pointer const begin, pointer const end) : const_iterator_interface<Item>{ begin }, position_{ 0 }, begin_{ begin }, end_{ end } {}
 
   [[nodiscard]] std::optional<value_type> next() const override
   {
     ++position_;
 
-    if (begin_ + position_ != end_)
+    if (begin_ + position_ != end_) {
+      const_iterator_interface<Item>::item_ = begin_ + position_;
       return { begin_[position_] };
+    }
 
+    const_iterator_interface<Item>::item_ = nullptr;
     return std::nullopt;
   }
 
-  std::optional<value_type> operator*() const override
-  {
-    return std::optional{ *(begin_ + position_) };
-  }
-
-  pointer get() { return begin_ + position_; }
-
 private:
   mutable size_type position_;
-  const value_type *const begin_;
-  const value_type *const end_;
+  pointer const begin_;
+  pointer const end_;
 };
 
 }// namespace ftl

@@ -3,34 +3,38 @@
 #include <tuple>
 #include <array>
 #include <optional>
+#include <ftl/from_iterator_trait.hpp>
 
 namespace ftl {
+
+template<typename Item>
+class iterator_interface;
 
 template<typename Item, typename Callable>
 class map_iterator;
 
 template<typename Item>
-class filter_iterator
+class filter_iterator : public iterator_interface<Item>
 {
 };
 
 template<typename Item>
-class flatten_iterator
+class flatten_iterator : public iterator_interface<Item>
 {
 };
 
 template<typename Item>
-class enumerate_iterator
+class enumerate_iterator : public iterator_interface<Item>
 {
 };
 
 template<typename Item>
-class inspect_iterator
+class inspect_iterator : public iterator_interface<Item>
 {
 };
 
 template<typename Item>
-class take_iterator
+class take_iterator : public iterator_interface<Item>
 {
 };
 
@@ -42,6 +46,8 @@ public:
   using value_type = std::remove_cv_t<Item>;
   using pointer = value_type *;
   using reference = value_type &;
+
+  iterator_interface(pointer const item) : item_{ item } {}
 
   virtual ~iterator_interface() = default;
 
@@ -63,16 +69,8 @@ public:
   template<typename Collection>
   [[nodiscard]] Collection collect()
   {
-    Collection result{};
-    
-    auto item = this->operator*();
-    std::size_t i = 0;
-    while (item) {
-      result[i++] = *item;
-      item = next();
-    }
-
-    return result;
+    // return from_iterator_trait</*Real type*/>::from_iter(*this);
+    return {};
   }
 
   /**
@@ -139,7 +137,8 @@ public:
   template<typename Callable>
   [[nodiscard]] map_iterator<Item, Callable> map(Callable &&callable) const
   {
-    return map_iterator<Item, Callable>{ std::forward<Callable>(callable) };
+    //return into_iter_trait</*Real type*/>::into_iter(*this);
+    return { callable };
   }
 
   /**
@@ -189,7 +188,20 @@ public:
   */
   [[nodiscard]] virtual std::optional<value_type> next() = 0;
 
-  [[nodiscard]] virtual std::optional<value_type> operator*() = 0;
+  /**
+   * @brief Returns currently pointed-to value.
+  */
+
+  [[nodiscard]] virtual reference operator*() { return *item_; }
+
+  /**
+   * @brief Returns pointer to current value.
+  */
+
+  [[nodiscard]] pointer get() { return item_; }
+
+protected:
+  pointer item_;
 };
 
 template<typename Item>
@@ -198,8 +210,10 @@ class const_iterator_interface
 public:
   using size_type = std::size_t;
   using value_type = std::remove_cv_t<Item>;
-  using pointer = value_type *;
-  using reference = value_type &;
+  using pointer = const value_type *;
+  using reference = const value_type &;
+
+  const_iterator_interface(pointer const item) : item_{ item } {}
 
   virtual ~const_iterator_interface() = default;
 
@@ -332,7 +346,20 @@ public:
   */
   [[nodiscard]] virtual std::optional<value_type> next() const = 0;
 
-  [[nodiscard]] virtual std::optional<value_type> operator*() const = 0;
+  /**
+   * @brief Returns currently pointed-to value.
+  */
+
+  [[nodiscard]] virtual reference operator*() const { return *item_; }
+
+  /**
+   * @brief Returns pointer to current value.
+  */
+
+  [[nodiscard]] pointer get() const { return item_; }
+
+protected:
+  mutable pointer item_;
 };
 
 template<typename Item, typename Callable>
@@ -341,19 +368,13 @@ class map_iterator : public iterator_interface<Item>
 public:
   using value_type = std::remove_cv_t<Item>;
 
-  [[nodiscard]] map_iterator(Callable callable) : callable_{ std::move(callable) } {}
+  [[nodiscard]] map_iterator(Callable callable) : iterator_interface<Item>{ nullptr }, callable_{ std::move(callable) } {}
 
   [[nodiscard]] virtual std::optional<value_type> next()
   {
     // return iterator_interface<Item>::next();
     return std::nullopt;
   };
-
-  [[nodiscard]] std::optional<value_type> operator*() override
-  {
-    // return iterator_interface<Item>::operator*();
-    return std::optional{ value_type{} };    
-  }
 
 private:
   Callable callable_;
