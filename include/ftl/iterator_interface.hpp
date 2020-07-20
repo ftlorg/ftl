@@ -43,6 +43,8 @@ class iterator_interface_base
 public:
   using size_type = std::size_t;
 
+  virtual ~iterator_interface_base() = default;
+
   /**
    * @brief Checks if all of the items matche a predicate.
   */

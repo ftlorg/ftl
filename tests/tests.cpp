@@ -141,7 +141,7 @@ TEST_CASE("iter", "[array]")
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
-  auto iter = arr.iter();
+  [[maybe_unused]] auto iter = arr.iter();
 }
 
 TEST_CASE("iter const", "[array]")
@@ -149,5 +149,5 @@ TEST_CASE("iter const", "[array]")
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
-  auto iter = arr.iter();
+  [[maybe_unused]] auto iter = arr.iter();
 }
