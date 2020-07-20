@@ -1,7 +1,7 @@
 #pragma once
 
 #include <functional>
-#include <ftl/iterator_interface.hpp>
+#include <ftl/iterator.hpp>
 
 namespace ftl {
 

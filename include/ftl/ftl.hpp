@@ -4,7 +4,7 @@
 
 #include <ftl/array.hpp>
 #include <ftl/into_iterator_trait.hpp>
-#include <ftl/iterator_interface.hpp>
+#include <ftl/iterator.hpp>
 
 namespace ftl {
 
