@@ -2,13 +2,16 @@
 
 #include <algorithm>
 
-#include <ftl/iterator.hpp>
+#include <ftl/iterator_interface.hpp>
+#include <ftl/into_iterator_trait.hpp>
 
 namespace ftl {
 
 template<typename T, std::size_t N>
 class array
 {
+  static_assert(N > 0, "N must be larger than 0!");
+
 public:
   using value_type = T;
   using size_type = std::size_t;
@@ -17,11 +20,10 @@ public:
   using const_reference = const value_type &;
   using pointer = value_type *;
   using const_pointer = const value_type *;
-  using iterator = ftl::iterator_trait<T>;
-  using const_iterator = const ftl::iterator_trait<T>;
-  using reverse_iterator = ftl::reverse_iterator_trait<T>;
-  using const_reverse_iterator = const ftl::reverse_iterator_trait<T>;
-
+  using iterator = ftl::array_iterator<T>;
+  using const_iterator = const ftl::array_iterator<T>;
+  using reverse_iterator = ftl::reverse_array_iterator<T>;
+  using const_reverse_iterator = const ftl::reverse_array_iterator<T>;
 
   [[nodiscard]] constexpr reference operator[](size_type pos) noexcept
   {
@@ -41,37 +43,21 @@ public:
 
   [[nodiscard]] constexpr reference front() noexcept
   {
-    if constexpr (N < 1) {
-      std::terminate();
-    }
-
     return data_[0];
   }
 
   [[nodiscard]] constexpr const_reference front() const noexcept
   {
-    if constexpr (N < 1) {
-      std::terminate();
-    }
-
     return data_[0];
   }
 
   [[nodiscard]] constexpr reference back() noexcept
   {
-    if constexpr (N < 1) {
-      std::terminate();
-    }
-
     return data_[N - 1];
   }
 
   [[nodiscard]] constexpr const_reference back() const noexcept
   {
-    if constexpr (N < 1) {
-      std::terminate();
-    }
-
     return data_[N - 1];
   }
 
@@ -84,6 +70,10 @@ public:
   {
     return data_;
   }
+
+  [[nodiscard]] constexpr iterator iter() noexcept { into_iterator_trait<array<T, N>>::into_iter(*this); }
+  
+  [[nodiscard]] constexpr const_iterator iter() const noexcept { into_iterator_trait<array<T, N>>::into_iter(*this); }
 
   [[nodiscard]] constexpr iterator begin() noexcept;
 
@@ -167,5 +157,22 @@ template<typename T, std::size_t N>
   std::copy(arr.data(), arr.data() + arr.size(), result.data());
   return result;
 }
+
+template<typename T, std::size_t N>
+struct into_iterator_trait<array<T, N>>
+{
+  using iterator = array<T, N>::iterator;
+  using const_iterator = array<T, N>::const_iterator;
+
+  iterator into_iter(const array<T, N> &arr)
+  {
+    return {arr.data(), arr.data() + arr.size()};
+  }
+
+  const_iterator into_iter(const array<T, N> &arr) const
+  {
+    return {arr.data(), arr.data() + arr.size()};
+  }
+};
 
 }// namespace ftl
