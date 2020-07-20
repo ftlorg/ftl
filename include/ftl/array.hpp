@@ -20,10 +20,10 @@ public:
   using const_reference = const value_type &;
   using pointer = value_type *;
   using const_pointer = const value_type *;
-  using iterator = ftl::array_iterator<T>;
-  using const_iterator = const ftl::array_iterator<T>;
-  using reverse_iterator = ftl::reverse_array_iterator<T>;
-  using const_reverse_iterator = const ftl::reverse_array_iterator<T>;
+  using iterator = typename ftl::array_iterator<T>;
+  using const_iterator = typename const ftl::array_const_iterator<T>;
+  using reverse_iterator = typename ftl::reverse_array_iterator<T>;
+  using const_reverse_iterator = typename const ftl::reverse_array_const_iterator<T>;
 
   [[nodiscard]] constexpr reference operator[](size_type pos) noexcept
   {
@@ -71,9 +71,9 @@ public:
     return data_;
   }
 
-  [[nodiscard]] constexpr iterator iter() noexcept { into_iterator_trait<array<T, N>>::into_iter(*this); }
-  
-  [[nodiscard]] constexpr const_iterator iter() const noexcept { into_iterator_trait<array<T, N>>::into_iter(*this); }
+  [[nodiscard]] constexpr iterator iter() noexcept { return into_iterator_trait<array<T, N>>::into_iter(*this); }
+
+  [[nodiscard]] constexpr const_iterator iter() const noexcept { return into_iterator_trait<array<T, N>>::into_iter(*this); }
 
   [[nodiscard]] constexpr iterator begin() noexcept;
 
@@ -161,17 +161,17 @@ template<typename T, std::size_t N>
 template<typename T, std::size_t N>
 struct into_iterator_trait<array<T, N>>
 {
-  using iterator = array<T, N>::iterator;
-  using const_iterator = array<T, N>::const_iterator;
+  using iterator = typename array<T, N>::iterator;
+  using const_iterator = typename array<T, N>::const_iterator;
 
-  iterator into_iter(const array<T, N> &arr)
+  [[nodiscard]] constexpr static iterator into_iter(array<T, N> &arr)
   {
-    return {arr.data(), arr.data() + arr.size()};
+    return iterator{ arr.data(), arr.data() + arr.size() };
   }
 
-  const_iterator into_iter(const array<T, N> &arr) const
+  [[nodiscard]] constexpr static const_iterator into_iter(const array<T, N> &arr)
   {
-    return {arr.data(), arr.data() + arr.size()};
+    return const_iterator{ arr.data(), arr.data() + arr.size() };
   }
 };
 

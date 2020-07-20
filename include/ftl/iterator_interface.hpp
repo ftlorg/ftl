@@ -2,37 +2,46 @@
 
 #include <optional>
 #include <tuple>
+#include <array>
 
 namespace ftl {
 
-  template<typename Item>
-class filter_iterator {};
+template<typename Item>
+class filter_iterator
+{
+};
 
 template<typename Item>
-class flatten_iterator{};
+class flatten_iterator
+{
+};
 
 template<typename Item>
-class enumerate_iterator{};
+class enumerate_iterator
+{
+};
 
 template<typename Item>
-class inspect_iterator{};
+class inspect_iterator
+{
+};
 
 template<typename Item>
-class map_iterator{};
+class map_iterator
+{
+};
 
 template<typename Item>
-class take_iterator{};
+class take_iterator
+{
+};
+
 
 template<typename Item>
-class iterator_interface
+class iterator_interface_base
 {
 public:
   using size_type = std::size_t;
-
-  /**
-   * @brief Advances the iterator and returns the next value.
-  */
-  [[nodiscard]] virtual std::optional<Item> next() = 0;
 
   /**
    * @brief Checks if all of the items matche a predicate.
@@ -160,22 +169,43 @@ public:
 };
 
 template<typename Item>
+class iterator_interface : public iterator_interface_base<Item>
+{
+
+  /**
+   * @brief Advances the iterator and returns the next value.
+  */
+  [[nodiscard]] virtual std::optional<Item> next() = 0;
+};
+
+template<typename Item>
+class const_iterator_interface : public iterator_interface_base<Item>
+{
+
+  /**
+   * @brief Advances the iterator and returns the next value.
+  */
+  [[nodiscard]] virtual std::optional<Item> next() const = 0;
+};
+
+template<typename Item>
 class array_iterator : public iterator_interface<Item>
 {
 public:
   using iterator_category = /* */ void;
   using value_type = std::remove_cv_t<Item>;
   using difference_type = std::ptrdiff_t;
-  using pointer = value_type*;
-  using reference = value_type&;
+  using pointer = value_type *;
+  using reference = value_type &;
   using size_type = std::size_t;
 
-  array_iterator(const Item * const begin, const Item * const end) : begin_{begin}, end_{end} {}
+  array_iterator(pointer const begin, pointer const end) : begin_{ begin }, end_{ end } {}
 
-  [[nodiscard]] std::optional<Item> next() override {
+  [[nodiscard]] std::optional<value_type> next() override
+  {
     ++position_;
 
-    if(begin_ + postion_ != end_)
+    if (begin_ + position_ != end_)
       return { begin_[position_] };
 
     return std::nullopt;
@@ -183,8 +213,37 @@ public:
 
 private:
   mutable size_type position_;
-  Item * const begin_;
-  Item * const end_;
+  value_type *const begin_;
+  value_type *const end_;
+};
+
+template<typename Item>
+class array_const_iterator : public const_iterator_interface<Item>
+{
+public:
+  using iterator_category = /* */ void;
+  using value_type = std::remove_cv_t<Item>;
+  using difference_type = std::ptrdiff_t;
+  using pointer = const value_type *;
+  using reference = const value_type &;
+  using size_type = std::size_t;
+
+  array_const_iterator(pointer const begin, pointer const end) : begin_{ begin }, end_{ end } {}
+
+  [[nodiscard]] std::optional<Item> next() const override
+  {
+    ++position_;
+
+    if (begin_ + position_ != end_)
+      return { begin_[position_] };
+
+    return std::nullopt;
+  }
+
+private:
+  mutable size_type position_;
+  const value_type *const begin_;
+  const value_type *const end_;
 };
 
 template<typename Item>
@@ -194,16 +253,17 @@ public:
   using iterator_category = /* */ void;
   using value_type = std::remove_cv_t<Item>;
   using difference_type = std::ptrdiff_t;
-  using pointer = value_type*;
-  using reference = value_type&;
+  using pointer = value_type *;
+  using reference = value_type &;
   using size_type = std::size_t;
 
-  reverse_array_iterator(const Item * const rbegin, const Item * const rend) : rbegin_{rbegin}, rend_{rend}, position_{std::distance(rbegin, rend)} {}
+  reverse_array_iterator(pointer const rbegin, pointer const rend) : rbegin_{ rbegin }, rend_{ rend }, position_{ std::distance(rbegin, rend) } {}
 
-  [[nodiscard]] virtual std::optional<Item> next() override {
+  [[nodiscard]] virtual std::optional<value_type> next() override
+  {
     --position_;
 
-    if(rbegin_ + postion_ != rend_)
+    if (rbegin_ + position_ != rend_)
       return { rbegin_[position_] };
 
     return std::nullopt;
@@ -211,8 +271,37 @@ public:
 
 private:
   mutable size_type position_;
-  Item * const rbegin_;
-  Item * const rend_;
+  value_type *const rbegin_;
+  value_type *const rend_;
+};
+
+template<typename Item>
+class reverse_array_const_iterator : public const_iterator_interface<Item>
+{
+public:
+  using iterator_category = /* */ void;
+  using value_type = std::remove_cv_t<Item>;
+  using difference_type = std::ptrdiff_t;
+  using pointer = value_type *;
+  using reference = value_type &;
+  using size_type = std::size_t;
+
+  reverse_array_const_iterator(pointer const rbegin, pointer const rend) : rbegin_{ rbegin }, rend_{ rend }, position_{ std::distance(rbegin, rend) } {}
+
+  [[nodiscard]] virtual std::optional<value_type> next() const override
+  {
+    --position_;
+
+    if (rbegin_ + position_ != rend_)
+      return { rbegin_[position_] };
+
+    return std::nullopt;
+  }
+
+private:
+  mutable size_type position_;
+  value_type *const rbegin_;
+  value_type *const rend_;
 };
 
 }// namespace ftl
