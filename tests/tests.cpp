@@ -151,3 +151,23 @@ TEST_CASE("iter const", "[array]")
 
   [[maybe_unused]] auto iter = arr.iter();
 }
+
+TEST_CASE("next", "[array_iterator]")
+{
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+
+  auto iter = arr.iter();
+  REQUIRE(arr[1] == *iter.next());
+  REQUIRE(arr.data() + 1 == iter.get());
+}
+
+TEST_CASE("next const", "[array_iterator]")
+{
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+
+  auto iter = arr.iter();
+  REQUIRE(arr[1] == *iter.next());
+  REQUIRE(arr.data() + 1 == iter.get());
+}

@@ -5,7 +5,7 @@
 namespace ftl {
 
 template<typename Item>
-class array_reverse_const_iterator : public const_iterator_interface<Item>
+class array_reverse_const_iterator final : public const_iterator_interface<Item>
 {
 public:
   using iterator_category = /* */ void;
@@ -17,7 +17,7 @@ public:
 
   array_reverse_const_iterator(pointer const rbegin, pointer const rend) : position_{ std::distance(rbegin, rend) }, rbegin_{ rbegin }, rend_{ rend } {}
 
-  [[nodiscard]] virtual std::optional<value_type> next() const override
+  [[nodiscard]] virtual std::optional<reference> next() const override
   {
     --position_;
 
