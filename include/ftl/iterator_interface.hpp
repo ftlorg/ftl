@@ -2,42 +2,48 @@
 
 #include <optional>
 #include <tuple>
+#include <array>
 
 namespace ftl {
 
 template<typename Item>
-class filter_iterator;
+class filter_iterator
+{
+};
 
 template<typename Item>
-class flatten_iterator;
+class flatten_iterator
+{
+};
 
 template<typename Item>
-class enumerate_iterator;
+class enumerate_iterator
+{
+};
 
 template<typename Item>
-class inspect_iterator;
+class inspect_iterator
+{
+};
 
 template<typename Item>
-class map_iterator;
+class map_iterator
+{
+};
 
 template<typename Item>
-class take_iterator;
+class take_iterator
+{
+};
+
 
 template<typename Item>
-class iterator_trait
+class iterator_interface_base
 {
 public:
-  using iterator_category = /* ... */ void;
-  using value_type = std::remove_cv_t<Item>;
-  using difference_type = /* ... */ void;
-  using pointer = Item *;
-  using reference = Item &;
   using size_type = std::size_t;
 
-  /**
-   * @brief Advances the iterator and returns the next value.
-  */
-  [[nodiscard]] virtual std::optional<Item> next() = 0;
+  virtual ~iterator_interface_base() = default;
 
   /**
    * @brief Checks if all of the items matche a predicate.
@@ -66,7 +72,6 @@ public:
    * @brief Creates an iterator which gives the current iteration count as well as the next value
   */
   [[nodiscard]] enumerate_iterator<Item> enumerate();
-
 
   /**
    * @brief Creates an iterator which uses a predicate to determine if an element should be yielded.
@@ -163,9 +168,26 @@ public:
    * @brief Creates an iterator that yields its first n elements.
   */
   [[nodiscard]] take_iterator<Item> take(size_type n) const;
+};
 
-private:
-  Item *m_item;
+template<typename Item>
+class iterator_interface : public iterator_interface_base<Item>
+{
+
+  /**
+   * @brief Advances the iterator and returns the next value.
+  */
+  [[nodiscard]] virtual std::optional<Item> next() = 0;
+};
+
+template<typename Item>
+class const_iterator_interface : public iterator_interface_base<Item>
+{
+
+  /**
+   * @brief Advances the iterator and returns the next value.
+  */
+  [[nodiscard]] virtual std::optional<Item> next() const = 0;
 };
 
 }// namespace ftl

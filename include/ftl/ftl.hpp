@@ -2,7 +2,9 @@
 
 #include <optional>
 
-#include <ftl/iterator.hpp>
+#include <ftl/array.hpp>
+#include <ftl/into_iterator_trait.hpp>
+#include <ftl/iterator_interface.hpp>
 
 namespace ftl {
 
@@ -15,12 +17,6 @@ constexpr unsigned int factorial(unsigned int number)
 {
   return number <= 1 ? number : factorial(number - 1) * number;
 }
-
-constexpr std::optional<int> get_optional() {
-  return {5};
-}
-
-int fun();
 
 }// namespace ftl
 

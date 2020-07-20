@@ -2,8 +2,14 @@ cmake_minimum_required(VERSION 3.17)
 
 add_library(ftl 
     ftl.cpp
+    ${ftl_SOURCE_DIR}/include/ftl/array.hpp
+    ${ftl_SOURCE_DIR}/include/ftl/array_const_iterator.hpp
+    ${ftl_SOURCE_DIR}/include/ftl/array_iterator.hpp
+    ${ftl_SOURCE_DIR}/include/ftl/array_reverse_const_iterator.hpp
+    ${ftl_SOURCE_DIR}/include/ftl/array_reverse_iterator.hpp
     ${ftl_SOURCE_DIR}/include/ftl/ftl.hpp
-    ${ftl_SOURCE_DIR}/include/ftl/iterator.hpp
+    ${ftl_SOURCE_DIR}/include/ftl/into_iterator_trait.hpp
+    ${ftl_SOURCE_DIR}/include/ftl/iterator_interface.hpp
     )
 
 target_include_directories(ftl 
