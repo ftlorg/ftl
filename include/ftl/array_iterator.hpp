@@ -12,7 +12,9 @@ public:
   using value_type = std::remove_cv_t<Item>;
   using difference_type = std::ptrdiff_t;
   using pointer = value_type *;
+  using const_pointer = const value_type *;
   using reference = value_type &;
+  using const_reference = value_type &;
   using size_type = std::size_t;
 
   array_iterator(pointer const begin, pointer const end) : iterator_interface<Item>{ begin }, position_{ 0 }, begin_{ begin }, end_{ end } {}
@@ -32,11 +34,11 @@ public:
 
   [[nodiscard]] pointer begin() noexcept { return begin_; }
 
-  [[nodiscard]] pointer const cbegin() const noexcept { return begin_; }
+  [[nodiscard]] const_pointer cbegin() const noexcept { return begin_; }
 
   [[nodiscard]] pointer end() noexcept { return end_; }
 
-  [[nodiscard]] pointer const cend() const noexcept { return end_; }
+  [[nodiscard]] const_pointer cend() const noexcept { return end_; }
 
 private:
   mutable size_type position_;

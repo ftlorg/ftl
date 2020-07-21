@@ -69,7 +69,7 @@ public:
   template<typename Collection>
   [[nodiscard]] Collection collect()
   {
-    return from_iterator_trait<Collection::iterator>::from_iter(static_cast<typename Collection::iterator &>(*this));
+    return from_iterator_trait<typename Collection::iterator>::from_iter(static_cast<typename Collection::iterator &>(*this));
   }
 
   /**
