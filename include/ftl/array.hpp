@@ -24,8 +24,8 @@ public:
   using const_reference = const value_type &;
   using pointer = value_type *;
   using const_pointer = const value_type *;
-  using iterator = typename ftl::array_iterator<T>;
-  using const_iterator = typename ftl::array_const_iterator<T>;
+  using iterator = typename ftl::array_iterator<T, N>;
+  using const_iterator = typename ftl::array_const_iterator<T, N>;
   using reverse_iterator = typename ftl::array_reverse_iterator<T>;
   using const_reverse_iterator = typename ftl::array_reverse_const_iterator<T>;
 
@@ -164,13 +164,28 @@ template<typename T, std::size_t N>
 
 }// namespace ftl
 
-template<typename Item>
-struct ftl::from_iterator_trait<ftl::array_iterator<Item>>
+template<typename Item, std::size_t N>
+struct ftl::from_iterator_trait<ftl::array_iterator<Item, N>>
 {
-  [[nodiscard]] constexpr static ftl::array<int, 5> from_iter(ftl::array_iterator<Item> &iter)
+  [[nodiscard]] constexpr static auto from_iter(ftl::array_iterator<Item, N> &iter)
   {
-    ftl::array<int, 5> result{};
+    ftl::array<Item, N> result{};
+    std::size_t i = 0;
+    for (auto &&item : iter) {
+      result[i] = item;
+      ++i;
+    }
 
+    return result;
+  }
+};
+
+template<typename Item, std::size_t N>
+struct ftl::from_iterator_trait<ftl::array_const_iterator<Item, N>>
+{
+  [[nodiscard]] constexpr static auto from_iter(const ftl::array_const_iterator<Item, N> &iter)
+  {
+    ftl::array<Item, N> result{};
     std::size_t i = 0;
     for (auto &&item : iter) {
       result[i] = item;

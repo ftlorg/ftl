@@ -2,7 +2,7 @@
 
 namespace ftl {
 
-template<typename Iter, typename... IteratorArgs>
+template<typename... Args>
 struct from_iterator_trait;
 
 }// namespace ftl
