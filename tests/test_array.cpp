@@ -1,8 +1,6 @@
 #include <catch2/catch.hpp>
 #include <ftl/ftl.hpp>
 
-#include <array>
-
 TEST_CASE("to_array", "[array]")
 {
   constexpr std::size_t size = 5;
@@ -150,70 +148,4 @@ TEST_CASE("iter const", "[array]")
   const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
   [[maybe_unused]] auto iter = arr.iter();
-}
-
-
-TEST_CASE("next", "[array_iterator]")
-{
-  constexpr std::size_t size = 5;
-  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
-
-  auto iter = arr.iter();
-  REQUIRE(arr[1] == *iter.next());
-  REQUIRE(arr.data() + 1 == iter.get());
-}
-
-TEST_CASE("next const", "[array_iterator]")
-{
-  constexpr std::size_t size = 5;
-  const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
-
-  auto iter = arr.iter();
-  REQUIRE(arr[1] == *iter.next());
-  REQUIRE(arr.data() + 1 == iter.get());
-}
-
-TEST_CASE("collect", "[iterator]")
-{
-  constexpr std::size_t size = 5;
-  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
-
-  auto mapped_arr = arr.iter().collect<ftl::array<int, size>>();
-
-  constexpr std::size_t size2 = 3;
-  ftl::array<int, size2> arr2 = { 1, 2, 3 };
-
-  auto mapped_arr2 = arr2.iter().collect<ftl::array<int, size2>>();
-
-  REQUIRE(mapped_arr == ftl::array<int, size>{ 1, 2, 3, 4, 5 });
-  REQUIRE(mapped_arr2 == ftl::array<int, size2>{ 1, 2, 3 });
-}
-
-TEST_CASE("collect const", "[iterator]")
-{
-  constexpr std::size_t size = 5;
-  const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
-
-  auto mapped_arr = arr.iter().collect<ftl::array<int, size>>();
-
-  constexpr std::size_t size2 = 3;
-  const ftl::array<int, size2> arr2 = { 1, 2, 3 };
-
-  auto mapped_arr2 = arr2.iter().collect<ftl::array<int, size2>>();
-
-  REQUIRE(mapped_arr == ftl::array<int, size>{ 1, 2, 3, 4, 5 });
-  REQUIRE(mapped_arr2 == ftl::array<int, size2>{ 1, 2, 3 });
-}
-
-TEST_CASE("map", "[array_iterator]")
-{
-  constexpr std::size_t size = 5;
-  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
-
-  auto mapped_arr = arr.iter().map([](const auto &x) {
-                                return x * x;
-                              })
-                      .collect<ftl::array<int, size>>();
-
-  REQUIRE(mapped_arr == ftl::array<int, size>{ 1, 4, 9, 16, 25 });
 }
