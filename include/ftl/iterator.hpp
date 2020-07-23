@@ -144,7 +144,7 @@ public:
    * @param callable 
   */
   template<typename Callable>
-  [[nodiscard]] map_iterator<Item, Callable> map(Callable &&callable)
+  [[nodiscard]] map_iterator<Item, Callable> map([[maybe_unused]] Callable &&callable)
   {
     // TODO: should not compile
     assert(false);
