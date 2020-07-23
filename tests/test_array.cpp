@@ -1,6 +1,8 @@
 #include <catch2/catch.hpp>
 #include <ftl/ftl.hpp>
 
+#include <array>
+
 TEST_CASE("to_array", "[array]")
 {
   constexpr std::size_t size = 5;

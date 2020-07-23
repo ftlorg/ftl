@@ -1,7 +1,7 @@
 #pragma once
 
+#include <cassert>
 #include <tuple>
-#include <array>
 #include <optional>
 #include <ftl/from_iterator_trait.hpp>
 
@@ -144,11 +144,11 @@ public:
    * @param callable 
   */
   template<typename Callable>
-  [[nodiscard]] auto map(Callable &&callable)
+  [[nodiscard]] map_iterator<Item, Callable> map(Callable &&callable)
   {
     // TODO: should not compile
-    //assert(false);
-    return map_iterator<iterator_interface<Item>, Callable>{ std::move(const_cast<iterator_interface<Item> &>(*this)), std::forward<Callable>(callable) };
+    assert(false);
+    return {};
   }
 
   /**
@@ -438,10 +438,8 @@ struct ftl::from_iterator_trait<ftl::map_iterator<Iter, Callable>, Collection>
   [[nodiscard]] constexpr static auto from_iter(ftl::map_iterator<Iter, Callable> &iter)
   {
     Collection result{};
+    
     std::size_t i = 0;
-    auto begin = iter.begin();
-    auto end = iter.end();
-    ++begin;
     for (auto &&item : iter) {
       result[i] = item;
       ++i;
