@@ -53,10 +53,7 @@ public:
 
   [[nodiscard]] constexpr array_iterator<Item, N> end() noexcept { return { N, begin_, end_ }; }
 
-  [[nodiscard]] constexpr array_iterator<Item, N> cend() const noexcept
-  {
-    return { N, begin_, end_ };
-  }
+  [[nodiscard]] constexpr array_iterator<Item, N> cend() const noexcept { return { N, begin_, end_ }; }
 
   [[nodiscard]] constexpr value_type operator*() override { return begin_[position_]; }
 
