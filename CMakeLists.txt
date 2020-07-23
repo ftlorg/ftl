@@ -78,7 +78,7 @@ if(ENABLE_UNITY)
   set_target_properties(intro PROPERTIES UNITY_BUILD ON)
 endif()
 
-option(ENABLE_EXAMPLES "Enable example projects" ON)
+option(ENABLE_EXAMPLES "Enable example projects" OFF)
 if(ENABLE_EXAMPLES)
   add_subdirectory(examples)
 endif()
