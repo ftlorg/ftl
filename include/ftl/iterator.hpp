@@ -46,15 +46,20 @@ public:
   using value_type = std::remove_cv_t<Item>;
   using pointer = value_type *;
   using reference = value_type &;
+  using const_pointer = const value_type *;
+  using const_reference = const value_type &;
 
   iterator_interface(pointer const item) : item_{ item } {}
+
+  virtual ~iterator_interface() = default;
+
   iterator_interface(const iterator_interface &) = delete;
+
   iterator_interface &operator=(const iterator_interface &) = delete;
 
   iterator_interface(iterator_interface &&) = default;
-  iterator_interface &operator=(iterator_interface &&) = default;
 
-  virtual ~iterator_interface() = default;
+  iterator_interface &operator=(iterator_interface &&) = default;
 
   /**
    * @brief Checks if all of the items matche a predicate.
@@ -215,14 +220,22 @@ class const_iterator_interface
 public:
   using size_type = std::size_t;
   using value_type = std::remove_cv_t<Item>;
-  using pointer = const value_type *;
-  using reference = const value_type &;
+  using pointer = value_type *;
+  using reference = value_type &;
+  using const_pointer = const value_type *;
+  using const_reference = const value_type &;
 
-  const_iterator_interface(pointer const item) : item_{ item } {}
-  const_iterator_interface(const const_iterator_interface &) = delete;
-  const_iterator_interface &operator=(const const_iterator_interface &) = delete;
+  const_iterator_interface(const_pointer const item) : item_{ item } {}
 
   virtual ~const_iterator_interface() = default;
+
+  const_iterator_interface(const const_iterator_interface &) = delete;
+
+  const_iterator_interface &operator=(const const_iterator_interface &) = delete;
+
+  const_iterator_interface(const_iterator_interface &&) = default;
+
+  const_iterator_interface &operator=(const_iterator_interface &&) = default;
 
   /**
    * @brief Checks if all of the items matche a predicate.
@@ -357,16 +370,16 @@ public:
    * @brief Returns currently pointed-to value.
   */
 
-  [[nodiscard]] virtual reference operator*() const { return *item_; }
+  [[nodiscard]] virtual const_reference operator*() const { return *item_; }
 
   /**
    * @brief Returns pointer to current value.
   */
 
-  [[nodiscard]] pointer get() const { return item_; }
+  [[nodiscard]] const_pointer get() const { return item_; }
 
 protected:
-  mutable pointer item_;
+  mutable const_pointer item_;
 };
 
 template<typename Iter, typename Callable>
@@ -375,11 +388,10 @@ class map_iterator : public iterator_interface<typename Iter::value_type>
 public:
   using value_type = std::remove_cv_t<typename Iter::value_type>;
 
-  map_iterator(Iter iterator, Callable callable) 
-      : 
-      iterator_interface<value_type>{ nullptr }, 
-      iterator_{ std::move(iterator) }, 
-      callable_{ std::move(callable) } 
+  map_iterator(Iter iterator, Callable callable)
+    : iterator_interface<value_type>{ nullptr },
+      iterator_{ std::move(iterator) },
+      callable_{ std::move(callable) }
   {}
 
   [[nodiscard]] virtual std::optional<value_type> next() override

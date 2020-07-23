@@ -12,11 +12,11 @@ public:
   using value_type = std::remove_cv_t<Item>;
   using difference_type = std::ptrdiff_t;
   using pointer = value_type *;
-  constexpr static std::size_t size = N;
-  using const_pointer = const value_type *;
   using reference = value_type &;
-  using const_reference = value_type &;
+  using const_pointer = const value_type *;
+  using const_reference = const value_type &;
   using size_type = std::size_t;
+  constexpr static size_type size = N;
 
   constexpr array_iterator(pointer const begin, pointer const end) : iterator_interface<Item>{ begin }, position_{ 0 }, begin_{ begin }, end_{ end } {}
 
