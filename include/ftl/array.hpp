@@ -71,9 +71,9 @@ public:
     return data_;
   }
 
-  [[nodiscard]] constexpr iterator iter() noexcept { return into_iterator_trait<array<T, N>>::into_iter(*this); }
+  [[nodiscard]] constexpr iterator iter() noexcept { return into_iterator_trait<array<T, N>, typename array<T,N>::iterator>::into_iter(*this); }
 
-  [[nodiscard]] constexpr const_iterator iter() const noexcept { return into_iterator_trait<array<T, N>>::into_iter(*this); }
+  [[nodiscard]] constexpr const_iterator iter() const noexcept { return into_iterator_trait<array<T, N>, typename array<T, N>::const_iterator>::into_iter(*this); }
 
   [[nodiscard]] constexpr iterator begin() noexcept;
 
@@ -161,7 +161,7 @@ template<typename T, std::size_t N>
 }// namespace ftl
 
 template<typename Item, std::size_t N>
-struct ftl::from_iterator_trait<ftl::array_iterator<Item, N>>
+struct ftl::from_iterator_trait<ftl::array_iterator<Item, N>, ftl::array<Item, N>>
 {
   [[nodiscard]] constexpr static auto from_iter(ftl::array_iterator<Item, N> &iter)
   {
@@ -177,7 +177,7 @@ struct ftl::from_iterator_trait<ftl::array_iterator<Item, N>>
 };
 
 template<typename Item, std::size_t N>
-struct ftl::from_iterator_trait<ftl::array_const_iterator<Item, N>>
+struct ftl::from_iterator_trait<ftl::array_const_iterator<Item, N>, ftl::array<Item, N>>
 {
   [[nodiscard]] constexpr static auto from_iter(const ftl::array_const_iterator<Item, N> &iter)
   {
@@ -193,15 +193,20 @@ struct ftl::from_iterator_trait<ftl::array_const_iterator<Item, N>>
 };
 
 template<typename T, std::size_t N>
-struct ftl::into_iterator_trait<ftl::array<T, N>>
+struct ftl::into_iterator_trait<ftl::array<T, N>, typename ftl::array<T, N>::iterator>
 {
   using iterator = typename array<T, N>::iterator;
-  using const_iterator = typename array<T, N>::const_iterator;
 
   [[nodiscard]] constexpr static iterator into_iter(array<T, N> &arr)
   {
     return iterator{ arr.data(), arr.data() + arr.size() };
   }
+};
+
+template<typename T, std::size_t N>
+struct ftl::into_iterator_trait<ftl::array<T, N>, typename ftl::array<T, N>::const_iterator>
+{
+  using const_iterator = typename array<T, N>::const_iterator;
 
   [[nodiscard]] constexpr static const_iterator into_iter(const array<T, N> &arr)
   {

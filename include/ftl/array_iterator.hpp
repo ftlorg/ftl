@@ -36,7 +36,7 @@ public:
   template<typename Collection>
   [[nodiscard]] Collection collect()
   {
-    return from_iterator_trait<typename Collection::iterator>::from_iter(*this);
+    return from_iterator_trait<decltype(*this), Collection>::from_iter(*this);
   }
 
   template<typename Callable>
@@ -53,7 +53,7 @@ public:
 
   [[nodiscard]] constexpr const_pointer cend() const noexcept { return end_; }
 
-  [[nodiscard]] constexpr value_type operator*() { return begin_[position_]; }
+  [[nodiscard]] constexpr value_type operator*() override { return begin_[position_]; }
 
 private:
   mutable size_type position_;

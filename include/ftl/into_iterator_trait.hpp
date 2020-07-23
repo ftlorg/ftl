@@ -2,7 +2,13 @@
 
 namespace ftl {
 
-template<typename... CollectionArgs>
-struct into_iterator_trait;
+template<typename T, typename U>
+struct into_iterator_trait
+{
+  [[nodiscard]] constexpr static auto into_iter(T &) -> U
+  {
+    {};
+  }
+};
 
 }// namespace ftl

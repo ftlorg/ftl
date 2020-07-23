@@ -36,7 +36,7 @@ public:
   template<typename Collection>
   [[nodiscard]] Collection collect() const
   {
-    return from_iterator_trait<typename Collection::const_iterator>::from_iter(*this);
+    return from_iterator_trait<decltype(*this), Collection>::from_iter(*this);
   }
 
   [[nodiscard]] constexpr const_pointer begin() const noexcept { return begin_; }

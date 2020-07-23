@@ -420,7 +420,6 @@ private:
   Callable callable_;
 };
 
-
 }// namespace ftl
 
 template<typename Iter, typename Callable, typename Collection>
