@@ -402,7 +402,7 @@ public:
   template<typename Collection>
   [[nodiscard]] Collection collect()
   {
-    return from_iterator_trait<Iter, Callable, Collection>::from_iter(*this);
+    return from_iterator_trait<map_iterator<Iter, Callable>, Collection>::from_iter(*this);
   }
 
   [[nodiscard]] constexpr typename Iter::pointer begin() noexcept { return iterator_.begin(); }
@@ -413,7 +413,7 @@ public:
 
   [[nodiscard]] constexpr typename Iter::const_pointer cend() const noexcept { return iterator_.cend(); }
 
-  [[nodiscard]] constexpr typename Iter::value_type operator*() { return callable_(*iterator_); }
+  [[nodiscard]] constexpr typename Iter::value_type operator*() override { return callable_(*iterator_); }
 
 private:
   Iter iterator_;
