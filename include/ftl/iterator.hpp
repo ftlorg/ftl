@@ -53,13 +53,13 @@ public:
 
   virtual ~iterator_interface() = default;
 
-  iterator_interface(const iterator_interface &) = delete;
+  //iterator_interface(const iterator_interface &) = delete;
 
-  iterator_interface &operator=(const iterator_interface &) = delete;
+  //iterator_interface &operator=(const iterator_interface &) = delete;
 
-  iterator_interface(iterator_interface &&) = default;
+  //iterator_interface(iterator_interface &&) = default;
 
-  iterator_interface &operator=(iterator_interface &&) = default;
+  //iterator_interface &operator=(iterator_interface &&) = default;
 
   /**
    * @brief Checks if all of the items matche a predicate.
@@ -229,13 +229,13 @@ public:
 
   virtual ~const_iterator_interface() = default;
 
-  const_iterator_interface(const const_iterator_interface &) = delete;
+  //const_iterator_interface(const const_iterator_interface &) = delete;
 
-  const_iterator_interface &operator=(const const_iterator_interface &) = delete;
+  //const_iterator_interface &operator=(const const_iterator_interface &) = delete;
 
-  const_iterator_interface(const_iterator_interface &&) = default;
+  //const_iterator_interface(const_iterator_interface &&) = default;
 
-  const_iterator_interface &operator=(const_iterator_interface &&) = default;
+  //const_iterator_interface &operator=(const_iterator_interface &&) = default;
 
   /**
    * @brief Checks if all of the items matche a predicate.
@@ -405,15 +405,25 @@ public:
     return from_iterator_trait<map_iterator<Iter, Callable>, Collection>::from_iter(*this);
   }
 
-  [[nodiscard]] constexpr typename Iter::pointer begin() noexcept { return iterator_.begin(); }
+  [[nodiscard]] constexpr map_iterator<Iter, Callable> begin() noexcept { return { iterator_.begin(), callable_ }; }
 
-  [[nodiscard]] constexpr typename Iter::const_pointer cbegin() const noexcept { return iterator_.cbegin(); }
+  [[nodiscard]] constexpr map_iterator<Iter, Callable> cbegin() const noexcept { return { iterator_.begin(), callable_ }; }
 
-  [[nodiscard]] constexpr typename Iter::pointer end() noexcept { return iterator_.end(); }
+  [[nodiscard]] constexpr map_iterator<Iter, Callable> end() noexcept { return { iterator_.end(), callable_ }; }
 
-  [[nodiscard]] constexpr typename Iter::const_pointer cend() const noexcept { return iterator_.cend(); }
+  [[nodiscard]] constexpr map_iterator<Iter, Callable> cend() const noexcept { return { iterator_.end(), callable_ }; }
 
   [[nodiscard]] constexpr typename Iter::value_type operator*() override { return callable_(*iterator_); }
+
+  constexpr void operator++()
+  {
+    ++iterator_;
+  }
+
+  [[nodiscard]] friend constexpr bool operator!=(const map_iterator<Iter, Callable> &lhs, const map_iterator<Iter, Callable> &rhs)
+  {
+    return lhs.iterator_ != rhs.iterator_;
+  }
 
 private:
   Iter iterator_;
@@ -429,6 +439,9 @@ struct ftl::from_iterator_trait<ftl::map_iterator<Iter, Callable>, Collection>
   {
     Collection result{};
     std::size_t i = 0;
+    auto begin = iter.begin();
+    auto end = iter.end();
+    ++begin;
     for (auto &&item : iter) {
       result[i] = item;
       ++i;

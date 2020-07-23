@@ -20,6 +20,8 @@ public:
 
   constexpr array_iterator(pointer const begin, pointer const end) : iterator_interface<Item>{ begin }, position_{ 0 }, begin_{ begin }, end_{ end } {}
 
+  constexpr array_iterator(size_type position, pointer const begin, pointer const end) : iterator_interface<Item>{ begin }, position_{ position }, begin_{ begin }, end_{ end } {}
+
   [[nodiscard]] std::optional<value_type> next() override
   {
     ++position_;
@@ -40,20 +42,30 @@ public:
   }
 
   template<typename Callable>
-  [[nodiscard]] auto map(Callable &&callable)
+  [[nodiscard]] auto map(Callable &&callable) -> map_iterator<array_iterator<Item, N>, Callable>
   {
-    return map_iterator<array_iterator<Item, N>, Callable>{ array_iterator<Item, N>{begin(), end()}, std::forward<Callable>(callable) };
+    return { array_iterator<Item, N>{ begin_, end_ }, std::forward<Callable>(callable) };
   }
 
-  [[nodiscard]] constexpr pointer begin() noexcept { return begin_; }
+  [[nodiscard]] constexpr array_iterator<Item, N> begin() noexcept { return { 0, begin_, end_ }; }
 
-  [[nodiscard]] constexpr const_pointer cbegin() const noexcept { return begin_; }
+  [[nodiscard]] constexpr array_iterator<Item, N> cbegin() const noexcept { return { 0, begin_, end_ }; }
 
-  [[nodiscard]] constexpr pointer end() noexcept { return end_; }
+  [[nodiscard]] constexpr array_iterator<Item, N> end() noexcept { return { N, begin_, end_ }; }
 
-  [[nodiscard]] constexpr const_pointer cend() const noexcept { return end_; }
+  [[nodiscard]] constexpr array_iterator<Item, N> cend() const noexcept
+  {
+    return { N, begin_, end_ };
+  }
 
   [[nodiscard]] constexpr value_type operator*() override { return begin_[position_]; }
+
+  void operator++() { position_++; }
+
+  [[nodiscard]] friend constexpr bool operator!=(const array_iterator<Item, N> &lhs, const array_iterator<Item, N> &rhs)
+  {
+    return lhs.position_ != rhs.position_;
+  }
 
 private:
   mutable size_type position_;
