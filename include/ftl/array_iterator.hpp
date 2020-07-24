@@ -45,7 +45,7 @@ private:
   }
 
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    return std::distance(cbegin(), cend());
+    return std::distance(cbegin_impl(), cend_impl());
   }
 
   [[nodiscard]] constexpr auto begin_impl() noexcept -> array_iterator<Item, N> {
