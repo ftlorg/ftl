@@ -18,18 +18,16 @@ public:
   using size_type = std::size_t;
   constexpr static size_type size = N;
 
-  constexpr array_const_iterator(const_pointer const begin, const_pointer const end) : const_iterator_interface<Item>{ begin }, position_{ 0 }, begin_{ begin }, end_{ end } {}
+  constexpr array_const_iterator(const_pointer const begin, const_pointer const end) : position_{ 0 }, begin_{ begin }, end_{ end } {}
 
   [[nodiscard]] std::optional<value_type> next() const override
   {
     ++position_;
 
     if (begin_ + position_ != end_) {
-      const_iterator_interface<Item>::item_ = begin_ + position_;
       return { begin_[position_] };
     }
 
-    const_iterator_interface<Item>::item_ = nullptr;
     return std::nullopt;
   }
 

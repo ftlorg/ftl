@@ -203,8 +203,6 @@ public:
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
 
-  const_iterator_interface(const_pointer const item) : item_{ item } {}
-
   virtual ~const_iterator_interface() = default;
 
   //const_iterator_interface(const const_iterator_interface &) = delete;
@@ -343,15 +341,6 @@ public:
    * @brief Advances the iterator and returns the next value.
   */
   [[nodiscard]] virtual std::optional<value_type> next() const = 0;
-
-  /**
-   * @brief Returns currently pointed-to value.
-  */
-
-  [[nodiscard]] virtual const_reference operator*() const { return *item_; }
-
-protected:
-  mutable const_pointer item_;
 };
 
 template<typename Iter, typename Callable>
