@@ -34,7 +34,8 @@ private:
     return std::nullopt;
   }
 
-  template<typename Collection>[[nodiscard]] Collection collect_impl() const {
+  template<typename Collection>
+  [[nodiscard]] Collection collect_impl() const {
     return from_iterator_trait<array_const_iterator, Collection>::from_iter(*this);
   }
 

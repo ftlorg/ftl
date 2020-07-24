@@ -7,21 +7,29 @@
 
 namespace ftl {
 
-template<typename Derived, typename Item, typename Size> class iterator_interface;
+template<typename Derived, typename Item, typename Size>
+class iterator_interface;
 
-template<typename Iter, typename Callable> class map_iterator;
+template<typename Iter, typename Callable>
+class map_iterator;
 
-template<typename Item> class filter_iterator : public iterator_interface<filter_iterator<Item>, Item, std::size_t> {};
+template<typename Item>
+class filter_iterator : public iterator_interface<filter_iterator<Item>, Item, std::size_t> {};
 
-template<typename Item> class flatten_iterator : public iterator_interface<flatten_iterator<Item>, Item, std::size_t> {};
+template<typename Item>
+class flatten_iterator : public iterator_interface<flatten_iterator<Item>, Item, std::size_t> {};
 
-template<typename Item> class enumerate_iterator : public iterator_interface<enumerate_iterator<Item>, Item, std::size_t> {};
+template<typename Item>
+class enumerate_iterator : public iterator_interface<enumerate_iterator<Item>, Item, std::size_t> {};
 
-template<typename Item> class inspect_iterator : public iterator_interface<inspect_iterator<Item>, Item, std::size_t> {};
+template<typename Item>
+class inspect_iterator : public iterator_interface<inspect_iterator<Item>, Item, std::size_t> {};
 
-template<typename Item> class take_iterator : public iterator_interface<take_iterator<Item>, Item, std::size_t> {};
+template<typename Item>
+class take_iterator : public iterator_interface<take_iterator<Item>, Item, std::size_t> {};
 
-template<typename Derived, typename Item, typename SizeType> class iterator_interface {
+template<typename Derived, typename Item, typename SizeType>
+class iterator_interface {
 public:
   using size_type = SizeType;
   using value_type = typename std::remove_cv_t<Item>;
@@ -35,17 +43,20 @@ public:
   /**
    * @brief Checks if all of the items matche a predicate.
    */
-  template<typename Predicate>[[nodiscard]] bool all(Predicate &&predicate) const;
+  template<typename Predicate>
+  [[nodiscard]] bool all(Predicate &&predicate) const;
 
   /**
    * @brief Checks if any of the items matches a predicate.
    */
-  template<typename Predicate>[[nodiscard]] bool any(Predicate &&predicate) const;
+  template<typename Predicate>
+  [[nodiscard]] bool any(Predicate &&predicate) const;
 
   /**
    * @brief Transforms an iterator into collection.
    */
-  template<typename Collection>[[nodiscard]] Collection collect() {
+  template<typename Collection>
+  [[nodiscard]] Collection collect() {
     return static_cast<Derived &>(*this).template collect_impl<Collection>();
   }
 
@@ -68,14 +79,16 @@ public:
    * @tparam Predicate
    * @param predicate
    */
-  template<typename Predicate>[[nodiscard]] filter_iterator<value_type> filter(Predicate &&predicate) const;
+  template<typename Predicate>
+  [[nodiscard]] filter_iterator<value_type> filter(Predicate &&predicate) const;
 
   /**
    * @brief Searches for an element of an iterator that satisfies a predicate.
    * @tparam Predicate
    * @param predicate
    */
-  template<typename Predicate>[[nodiscard]] std::optional<value_type> find(Predicate &&predicate) const;
+  template<typename Predicate>
+  [[nodiscard]] std::optional<value_type> find(Predicate &&predicate) const;
 
   /**
    * @brief Creates an iterator that flattens nested structure.
@@ -88,21 +101,24 @@ public:
    * @param initial
    * @param op
    */
-  template<typename Operator>[[nodiscard]] value_type fold(value_type initial, Operator &&op);
+  template<typename Operator>
+  [[nodiscard]] value_type fold(value_type initial, Operator &&op);
 
   /**
    * @brief Calls a callable on each element of an iterator.
    * @tparam Callable
    * @param callable
    */
-  template<typename Callable> void for_each(Callable &&callable);
+  template<typename Callable>
+  void for_each(Callable &&callable);
 
   /**
    * @brief Does something with each element of an iterator, passing the value on.
    * @tparam Callable
    * @param callable
    */
-  template<typename Callable>[[nodiscard]] inspect_iterator<value_type> inspect(Callable &&callable) const;
+  template<typename Callable>
+  [[nodiscard]] inspect_iterator<value_type> inspect(Callable &&callable) const;
 
   /**
    * @brief Takes a callable and creates an iterator which calls that callable on
@@ -110,7 +126,8 @@ public:
    * @tparam Callable
    * @param callable
    */
-  template<typename Callable>[[nodiscard]] map_iterator<Derived, Callable> map(Callable &&callable) {
+  template<typename Callable>
+  [[nodiscard]] map_iterator<Derived, Callable> map(Callable &&callable) {
     return static_cast<Derived &>(*this).map_impl(std::forward<Callable>(callable));
   }
 
@@ -148,7 +165,8 @@ public:
    * @brief Reverses an iterator's direction.
    * @tparam Iterator
    */
-  template<typename Iterator>[[nodiscard]] Iterator rev() const;
+  template<typename Iterator>
+  [[nodiscard]] Iterator rev() const;
 
   /**
    * @brief Creates an iterator that yields its first n elements.
@@ -191,7 +209,8 @@ public:
   }
 };
 
-template<typename Derived, typename Item, typename SizeType> class const_iterator_interface {
+template<typename Derived, typename Item, typename SizeType>
+class const_iterator_interface {
 public:
   using size_type = SizeType;
   using value_type = typename std::remove_cv_t<Item>;
@@ -205,17 +224,20 @@ public:
   /**
    * @brief Checks if all of the items matche a predicate.
    */
-  template<typename Predicate>[[nodiscard]] bool all(Predicate &&predicate) const;
+  template<typename Predicate>
+  [[nodiscard]] bool all(Predicate &&predicate) const;
 
   /**
    * @brief Checks if any of the items matches a predicate.
    */
-  template<typename Predicate>[[nodiscard]] bool any(Predicate &&predicate) const;
+  template<typename Predicate>
+  [[nodiscard]] bool any(Predicate &&predicate) const;
 
   /**
    * @brief Transforms an iterator into collection.
    */
-  template<typename Collection>[[nodiscard]] Collection collect() {
+  template<typename Collection>
+  [[nodiscard]] Collection collect() {
     return static_cast<const Derived &>(*this).template collect_impl<Collection>();
   }
 
@@ -238,14 +260,16 @@ public:
    * @tparam Predicate
    * @param predicate
    */
-  template<typename Predicate>[[nodiscard]] filter_iterator<value_type> filter(Predicate &&predicate) const;
+  template<typename Predicate>
+  [[nodiscard]] filter_iterator<value_type> filter(Predicate &&predicate) const;
 
   /**
    * @brief Searches for an element of an iterator that satisfies a predicate.
    * @tparam Predicate
    * @param predicate
    */
-  template<typename Predicate>[[nodiscard]] std::optional<value_type> find(Predicate &&predicate) const;
+  template<typename Predicate>
+  [[nodiscard]] std::optional<value_type> find(Predicate &&predicate) const;
 
   /**
    * @brief Creates an iterator that flattens nested structure.
@@ -258,21 +282,24 @@ public:
    * @param initial
    * @param op
    */
-  template<typename Operator>[[nodiscard]] value_type fold(value_type initial, Operator &&op) const;
+  template<typename Operator>
+  [[nodiscard]] value_type fold(value_type initial, Operator &&op) const;
 
   /**
    * @brief Calls a callable on each element of an iterator.
    * @tparam Callable
    * @param callable
    */
-  template<typename Callable> void for_each(Callable &&callable) const;
+  template<typename Callable>
+  void for_each(Callable &&callable) const;
 
   /**
    * @brief Does something with each element of an iterator, passing the value on.
    * @tparam Callable
    * @param callable
    */
-  template<typename Callable>[[nodiscard]] inspect_iterator<value_type> inspect(Callable &&callable) const;
+  template<typename Callable>
+  [[nodiscard]] inspect_iterator<value_type> inspect(Callable &&callable) const;
 
   /**
    * @brief Takes a callable and creates an iterator which calls that callable on
@@ -280,7 +307,8 @@ public:
    * @tparam Callable
    * @param callable
    */
-  template<typename Callable>[[nodiscard]] map_iterator<Derived, Callable> map(Callable &&callable) const {
+  template<typename Callable>
+  [[nodiscard]] map_iterator<Derived, Callable> map(Callable &&callable) const {
     return static_cast<const Derived &>(*this).map_impl(std::forward<Callable>(callable));
   }
 
@@ -318,7 +346,8 @@ public:
    * @brief Reverses an iterator's direction.
    * @tparam Iterator
    */
-  template<typename Iterator>[[nodiscard]] Iterator rev() const;
+  template<typename Iterator>
+  [[nodiscard]] Iterator rev() const;
 
   /**
    * @brief Creates an iterator that yields its first n elements.
@@ -378,7 +407,8 @@ public:
   }
 
 private:
-  template<typename Collection>[[nodiscard]] Collection collect_impl() {
+  template<typename Collection>
+  [[nodiscard]] Collection collect_impl() {
     return from_iterator_trait<map_iterator<Iter, Callable>, Collection>::from_iter(*this);
   }
 
