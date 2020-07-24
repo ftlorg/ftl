@@ -28,6 +28,9 @@ class inspect_iterator : public iterator_interface<inspect_iterator<Item>, Item,
 template<typename Item>
 class take_iterator : public iterator_interface<take_iterator<Item>, Item, std::size_t> {};
 
+template<typename Item>
+class rev_iterator : public iterator_interface<rev_iterator<Item>, Item, std::size_t> {};
+
 template<typename Derived, typename Item, typename SizeType>
 class iterator_interface {
 public:
@@ -44,26 +47,26 @@ public:
    * @brief Checks if all of the items matche a predicate.
    */
   template<typename Predicate>
-  [[nodiscard]] bool all(Predicate &&predicate) const;
+  [[nodiscard]] auto all(Predicate &&predicate) const -> bool;
 
   /**
    * @brief Checks if any of the items matches a predicate.
    */
   template<typename Predicate>
-  [[nodiscard]] bool any(Predicate &&predicate) const;
+  [[nodiscard]] auto any(Predicate &&predicate) const -> bool;
 
   /**
    * @brief Transforms an iterator into collection.
    */
   template<typename Collection>
-  [[nodiscard]] Collection collect() {
+  [[nodiscard]] auto collect() -> Collection {
     return static_cast<Derived &>(*this).template collect_impl<Collection>();
   }
 
   /**
    * @brief Counts number of iterations.
    */
-  [[nodiscard]] size_type count() const {
+  [[nodiscard]] auto count() const -> size_type {
     return static_cast<Derived &>(*this).count_impl();
   }
 
@@ -71,7 +74,7 @@ public:
    * @brief Creates an iterator which gives the current iteration count as well as
    * the next value
    */
-  [[nodiscard]] enumerate_iterator<value_type> enumerate();
+  [[nodiscard]] auto enumerate() -> enumerate_iterator<value_type>;
 
   /**
    * @brief Creates an iterator which uses a predicate to determine if an element
@@ -80,7 +83,7 @@ public:
    * @param predicate
    */
   template<typename Predicate>
-  [[nodiscard]] filter_iterator<value_type> filter(Predicate &&predicate) const;
+  [[nodiscard]] auto filter(Predicate &&predicate) const -> filter_iterator<value_type>;
 
   /**
    * @brief Searches for an element of an iterator that satisfies a predicate.
@@ -88,12 +91,12 @@ public:
    * @param predicate
    */
   template<typename Predicate>
-  [[nodiscard]] std::optional<value_type> find(Predicate &&predicate) const;
+  [[nodiscard]] auto find(Predicate &&predicate) const -> std::optional<value_type>;
 
   /**
    * @brief Creates an iterator that flattens nested structure.
    */
-  [[nodiscard]] flatten_iterator<value_type> flatten() const;
+  [[nodiscard]] auto flatten() const -> flatten_iterator<value_type>;
 
   /**
    * @brief Applies a function, producing a single, final value.
@@ -102,7 +105,7 @@ public:
    * @param op
    */
   template<typename Operator>
-  [[nodiscard]] value_type fold(value_type initial, Operator &&op);
+  [[nodiscard]] auto fold(value_type initial, Operator &&op) -> value_type;
 
   /**
    * @brief Calls a callable on each element of an iterator.
@@ -110,7 +113,7 @@ public:
    * @param callable
    */
   template<typename Callable>
-  void for_each(Callable &&callable);
+  auto for_each(Callable &&callable) -> void;
 
   /**
    * @brief Does something with each element of an iterator, passing the value on.
@@ -118,7 +121,7 @@ public:
    * @param callable
    */
   template<typename Callable>
-  [[nodiscard]] inspect_iterator<value_type> inspect(Callable &&callable) const;
+  [[nodiscard]] auto inspect(Callable &&callable) const -> inspect_iterator<value_type>;
 
   /**
    * @brief Takes a callable and creates an iterator which calls that callable on
@@ -127,19 +130,19 @@ public:
    * @param callable
    */
   template<typename Callable>
-  [[nodiscard]] map_iterator<Derived, Callable> map(Callable &&callable) {
+  [[nodiscard]] auto map(Callable &&callable) -> map_iterator<Derived, Callable> {
     return static_cast<Derived &>(*this).map_impl(std::forward<Callable>(callable));
   }
 
   /**
    * @brief Returns the maximum element of an iterator.
    */
-  [[nodiscard]] std::optional<value_type> max() const;
+  [[nodiscard]] auto max() const -> std::optional<value_type>;
 
   /**
    * @brief Returns the minimum element of an iterator.
    */
-  [[nodiscard]] std::optional<value_type> min() const;
+  [[nodiscard]] auto min() const -> std::optional<value_type>;
 
   /**
    * @brief Consumes an iterator, creating two collections from it.
@@ -148,35 +151,34 @@ public:
    * @param predicate
    */
   template<typename Collection, typename Predicate>
-  [[nodiscard]] std::tuple<Collection, Collection> partition(Predicate &&predicate) const;
+  [[nodiscard]] auto partition(Predicate &&predicate) const -> std::tuple<Collection, Collection>;
 
   /**
    * @brief Iterates over the entire iterator, multiplying all the elements.
    */
-  [[nodiscard]] value_type product() const;
+  [[nodiscard]] auto product() const -> value_type;
 
 
   /**
    * @brief Iterates over the entire iterator, summing all the elements.
    */
-  [[nodiscard]] value_type sum() const;
+  [[nodiscard]] auto sum() const -> value_type;
 
   /**
    * @brief Reverses an iterator's direction.
    * @tparam Iterator
    */
-  template<typename Iterator>
-  [[nodiscard]] Iterator rev() const;
+  [[nodiscard]] auto rev() const -> rev_iterator<Item>;
 
   /**
    * @brief Creates an iterator that yields its first n elements.
    */
-  [[nodiscard]] take_iterator<value_type> take(size_type n) const;
+  [[nodiscard]] auto take(size_type n) const -> take_iterator<value_type>;
 
   /**
    * @brief Advances the iterator and returns the next value.
    */
-  [[nodiscard]] std::optional<value_type> next() {
+  [[nodiscard]] auto next() -> std::optional<value_type> {
     return static_cast<Derived &>(*this).next_impl();
   }
 
@@ -184,27 +186,27 @@ public:
    * @brief Returns currently pointed-to value.
    */
 
-  [[nodiscard]] value_type operator*() {
+  [[nodiscard]] auto operator*() -> value_type {
     return static_cast<Derived &>(*this).deref_impl();
   };
 
-  void operator++() {
+  auto operator++() -> void {
     static_cast<Derived &>(*this).preincrement_impl();
   }
 
-  [[nodiscard]] constexpr Derived begin() noexcept {
+  [[nodiscard]] constexpr auto begin() noexcept -> Derived {
     return static_cast<Derived &>(*this).begin_impl();
   }
 
-  [[nodiscard]] constexpr Derived cbegin() const noexcept {
+  [[nodiscard]] constexpr auto cbegin() const noexcept -> Derived {
     return static_cast<Derived &>(*this).cbegin_impl();
   }
 
-  [[nodiscard]] constexpr Derived end() noexcept {
+  [[nodiscard]] constexpr auto end() noexcept -> Derived {
     return static_cast<Derived &>(*this).end_impl();
   }
 
-  [[nodiscard]] constexpr Derived cend() const noexcept {
+  [[nodiscard]] constexpr auto cend() const noexcept -> Derived {
     return static_cast<Derived &>(*this).cend_impl();
   }
 };
@@ -225,26 +227,26 @@ public:
    * @brief Checks if all of the items matche a predicate.
    */
   template<typename Predicate>
-  [[nodiscard]] bool all(Predicate &&predicate) const;
+  [[nodiscard]] auto all(Predicate &&predicate) const -> bool;
 
   /**
    * @brief Checks if any of the items matches a predicate.
    */
   template<typename Predicate>
-  [[nodiscard]] bool any(Predicate &&predicate) const;
+  [[nodiscard]] auto any(Predicate &&predicate) const -> bool;
 
   /**
    * @brief Transforms an iterator into collection.
    */
   template<typename Collection>
-  [[nodiscard]] Collection collect() {
+  [[nodiscard]] auto collect() -> Collection {
     return static_cast<const Derived &>(*this).template collect_impl<Collection>();
   }
 
   /**
    * @brief Counts number of iterations.
    */
-  [[nodiscard]] size_type count() const {
+  [[nodiscard]] auto count() const -> size_type {
     return static_cast<const Derived &>(*this).count_impl();
   }
 
@@ -252,7 +254,7 @@ public:
    * @brief Creates an iterator which gives the current iteration count as well as
    * the next value
    */
-  [[nodiscard]] enumerate_iterator<value_type> enumerate() const;
+  [[nodiscard]] auto enumerate() const -> enumerate_iterator<value_type>;
 
   /**
    * @brief Creates an iterator which uses a predicate to determine if an element
@@ -261,7 +263,7 @@ public:
    * @param predicate
    */
   template<typename Predicate>
-  [[nodiscard]] filter_iterator<value_type> filter(Predicate &&predicate) const;
+  [[nodiscard]] auto filter(Predicate &&predicate) const -> filter_iterator<value_type>;
 
   /**
    * @brief Searches for an element of an iterator that satisfies a predicate.
@@ -269,12 +271,12 @@ public:
    * @param predicate
    */
   template<typename Predicate>
-  [[nodiscard]] std::optional<value_type> find(Predicate &&predicate) const;
+  [[nodiscard]] auto find(Predicate &&predicate) const -> std::optional<value_type>;
 
   /**
    * @brief Creates an iterator that flattens nested structure.
    */
-  [[nodiscard]] flatten_iterator<value_type> flatten() const;
+  [[nodiscard]] auto flatten() const -> flatten_iterator<value_type>;
 
   /**
    * @brief Applies a function, producing a single, final value.
@@ -283,7 +285,7 @@ public:
    * @param op
    */
   template<typename Operator>
-  [[nodiscard]] value_type fold(value_type initial, Operator &&op) const;
+  [[nodiscard]] auto fold(value_type initial, Operator &&op) const -> value_type;
 
   /**
    * @brief Calls a callable on each element of an iterator.
@@ -291,7 +293,7 @@ public:
    * @param callable
    */
   template<typename Callable>
-  void for_each(Callable &&callable) const;
+  auto for_each(Callable &&callable) const -> void;
 
   /**
    * @brief Does something with each element of an iterator, passing the value on.
@@ -299,7 +301,7 @@ public:
    * @param callable
    */
   template<typename Callable>
-  [[nodiscard]] inspect_iterator<value_type> inspect(Callable &&callable) const;
+  [[nodiscard]] auto inspect(Callable &&callable) const -> inspect_iterator<value_type>;
 
   /**
    * @brief Takes a callable and creates an iterator which calls that callable on
@@ -308,19 +310,19 @@ public:
    * @param callable
    */
   template<typename Callable>
-  [[nodiscard]] map_iterator<Derived, Callable> map(Callable &&callable) const {
+  [[nodiscard]] auto map(Callable &&callable) const -> map_iterator<Derived, Callable> {
     return static_cast<const Derived &>(*this).map_impl(std::forward<Callable>(callable));
   }
 
   /**
    * @brief Returns the maximum element of an iterator.
    */
-  [[nodiscard]] std::optional<value_type> max() const;
+  [[nodiscard]] auto max() const -> std::optional<value_type>;
 
   /**
    * @brief Returns the minimum element of an iterator.
    */
-  [[nodiscard]] std::optional<value_type> min() const;
+  [[nodiscard]] auto min() const -> std::optional<value_type>;
 
   /**
    * @brief Consumes an iterator, creating two collections from it.
@@ -329,35 +331,33 @@ public:
    * @param predicate
    */
   template<typename Collection, typename Predicate>
-  [[nodiscard]] std::tuple<Collection, Collection> partition(Predicate &&predicate) const;
+  [[nodiscard]] auto partition(Predicate &&predicate) const -> std::tuple<Collection, Collection>;
 
   /**
    * @brief Iterates over the entire iterator, multiplying all the elements.
    */
-  [[nodiscard]] value_type product() const;
+  [[nodiscard]] auto product() const -> value_type;
 
 
   /**
    * @brief Iterates over the entire iterator, summing all the elements.
    */
-  [[nodiscard]] value_type sum() const;
+  [[nodiscard]] auto sum() const -> value_type;
 
   /**
-   * @brief Reverses an iterator's direction.
-   * @tparam Iterator
+   * @brief Creates an iterator that reverses traversal direction.
    */
-  template<typename Iterator>
-  [[nodiscard]] Iterator rev() const;
+  [[nodiscard]] auto rev() const -> rev_iterator<Item>;
 
   /**
    * @brief Creates an iterator that yields its first n elements.
    */
-  [[nodiscard]] take_iterator<value_type> take(size_type n) const;
+  [[nodiscard]] auto take(size_type n) const -> take_iterator<value_type>;
 
   /**
    * @brief Advances the iterator and returns the next value.
    */
-  [[nodiscard]] std::optional<value_type> next() const {
+  [[nodiscard]] auto next() const -> std::optional<value_type> {
     return static_cast<const Derived &>(*this).next_impl();
   }
 
@@ -365,27 +365,27 @@ public:
    * @brief Returns currently pointed-to value.
    */
 
-  [[nodiscard]] value_type operator*() const {
+  [[nodiscard]] auto operator*() const -> value_type {
     return static_cast<const Derived &>(*this).deref_impl();
   };
 
-  void operator++() const {
+  auto operator++() const -> void {
     static_cast<const Derived &>(*this).preincrement_impl();
   }
 
-  [[nodiscard]] constexpr Derived begin() const noexcept {
+  [[nodiscard]] constexpr auto begin() const noexcept -> Derived {
     return static_cast<const Derived &>(*this).begin_impl();
   }
 
-  [[nodiscard]] constexpr Derived cbegin() const noexcept {
+  [[nodiscard]] constexpr auto cbegin() const noexcept -> Derived {
     return static_cast<const Derived &>(*this).cbegin_impl();
   }
 
-  [[nodiscard]] constexpr Derived end() const noexcept {
+  [[nodiscard]] constexpr auto end() const noexcept -> Derived {
     return static_cast<const Derived &>(*this).end_impl();
   }
 
-  [[nodiscard]] constexpr Derived cend() const noexcept {
+  [[nodiscard]] constexpr auto cend() const noexcept -> Derived {
     return static_cast<const Derived &>(*this).cend_impl();
   }
 };
@@ -408,11 +408,11 @@ public:
 
 private:
   template<typename Collection>
-  [[nodiscard]] Collection collect_impl() {
+  [[nodiscard]] auto collect_impl() -> Collection {
     return from_iterator_trait<map_iterator<Iter, Callable>, Collection>::from_iter(*this);
   }
 
-  [[nodiscard]] constexpr size_type count_impl() const {
+  [[nodiscard]] constexpr auto count_impl() const -> size_type {
     return iterator_.count();
   }
 
@@ -421,32 +421,32 @@ private:
     return { *this, std::forward<NewCallable>(callable) };
   }
 
-  [[nodiscard]] constexpr map_iterator<Iter, Callable> begin_impl() noexcept {
+  [[nodiscard]] constexpr auto begin_impl() noexcept -> map_iterator<Iter, Callable> {
     return { iterator_.begin(), callable_ };
   }
 
-  [[nodiscard]] constexpr map_iterator<Iter, Callable> cbegin_impl() const noexcept {
+  [[nodiscard]] constexpr auto cbegin_impl() const noexcept -> map_iterator<Iter, Callable> {
     return { iterator_.begin(), callable_ };
   }
 
-  [[nodiscard]] constexpr map_iterator<Iter, Callable> end_impl() noexcept {
+  [[nodiscard]] constexpr auto end_impl() noexcept -> map_iterator<Iter, Callable> {
     return { iterator_.end(), callable_ };
   }
 
-  [[nodiscard]] constexpr map_iterator<Iter, Callable> cend_impl() const noexcept {
+  [[nodiscard]] constexpr auto cend_impl() const noexcept -> map_iterator<Iter, Callable> {
     return { iterator_.end(), callable_ };
   }
 
-  [[nodiscard]] constexpr value_type deref_impl() {
+  [[nodiscard]] constexpr auto deref_impl() -> value_type {
     return callable_(*iterator_);
   }
 
-  void preincrement_impl() {
+  auto preincrement_impl() -> void {
     ++iterator_;
   }
 
-  [[nodiscard]] friend constexpr bool operator!=(const map_iterator<Iter, Callable> &lhs,
-    const map_iterator<Iter, Callable> &rhs) {
+  [[nodiscard]] friend constexpr auto operator!=(const map_iterator<Iter, Callable> &lhs,
+    const map_iterator<Iter, Callable> &rhs) -> bool {
     return lhs.iterator_ != rhs.iterator_;
   }
 
@@ -459,7 +459,7 @@ private:
 
 template<typename Iter, typename Callable, typename Collection>
 struct ftl::from_iterator_trait<ftl::map_iterator<Iter, Callable>, Collection> {
-  [[nodiscard]] constexpr static auto from_iter(ftl::map_iterator<Iter, Callable> &iter) {
+  [[nodiscard]] constexpr static auto from_iter(ftl::map_iterator<Iter, Callable> &iter) -> Collection {
     Collection result{};
 
     std::size_t i = 0;

@@ -27,7 +27,7 @@ public:
   }
 
 private:
-  [[nodiscard]] std::optional<value_type> next_impl() {
+  [[nodiscard]] auto next_impl() -> std::optional<value_type> {
     ++position_;
 
     if (begin_ + position_ != end_) { return { begin_[position_] }; }
@@ -35,7 +35,7 @@ private:
   }
 
   template<typename Collection>
-  [[nodiscard]] Collection collect_impl() {
+  [[nodiscard]] auto collect_impl() -> Collection {
     return from_iterator_trait<array_iterator, Collection>::from_iter(*this);
   }
 
@@ -44,35 +44,36 @@ private:
     return { array_iterator<Item, N>{ begin_, end_ }, std::forward<Callable>(callable) };
   }
 
-  [[nodiscard]] constexpr size_type count_impl() const {
+  [[nodiscard]] constexpr auto count_impl() const -> size_type {
     return std::distance(cbegin(), cend());
   }
 
-  [[nodiscard]] constexpr array_iterator<Item, N> begin_impl() noexcept {
+  [[nodiscard]] constexpr auto begin_impl() noexcept -> array_iterator<Item, N> {
     return { 0, begin_, end_ };
   }
 
-  [[nodiscard]] constexpr array_iterator<Item, N> cbegin_impl() const noexcept {
+  [[nodiscard]] constexpr auto cbegin_impl() const noexcept -> array_iterator<Item, N> {
     return { 0, begin_, end_ };
   }
 
-  [[nodiscard]] constexpr array_iterator<Item, N> end_impl() noexcept {
+  [[nodiscard]] constexpr auto end_impl() noexcept -> array_iterator<Item, N> {
     return { N, begin_, end_ };
   }
 
-  [[nodiscard]] constexpr array_iterator<Item, N> cend_impl() const noexcept {
+  [[nodiscard]] constexpr auto cend_impl() const noexcept -> array_iterator<Item, N> {
     return { N, begin_, end_ };
   }
 
-  [[nodiscard]] constexpr value_type deref_impl() {
+  [[nodiscard]] constexpr auto deref_impl() -> value_type {
     return begin_[position_];
   }
 
-  void preincrement_impl() {
+  auto preincrement_impl() {
     position_++;
   }
 
-  [[nodiscard]] friend constexpr bool operator!=(const array_iterator<Item, N> &lhs, const array_iterator<Item, N> &rhs) {
+  [[nodiscard]] friend constexpr auto operator!=(const array_iterator<Item, N> &lhs, const array_iterator<Item, N> &rhs)
+    -> bool {
     return lhs.position_ != rhs.position_;
   }
 
