@@ -71,9 +71,9 @@ public:
     return data_;
   }
 
-  [[nodiscard]] constexpr iterator iter() noexcept { return into_iterator_trait<array<T, N>, typename array<T,N>::iterator>::into_iter(*this); }
+  [[nodiscard]] constexpr iterator iter() noexcept { return into_iterator_trait<array<T, N>, iterator>::into_iter(*this); }
 
-  [[nodiscard]] constexpr const_iterator iter() const noexcept { return into_iterator_trait<array<T, N>, typename array<T, N>::const_iterator>::into_iter(*this); }
+  [[nodiscard]] constexpr const_iterator iter() const noexcept { return into_iterator_trait<array<T, N>, const_iterator>::into_iter(*this); }
 
   [[nodiscard]] constexpr iterator begin() noexcept;
 
