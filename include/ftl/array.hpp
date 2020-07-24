@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <array>
 
 #include <ftl/array_iterator.hpp>
 #include <ftl/array_const_iterator.hpp>
