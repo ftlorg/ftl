@@ -1,8 +1,7 @@
 #include <catch2/catch.hpp>
 #include <ftl/ftl.hpp>
 
-TEST_CASE("collect", "[iterator]")
-{
+TEST_CASE("collect", "[iterator]") {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
@@ -17,8 +16,7 @@ TEST_CASE("collect", "[iterator]")
   REQUIRE(mapped_arr2 == ftl::array<int, size2>{ 1, 2, 3 });
 }
 
-TEST_CASE("collect const", "[iterator]")
-{
+TEST_CASE("collect const", "[iterator]") {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 

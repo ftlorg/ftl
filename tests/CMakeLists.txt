@@ -12,7 +12,8 @@ target_link_libraries(catch_main PRIVATE project_options)
 add_executable(tests 
   test_array.cpp
   test_array_iterator.cpp
-  test_iterator.cpp)
+  test_iterator.cpp
+  test_map_iterator.cpp)
 target_link_libraries(tests PRIVATE project_warnings project_options ftl catch_main)
 
 # automatically discover tests that are defined in catch based test files you can modify the unittests. TEST_PREFIX to
