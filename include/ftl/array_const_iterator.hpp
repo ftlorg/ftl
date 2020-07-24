@@ -3,6 +3,7 @@
 #include <ftl/iterator.hpp>
 
 namespace ftl {
+
 template<typename Item, std::size_t N>
 class array_const_iterator final : public const_iterator_interface<array_const_iterator<Item, N>, Item, std::size_t> {
 
