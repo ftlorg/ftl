@@ -36,7 +36,7 @@ private:
 
   template<typename Collection>
   [[nodiscard]] auto collect_impl() -> Collection {
-    return from_iterator_trait<array_iterator, Collection>::from_iter(*this);
+    return from_iterator_trait<array_iterator<Item, N>, Collection>::from_iter(*this);
   }
 
   template<typename Callable>

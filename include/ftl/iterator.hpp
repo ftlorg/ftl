@@ -67,7 +67,7 @@ public:
    * @brief Counts number of iterations.
    */
   [[nodiscard]] auto count() const -> size_type {
-    return static_cast<Derived &>(*this).count_impl();
+    return static_cast<const Derived &>(*this).count_impl();
   }
 
   /**
@@ -199,7 +199,7 @@ public:
   }
 
   [[nodiscard]] constexpr auto cbegin() const noexcept -> Derived {
-    return static_cast<Derived &>(*this).cbegin_impl();
+    return static_cast<const Derived &>(*this).cbegin_impl();
   }
 
   [[nodiscard]] constexpr auto end() noexcept -> Derived {
@@ -207,7 +207,7 @@ public:
   }
 
   [[nodiscard]] constexpr auto cend() const noexcept -> Derived {
-    return static_cast<Derived &>(*this).cend_impl();
+    return static_cast<const Derived &>(*this).cend_impl();
   }
 };
 
