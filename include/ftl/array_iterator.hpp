@@ -18,20 +18,17 @@ public:
   using size_type = std::size_t;
   constexpr static size_type size = N;
 
-  constexpr array_iterator(pointer const begin, pointer const end) : iterator_interface<Item>{ begin }, position_{ 0 }, begin_{ begin }, end_{ end } {}
+  constexpr array_iterator(pointer const begin, pointer const end) : position_{ 0 }, begin_{ begin }, end_{ end } {}
 
-  constexpr array_iterator(size_type position, pointer const begin, pointer const end) : iterator_interface<Item>{ begin }, position_{ position }, begin_{ begin }, end_{ end } {}
+  constexpr array_iterator(size_type position, pointer const begin, pointer const end) : position_{ position }, begin_{ begin }, end_{ end } {}
 
   [[nodiscard]] std::optional<value_type> next() override
   {
     ++position_;
 
     if (begin_ + position_ != end_) {
-      iterator_interface<Item>::item_ = begin_ + position_;
       return { begin_[position_] };
     }
-
-    iterator_interface<Item>::item_ = nullptr;
     return std::nullopt;
   }
 
@@ -56,6 +53,8 @@ public:
   [[nodiscard]] constexpr array_iterator<Item, N> cend() const noexcept { return { N, begin_, end_ }; }
 
   [[nodiscard]] constexpr value_type operator*() override { return begin_[position_]; }
+
+  [[nodiscard]] constexpr size_type count() const override { return std::distance(cbegin(), cend()); }
 
   void operator++() { position_++; }
 

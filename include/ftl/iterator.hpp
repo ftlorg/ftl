@@ -49,17 +49,7 @@ public:
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
 
-  iterator_interface(pointer const item) : item_{ item } {}
-
   virtual ~iterator_interface() = default;
-
-  //iterator_interface(const iterator_interface &) = delete;
-
-  //iterator_interface &operator=(const iterator_interface &) = delete;
-
-  //iterator_interface(iterator_interface &&) = default;
-
-  //iterator_interface &operator=(iterator_interface &&) = default;
 
   /**
    * @brief Checks if all of the items matche a predicate.
@@ -77,15 +67,12 @@ public:
    * @brief Transforms an iterator into collection.
   */
   template<typename Collection>
-  [[nodiscard]] Collection collect()
-  {
-    return {};
-  }
+  [[nodiscard]] Collection collect();
 
   /**
    * @brief Counts number of iterations.
   */
-  [[nodiscard]] size_type count() const;
+  [[nodiscard]] virtual size_type count() const = 0;
 
   /**
    * @brief Creates an iterator which gives the current iteration count as well as the next value
@@ -202,16 +189,7 @@ public:
    * @brief Returns currently pointed-to value.
   */
 
-  [[nodiscard]] virtual value_type operator*() { return *item_; }
-
-  /**
-   * @brief Returns pointer to current value.
-  */
-
-  [[nodiscard]] pointer get() { return item_; }
-
-protected:
-  pointer item_;
+  [[nodiscard]] virtual value_type operator*() = 0;
 };
 
 template<typename Item>
@@ -372,12 +350,6 @@ public:
 
   [[nodiscard]] virtual const_reference operator*() const { return *item_; }
 
-  /**
-   * @brief Returns pointer to current value.
-  */
-
-  [[nodiscard]] const_pointer get() const { return item_; }
-
 protected:
   mutable const_pointer item_;
 };
@@ -389,8 +361,7 @@ public:
   using value_type = std::remove_cv_t<typename Iter::value_type>;
 
   map_iterator(Iter iterator, Callable callable)
-    : iterator_interface<value_type>{ nullptr },
-      iterator_{ std::move(iterator) },
+    : iterator_{ std::move(iterator) },
       callable_{ std::move(callable) }
   {}
 
@@ -414,6 +385,8 @@ public:
   [[nodiscard]] constexpr map_iterator<Iter, Callable> cend() const noexcept { return { iterator_.end(), callable_ }; }
 
   [[nodiscard]] constexpr typename Iter::value_type operator*() override { return callable_(*iterator_); }
+
+  [[nodiscard]] constexpr typename Iter::size_type count() const override { return iterator_.count(); }
 
   constexpr void operator++()
   {
