@@ -96,14 +96,11 @@ public:
     return false;
   }
 
-  constexpr auto fill(const T &value) {
-    // TODO: Use begin() instead of data once we sort out iterators.
+  constexpr auto fill(const T &value) -> void {
     std::fill_n(data_, N, value);
   }
 
-  constexpr auto swap(array &other) {
-    // TODO: Use begin() and end() instead of raw once we sort out
-    // iterators.
+  constexpr auto swap(array &other) -> void {
     std::swap_ranges(data(), data() + size(), other.data());
   }
 
@@ -112,7 +109,6 @@ public:
 
 template<typename T, std::size_t N>
 [[nodiscard]] constexpr auto operator==(const array<T, N> &lhs, const array<T, N> &rhs) noexcept -> bool {
-  // TODO: Use begin() and end() instead of raw once we sort out iterators.
   return std::equal(lhs.data(), lhs.data() + lhs.size(), rhs.data());
 }
 
@@ -123,7 +119,6 @@ template<typename T, std::size_t N>
 
 template<typename T, std::size_t N>
 [[nodiscard]] constexpr auto operator<(const array<T, N> &lhs, const array<T, N> &rhs) noexcept -> bool {
-  // TODO: Use begin() and end() instead of raw once we sort out iterators.
   return std::lexicographical_compare(lhs.data(), lhs.data() + lhs.size(), rhs.data(), rhs.data() + rhs.size());
 }
 
