@@ -38,11 +38,11 @@ class take_iterator : public iterator_interface<take_iterator<Item>, Item, std::
 {
 };
 
-template<typename Derived, typename Item, typename Size>
+template<typename Derived, typename Item, typename SizeType>
 class iterator_interface
 {
 public:
-  using size_type = Size;
+  using size_type = SizeType;
   using value_type = typename std::remove_cv_t<Item>;
   using pointer = value_type *;
   using reference = value_type &;
@@ -215,12 +215,12 @@ public:
   [[nodiscard]] constexpr Derived cend() const noexcept { return static_cast<Derived &>(*this).cend_impl(); }
 };
 
-template<typename Item>
+template<typename Derived, typename Item, typename SizeType>
 class const_iterator_interface
 {
 public:
-  using size_type = std::size_t;
-  using value_type = std::remove_cv_t<Item>;
+  using size_type = SizeType;
+  using value_type = typename std::remove_cv_t<Item>;
   using pointer = value_type *;
   using reference = value_type &;
   using const_pointer = const value_type *;
@@ -244,17 +244,23 @@ public:
    * @brief Transforms an iterator into collection.
   */
   template<typename Collection>
-  [[nodiscard]] Collection collect() const;
+  [[nodiscard]] Collection collect()
+  {
+    return static_cast<const Derived &>(*this).template collect_impl<Collection>();
+  }
 
   /**
    * @brief Counts number of iterations.
   */
-  [[nodiscard]] size_type count() const;
+  [[nodiscard]] size_type count() const
+  {
+    return static_cast<const Derived &>(*this).count_impl();
+  }
 
   /**
    * @brief Creates an iterator which gives the current iteration count as well as the next value
   */
-  [[nodiscard]] enumerate_iterator<Item> enumerate();
+  [[nodiscard]] enumerate_iterator<value_type> enumerate() const;
 
   /**
    * @brief Creates an iterator which uses a predicate to determine if an element should be yielded.
@@ -262,7 +268,7 @@ public:
    * @param predicate 
   */
   template<typename Predicate>
-  [[nodiscard]] filter_iterator<Item> filter(Predicate &&predicate) const;
+  [[nodiscard]] filter_iterator<value_type> filter(Predicate &&predicate) const;
 
   /**
    * @brief Searches for an element of an iterator that satisfies a predicate.
@@ -275,7 +281,7 @@ public:
   /**
    * @brief Creates an iterator that flattens nested structure.
   */
-  [[nodiscard]] flatten_iterator<Item> flatten() const;
+  [[nodiscard]] flatten_iterator<value_type> flatten() const;
 
   /**
    * @brief Applies a function, producing a single, final value.
@@ -284,7 +290,7 @@ public:
    * @param op 
   */
   template<typename Operator>
-  [[nodiscard]] Item fold(Item initial, Operator &&op);
+  [[nodiscard]] value_type fold(value_type initial, Operator &&op) const;
 
   /**
    * @brief Calls a callable on each element of an iterator.
@@ -292,7 +298,7 @@ public:
    * @param callable 
   */
   template<typename Callable>
-  void for_each(Callable &&callable);
+  void for_each(Callable &&callable) const;
 
   /**
    * @brief Does something with each element of an iterator, passing the value on.
@@ -300,7 +306,7 @@ public:
    * @param callable 
   */
   template<typename Callable>
-  [[nodiscard]] inspect_iterator<Item> inspect(Callable &&callable) const;
+  [[nodiscard]] inspect_iterator<value_type> inspect(Callable &&callable) const;
 
   /**
    * @brief Takes a callable and creates an iterator which calls that callable on each element.
@@ -308,7 +314,10 @@ public:
    * @param callable 
   */
   template<typename Callable>
-  [[nodiscard]] map_iterator<Item, Callable> map(Callable &&callable) const;
+  [[nodiscard]] map_iterator<Derived, Callable> map(Callable &&callable) const
+  {
+    return static_cast<const Derived &>(*this).map_impl(std::forward<Callable>(callable));
+  }
 
   /**
    * @brief Returns the maximum element of an iterator.
@@ -332,13 +341,13 @@ public:
   /**
    * @brief Iterates over the entire iterator, multiplying all the elements.
   */
-  [[nodiscard]] Item product() const;
+  [[nodiscard]] value_type product() const;
 
 
   /**
    * @brief Iterates over the entire iterator, summing all the elements.
   */
-  [[nodiscard]] Item sum() const;
+  [[nodiscard]] value_type sum() const;
 
   /**
    * @brief Reverses an iterator's direction.
@@ -350,12 +359,37 @@ public:
   /**
    * @brief Creates an iterator that yields its first n elements.
   */
-  [[nodiscard]] take_iterator<Item> take(size_type n) const;
+  [[nodiscard]] take_iterator<value_type> take(size_type n) const;
 
   /**
    * @brief Advances the iterator and returns the next value.
   */
-  [[nodiscard]] virtual std::optional<value_type> next() const = 0;
+  [[nodiscard]] std::optional<value_type> next() const
+  {
+    return static_cast<const Derived &>(*this).next_impl();
+  }
+
+  /**
+   * @brief Returns currently pointed-to value.
+  */
+
+  [[nodiscard]] value_type operator*() const
+  {
+    return static_cast<const Derived &>(*this).deref_impl();
+  };
+
+  void operator++() const
+  {
+    static_cast<const Derived &>(*this).preincrement_impl();
+  }
+
+  [[nodiscard]] constexpr Derived begin() const noexcept { return static_cast<const Derived &>(*this).begin_impl(); }
+
+  [[nodiscard]] constexpr Derived cbegin() const noexcept { return static_cast<const Derived &>(*this).cbegin_impl(); }
+
+  [[nodiscard]] constexpr Derived end() const noexcept { return static_cast<const Derived &>(*this).end_impl(); }
+
+  [[nodiscard]] constexpr Derived cend() const noexcept { return static_cast<const Derived &>(*this).cend_impl(); }
 };
 
 template<typename Iter, typename Callable>

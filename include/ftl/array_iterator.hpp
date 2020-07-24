@@ -18,7 +18,6 @@ public:
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
   using size_type = std::size_t;
-  constexpr static size_type size = N;
 
   constexpr array_iterator(pointer const begin, pointer const end) : position_{ 0 }, begin_{ begin }, end_{ end } {}
 

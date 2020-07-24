@@ -3,47 +3,66 @@
 #include <ftl/iterator.hpp>
 
 namespace ftl {
-
 template<typename Item, std::size_t N>
-class array_const_iterator final : public const_iterator_interface<Item>
+class array_const_iterator final : public const_iterator_interface<array_const_iterator<Item, N>, Item, std::size_t>
 {
+  friend const_iterator_interface<array_const_iterator<Item, N>, Item, std::size_t>;
+
 public:
   using iterator_category = /* */ void;
-  using value_type = std::remove_cv_t<Item>;
+  using value_type = typename std::remove_cv_t<Item>;
   using difference_type = std::ptrdiff_t;
   using pointer = value_type *;
-  using const_pointer = const value_type *;
   using reference = value_type &;
-  using const_reference = value_type &;
+  using const_pointer = const value_type *;
+  using const_reference = const value_type &;
   using size_type = std::size_t;
-  constexpr static size_type size = N;
 
   constexpr array_const_iterator(const_pointer const begin, const_pointer const end) : position_{ 0 }, begin_{ begin }, end_{ end } {}
 
-  [[nodiscard]] std::optional<value_type> next() const override
+  constexpr array_const_iterator(size_type position, const_pointer const begin, const_pointer const end) : position_{ position }, begin_{ begin }, end_{ end } {}
+
+private:
+  [[nodiscard]] std::optional<value_type> next_impl() const
   {
     ++position_;
 
     if (begin_ + position_ != end_) {
       return { begin_[position_] };
     }
-
     return std::nullopt;
   }
 
   template<typename Collection>
-  [[nodiscard]] Collection collect() const
+  [[nodiscard]] Collection collect_impl() const
   {
     return from_iterator_trait<array_const_iterator, Collection>::from_iter(*this);
   }
 
-  [[nodiscard]] constexpr const_pointer begin() const noexcept { return begin_; }
+  template<typename Callable>
+  [[nodiscard]] auto map_impl(Callable &&callable) const -> map_iterator<array_iterator<Item, N>, Callable>
+  {
+    return { array_const_iterator<Item, N>{ begin_, end_ }, std::forward<Callable>(callable) };
+  }
 
-  [[nodiscard]] constexpr const_pointer cbegin() const noexcept { return begin_; }
+  [[nodiscard]] constexpr size_type count_impl() const { return std::distance(cbegin(), cend()); }
 
-  [[nodiscard]] constexpr const_pointer end() const noexcept { return end_; }
+  [[nodiscard]] constexpr array_const_iterator<Item, N> begin_impl() const noexcept { return { 0, begin_, end_ }; }
 
-  [[nodiscard]] constexpr const_pointer cend() const noexcept { return end_; }
+  [[nodiscard]] constexpr array_const_iterator<Item, N> cbegin_impl() const noexcept { return { 0, begin_, end_ }; }
+
+  [[nodiscard]] constexpr array_const_iterator<Item, N> end_impl() const noexcept { return { N, begin_, end_ }; }
+
+  [[nodiscard]] constexpr array_const_iterator<Item, N> cend_impl() const noexcept { return { N, begin_, end_ }; }
+
+  [[nodiscard]] constexpr value_type deref_impl() const { return begin_[position_]; }
+
+  void preincrement_impl() const { position_++; }
+
+  [[nodiscard]] friend constexpr bool operator!=(const array_const_iterator<Item, N> &lhs, const array_const_iterator<Item, N> &rhs)
+  {
+    return lhs.position_ != rhs.position_;
+  }
 
 private:
   mutable size_type position_;
