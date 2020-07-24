@@ -140,7 +140,7 @@ template<typename T, std::size_t N>
 
 template<typename T, std::size_t N>
 [[nodiscard]] constexpr auto to_array(const std::array<T, N> &arr) -> ftl::array<T, N> {
-  array<T, N> result;
+  array<T, N> result = {};
   std::copy(arr.data(), arr.data() + arr.size(), result.data());
   return result;
 }

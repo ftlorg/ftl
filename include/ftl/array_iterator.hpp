@@ -45,7 +45,7 @@ private:
   }
 
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    return std::distance(cbegin_impl(), cend_impl());
+    return static_cast<size_type>(std::distance(cbegin_impl(), cend_impl()));
   }
 
   [[nodiscard]] constexpr auto begin_impl() noexcept -> array_iterator<Item, N> {
@@ -84,3 +84,13 @@ private:
 };
 
 }// namespace ftl
+
+template<typename Item, std::size_t N>
+struct std::iterator_traits<ftl::array_iterator<Item, N>> {
+  using difference_type = typename ftl::array_iterator<Item, N>::difference_type;
+  using value_type = typename ftl::array_iterator<Item, N>::value_type;
+  using pointer = typename ftl::array_iterator<Item, N>::pointer;
+  using reference = typename ftl::array_iterator<Item, N>::reference;
+  using iterator_category = typename ftl::array_iterator<Item, N>::iterator_category;
+};
+
