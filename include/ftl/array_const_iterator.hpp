@@ -46,7 +46,8 @@ private:
   }
 
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    return static_cast<size_type>(std::distance(cbegin_impl(), cend_impl()));
+    // TODO: Use std::distance once we make this iterator compatible with STL
+    return static_cast<size_type>(end_ - begin_);
   }
 
   [[nodiscard]] constexpr auto begin_impl() const noexcept -> array_const_iterator<Item, N> {
