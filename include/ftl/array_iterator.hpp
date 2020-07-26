@@ -65,7 +65,7 @@ private:
     return { N, begin_, end_ };
   }
 
-  [[nodiscard]] constexpr auto deref_impl() -> value_type {
+  [[nodiscard]] constexpr auto deref_impl() -> reference {
     return begin_[position_];
   }
 

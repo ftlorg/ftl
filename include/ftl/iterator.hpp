@@ -186,8 +186,16 @@ public:
    * @brief Returns currently pointed-to value.
    */
 
-  [[nodiscard]] auto operator*() -> value_type {
+  [[nodiscard]] auto operator*() -> decltype(auto) {
     return static_cast<Derived &>(*this).deref_impl();
+  };
+
+  /**
+   * @brief Returns currently pointed-to value.
+   */
+
+  [[nodiscard]] auto operator*() const -> decltype(auto) {
+    return static_cast<Derived &>(*this).const_deref_impl();
   };
 
   auto operator++() -> void {
@@ -365,8 +373,8 @@ public:
    * @brief Returns currently pointed-to value.
    */
 
-  [[nodiscard]] auto operator*() const -> value_type {
-    return static_cast<const Derived &>(*this).deref_impl();
+  [[nodiscard]] auto operator*() const -> decltype(auto) {
+    return static_cast<const Derived &>(*this).const_deref_impl();
   };
 
   auto operator++() const -> void {
@@ -393,6 +401,7 @@ public:
 template<typename Iter, typename Callable>
 class map_iterator
   : public iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type> {
+
   friend iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
 
 public:
@@ -438,6 +447,10 @@ private:
   }
 
   [[nodiscard]] constexpr auto deref_impl() -> value_type {
+    return callable_(*iterator_);
+  }
+
+  [[nodiscard]] constexpr auto const_deref_impl() const -> value_type {
     return callable_(*iterator_);
   }
 
