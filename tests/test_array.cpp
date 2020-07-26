@@ -93,7 +93,7 @@ TEST_CASE("max_size", "[array]") {
   constexpr std::size_t size = 2;
   const ftl::array<int, size> arr = {};
 
-  REQUIRE(arr.size() == 2);
+  REQUIRE(arr.max_size() == 2);
 }
 
 TEST_CASE("empty", "[array]") {
@@ -150,4 +150,52 @@ TEST_CASE("range-based for loop const", "[array]") {
   const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
   for ([[maybe_unused]] const auto &x : arr) {}
+}
+
+TEST_CASE("operator==", "[array]") {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr1 = { 1, 2, 3, 4, 5};
+  ftl::array<int, size> arr2 = { 1, 2, 3, 4, 5 };
+  
+  REQUIRE(arr1 == arr2);
+}
+
+TEST_CASE("operator!=", "[array]") {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr1 = { 1, 2, 3, 4, 5 };
+  ftl::array<int, size> arr2 = { 5, 2, 3, 4, 5 };
+
+  REQUIRE(arr1 != arr2);
+}
+
+TEST_CASE("operator<", "[array]") {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr1 = { 1, 2, 3, 4, 5 };
+  ftl::array<int, size> arr2 = { 5, 2, 3, 4, 5 };
+
+  REQUIRE(arr1 < arr2);
+}
+
+TEST_CASE("operator<=", "[array]") {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr1 = { 1, 2, 3, 4, 5 };
+  ftl::array<int, size> arr2 = { 5, 2, 3, 4, 5 };
+
+  REQUIRE(arr1 <= arr2);
+}
+
+TEST_CASE("operator>", "[array]") {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr1 = { 6, 2, 3, 4, 5 };
+  ftl::array<int, size> arr2 = { 5, 2, 3, 4, 5 };
+
+  REQUIRE(arr1 > arr2);
+}
+
+TEST_CASE("operator>=", "[array]") {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr1 = { 5, 2, 3, 4, 5 };
+  ftl::array<int, size> arr2 = { 5, 2, 3, 4, 5 };
+
+  REQUIRE(arr1 >= arr2);
 }

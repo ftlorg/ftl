@@ -32,6 +32,7 @@ private:
     ++position_;
 
     if (begin_ + position_ != end_) { return { begin_[position_] }; }
+
     return std::nullopt;
   }
 
@@ -95,4 +96,3 @@ struct std::iterator_traits<ftl::array_const_iterator<Item, N>> {
   using reference = typename ftl::array_const_iterator<Item, N>::reference;
   using iterator_category = typename ftl::array_const_iterator<Item, N>::iterator_category;
 };
-
