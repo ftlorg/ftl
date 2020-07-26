@@ -185,7 +185,6 @@ public:
   /**
    * @brief Returns currently pointed-to value.
    */
-
   [[nodiscard]] auto operator*() -> decltype(auto) {
     return static_cast<Derived &>(*this).deref_impl();
   };
@@ -193,35 +192,55 @@ public:
   /**
    * @brief Returns currently pointed-to value.
    */
-
   [[nodiscard]] auto operator*() const -> decltype(auto) {
     return static_cast<const Derived &>(*this).const_deref_impl();
   };
 
+  /**
+   * @brief Advances the iterator.
+   */
   auto operator++() const -> void {
     static_cast<const Derived &>(*this).preincrement_impl();
   }
 
+  /**
+   * @brief Returns begin iterator.
+   */
   [[nodiscard]] constexpr auto begin() noexcept -> Derived {
     return static_cast<Derived &>(*this).begin_impl();
   }
 
+  /**
+   * @brief Returns begin iterator.
+   */
   [[nodiscard]] constexpr auto begin() const noexcept -> Derived {
     return cbegin();
   }
 
+  /**
+   * @brief Returns cbegin iterator.
+   */
   [[nodiscard]] constexpr auto cbegin() const noexcept -> Derived {
     return static_cast<const Derived &>(*this).cbegin_impl();
   }
 
+  /**
+   * @brief Returns end iterator.
+   */
   [[nodiscard]] constexpr auto end() noexcept -> Derived {
     return static_cast<Derived &>(*this).end_impl();
   }
 
+  /**
+   * @brief Returns end iterator.
+   */
   [[nodiscard]] constexpr auto end() const noexcept -> Derived {
     return cend();
   }
 
+  /**
+   * @brief Returns cend iterator.
+   */
   [[nodiscard]] constexpr auto cend() const noexcept -> Derived {
     return static_cast<const Derived &>(*this).cend_impl();
   }
@@ -380,27 +399,41 @@ public:
   /**
    * @brief Returns currently pointed-to value.
    */
-
   [[nodiscard]] auto operator*() const -> decltype(auto) {
     return static_cast<const Derived &>(*this).const_deref_impl();
   };
 
+  /**
+   * @brief Advances the iterator.
+   */
   auto operator++() const -> void {
     static_cast<const Derived &>(*this).preincrement_impl();
   }
 
+  /**
+   * @brief Returns begin iterator.
+   */
   [[nodiscard]] constexpr auto begin() const noexcept -> Derived {
     return static_cast<const Derived &>(*this).begin_impl();
   }
 
+  /**
+   * @brief Returns cbegin iterator.
+   */
   [[nodiscard]] constexpr auto cbegin() const noexcept -> Derived {
     return static_cast<const Derived &>(*this).cbegin_impl();
   }
 
+  /**
+   * @brief Returns end iterator.
+   */
   [[nodiscard]] constexpr auto end() const noexcept -> Derived {
     return static_cast<const Derived &>(*this).end_impl();
   }
 
+  /**
+   * @brief Returns cend iterator.
+   */
   [[nodiscard]] constexpr auto cend() const noexcept -> Derived {
     return static_cast<const Derived &>(*this).cend_impl();
   }
