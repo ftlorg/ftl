@@ -1,5 +1,7 @@
 #include <catch2/catch.hpp>
 #include <ftl/ftl.hpp>
+#include <vector>
+#include <list>
 
 TEST_CASE("next", "[array_iterator]") {
   constexpr std::size_t size = 5;
@@ -57,6 +59,33 @@ TEST_CASE("collect to std::vector", "[array_iterator]") {
   auto mapped_arr = arr.iter().collect<std::vector<int>>();
 
   REQUIRE(mapped_arr == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE("collect const to std::vector", "[array_iterator]") {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+
+  auto mapped_arr = arr.iter().collect<std::vector<int>>();
+
+  REQUIRE(mapped_arr == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE("collect to std::list", "[array_iterator]") {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+
+  auto mapped_arr = arr.iter().collect<std::list<int>>();
+
+  REQUIRE(mapped_arr == std::list<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE("collect const to std::list", "[array_iterator]") {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+
+  auto mapped_arr = arr.iter().collect<std::list<int>>();
+
+  REQUIRE(mapped_arr == std::list<int>{ 1, 2, 3, 4, 5 });
 }
 
 TEST_CASE("collect const", "[array_iterator]") {
