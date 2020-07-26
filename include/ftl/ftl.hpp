@@ -3,8 +3,9 @@
 #include <optional>
 
 #include <ftl/array.hpp>
+#include <ftl/from_iterator_trait.hpp>
 #include <ftl/into_iterator_trait.hpp>
-#include <ftl/iterator_interface.hpp>
+#include <ftl/iterator.hpp>
 
 namespace ftl {
 
@@ -13,10 +14,8 @@ namespace ftl {
 /// This computes a factorial
 ///
 
-constexpr unsigned int factorial(unsigned int number)
-{
+constexpr auto factorial(unsigned int number) -> unsigned int {
   return number <= 1 ? number : factorial(number - 1) * number;
 }
 
 }// namespace ftl
-

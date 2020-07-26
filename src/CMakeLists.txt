@@ -1,15 +1,10 @@
 cmake_minimum_required(VERSION 3.17)
 
+file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${ftl_SOURCE_DIR}/include/ftl/*.hpp")
+
 add_library(ftl 
     ftl.cpp
-    ${ftl_SOURCE_DIR}/include/ftl/array.hpp
-    ${ftl_SOURCE_DIR}/include/ftl/array_const_iterator.hpp
-    ${ftl_SOURCE_DIR}/include/ftl/array_iterator.hpp
-    ${ftl_SOURCE_DIR}/include/ftl/array_reverse_const_iterator.hpp
-    ${ftl_SOURCE_DIR}/include/ftl/array_reverse_iterator.hpp
-    ${ftl_SOURCE_DIR}/include/ftl/ftl.hpp
-    ${ftl_SOURCE_DIR}/include/ftl/into_iterator_trait.hpp
-    ${ftl_SOURCE_DIR}/include/ftl/iterator_interface.hpp
+    ${HEADER_LIST}
     )
 
 target_include_directories(ftl 
@@ -23,6 +18,8 @@ target_link_libraries(ftl
   PRIVATE
     $<BUILD_INTERFACE:project_options>
     $<BUILD_INTERFACE:project_warnings>)
+
+source_group(TREE "${PROJECT_SOURCE_DIR}/include" PREFIX "Header Files" FILES ${HEADER_LIST})
 
 install(TARGETS ftl EXPORT ftlTargets
   LIBRARY DESTINATION lib
