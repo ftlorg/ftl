@@ -195,11 +195,11 @@ public:
    */
 
   [[nodiscard]] auto operator*() const -> decltype(auto) {
-    return static_cast<Derived &>(*this).const_deref_impl();
+    return static_cast<const Derived &>(*this).const_deref_impl();
   };
 
-  auto operator++() -> void {
-    static_cast<Derived &>(*this).preincrement_impl();
+  auto operator++() const -> void {
+    static_cast<const Derived &>(*this).preincrement_impl();
   }
 
   [[nodiscard]] constexpr auto begin() noexcept -> Derived {
@@ -247,7 +247,7 @@ public:
    * @brief Transforms an iterator into collection.
    */
   template<typename Collection>
-  [[nodiscard]] auto collect() -> Collection {
+  [[nodiscard]] auto collect() const -> Collection {
     return static_cast<const Derived &>(*this).template collect_impl<Collection>();
   }
 
@@ -400,9 +400,9 @@ public:
 
 template<typename Iter, typename Callable>
 class map_iterator
-  : public iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type> {
+  : public const_iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type> {
 
-  friend iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
+  friend const_iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
 
 public:
   using size_type = typename Iter::size_type;
@@ -417,7 +417,7 @@ public:
 
 private:
   template<typename Collection>
-  [[nodiscard]] auto collect_impl() -> Collection {
+  [[nodiscard]] auto collect_impl() const -> Collection {
     return from_iterator_trait<map_iterator<Iter, Callable>, Collection>::from_iter(*this);
   }
 
@@ -426,35 +426,31 @@ private:
   }
 
   template<typename NewCallable>
-  [[nodiscard]] auto map_impl(NewCallable &&callable) -> map_iterator<map_iterator<Iter, Callable>, NewCallable> {
+  [[nodiscard]] auto map_impl(NewCallable &&callable) const -> map_iterator<map_iterator<Iter, Callable>, NewCallable> {
     return { *this, std::forward<NewCallable>(callable) };
   }
 
-  [[nodiscard]] constexpr auto begin_impl() noexcept -> map_iterator<Iter, Callable> {
-    return { iterator_.begin(), callable_ };
+  [[nodiscard]] constexpr auto begin_impl() const noexcept -> map_iterator<Iter, Callable> {
+    return { iterator_.cbegin(), callable_ };
   }
 
   [[nodiscard]] constexpr auto cbegin_impl() const noexcept -> map_iterator<Iter, Callable> {
-    return { iterator_.begin(), callable_ };
+    return { iterator_.cbegin(), callable_ };
   }
 
-  [[nodiscard]] constexpr auto end_impl() noexcept -> map_iterator<Iter, Callable> {
-    return { iterator_.end(), callable_ };
+  [[nodiscard]] constexpr auto end_impl() const noexcept -> map_iterator<Iter, Callable> {
+    return { iterator_.cend(), callable_ };
   }
 
   [[nodiscard]] constexpr auto cend_impl() const noexcept -> map_iterator<Iter, Callable> {
-    return { iterator_.end(), callable_ };
-  }
-
-  [[nodiscard]] constexpr auto deref_impl() -> value_type {
-    return callable_(*iterator_);
+    return { iterator_.cend(), callable_ };
   }
 
   [[nodiscard]] constexpr auto const_deref_impl() const -> value_type {
     return callable_(*iterator_);
   }
 
-  auto preincrement_impl() -> void {
+  auto preincrement_impl() const -> void {
     ++iterator_;
   }
 
@@ -472,7 +468,7 @@ private:
 
 template<typename Iter, typename Callable, typename Collection>
 struct ftl::from_iterator_trait<ftl::map_iterator<Iter, Callable>, Collection> {
-  [[nodiscard]] constexpr static auto from_iter(ftl::map_iterator<Iter, Callable> &iter) -> Collection {
+  [[nodiscard]] constexpr static auto from_iter(const ftl::map_iterator<Iter, Callable> &iter) -> Collection {
     Collection result{};
 
     std::size_t i = 0;

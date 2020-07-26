@@ -69,8 +69,12 @@ private:
     return begin_[position_];
   }
 
-  auto preincrement_impl() {
-    position_++;
+  [[nodiscard]] constexpr auto const_deref_impl() const -> const_reference {
+    return begin_[position_];
+  }
+
+  auto preincrement_impl() const {
+    ++position_;
   }
 
   [[nodiscard]] friend constexpr auto operator!=(const array_iterator<Item, N> &lhs, const array_iterator<Item, N> &rhs)
