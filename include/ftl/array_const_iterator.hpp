@@ -119,7 +119,6 @@ private:
     return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.position_ == rhs.position_;
   }
 
-
   [[nodiscard]] friend constexpr auto operator!=(const array_const_iterator<Item, N> &lhs,
     const array_const_iterator<Item, N> &rhs) noexcept -> bool {
     return !(lhs == rhs);
@@ -129,7 +128,6 @@ private:
     const array_const_iterator<Item, N> &rhs) noexcept -> bool {
     return rhs - lhs > 0;
   }
-
 
   [[nodiscard]] friend constexpr auto operator<=(const array_const_iterator &lhs, const array_const_iterator &rhs) noexcept
     -> bool {
@@ -142,12 +140,10 @@ private:
     return rhs < lhs;
   }
 
-
   [[nodiscard]] friend constexpr auto operator>=(const array_const_iterator &lhs, const array_const_iterator &rhs) noexcept
     -> bool {
     return !(lhs < rhs);
   }
-
 
 private:
   mutable size_type position_;

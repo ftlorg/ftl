@@ -86,7 +86,8 @@ private:
     return begin_[pos];
   }
 
-  [[nodiscard]] friend constexpr auto operator+=(const array_iterator<Item, N> &lhs, size_type n) -> array_iterator<Item, N> & {
+  [[nodiscard]] friend constexpr auto operator+=(const array_iterator<Item, N> &lhs, size_type n)
+    -> array_iterator<Item, N> & {
     lhs.position_ += n;
     return lhs;
   }
@@ -99,7 +100,8 @@ private:
     return rhs += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator-=(const array_iterator<Item, N> &lhs, size_type n) -> array_iterator<Item, N> & {
+  [[nodiscard]] friend constexpr auto operator-=(const array_iterator<Item, N> &lhs, size_type n)
+    -> array_iterator<Item, N> & {
     return lhs += -n;
   }
 
@@ -109,14 +111,14 @@ private:
 
   [[nodiscard]] friend constexpr auto operator-(const array_iterator<Item, N> &lhs, const array_iterator<Item, N> &rhs)
     -> difference_type {
-    return std::distance( rhs.begin_ + rhs.position_, lhs.begin_ + lhs.position_);
+    return std::distance(rhs.begin_ + rhs.position_, lhs.begin_ + lhs.position_);
   }
 
-  [[nodiscard]] friend constexpr auto operator==(const array_iterator<Item, N> &lhs, const array_iterator<Item, N> &rhs) noexcept -> bool {
+  [[nodiscard]] friend constexpr auto operator==(const array_iterator<Item, N> &lhs,
+    const array_iterator<Item, N> &rhs) noexcept -> bool {
     return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.position_ == rhs.position_;
   }
 
- 
   [[nodiscard]] friend constexpr auto operator!=(const array_iterator<Item, N> &lhs,
     const array_iterator<Item, N> &rhs) noexcept -> bool {
     return !(lhs == rhs);
@@ -127,16 +129,13 @@ private:
     return rhs - lhs > 0;
   }
 
-
   [[nodiscard]] friend constexpr auto operator<=(const array_iterator &lhs, const array_iterator &rhs) noexcept -> bool {
     return !(rhs < lhs);
   }
 
-
   [[nodiscard]] friend constexpr auto operator>(const array_iterator &lhs, const array_iterator &rhs) noexcept -> bool {
     return rhs < lhs;
   }
-
 
   [[nodiscard]] friend constexpr auto operator>=(const array_iterator &lhs, const array_iterator &rhs) noexcept -> bool {
     return !(lhs < rhs);
