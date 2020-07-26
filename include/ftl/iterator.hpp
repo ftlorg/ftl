@@ -206,12 +206,20 @@ public:
     return static_cast<Derived &>(*this).begin_impl();
   }
 
+  [[nodiscard]] constexpr auto begin() const noexcept -> Derived {
+    return cbegin();
+  }
+
   [[nodiscard]] constexpr auto cbegin() const noexcept -> Derived {
     return static_cast<const Derived &>(*this).cbegin_impl();
   }
 
   [[nodiscard]] constexpr auto end() noexcept -> Derived {
     return static_cast<Derived &>(*this).end_impl();
+  }
+
+  [[nodiscard]] constexpr auto end() const noexcept -> Derived {
+    return cend();
   }
 
   [[nodiscard]] constexpr auto cend() const noexcept -> Derived {

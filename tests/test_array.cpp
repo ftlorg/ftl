@@ -135,3 +135,19 @@ TEST_CASE("iter const", "[array]") {
 
   [[maybe_unused]] auto iter = arr.iter();
 }
+
+TEST_CASE("range-based for loop", "[array]") {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+
+  for (auto &x : arr) { x = 7; }
+
+  REQUIRE(arr == ftl::array<int, size>{ 7, 7, 7, 7, 7 });
+}
+
+TEST_CASE("range-based for loop const", "[array]") {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+
+  for ([[maybe_unused]] const auto &x : arr) {}
+}

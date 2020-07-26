@@ -73,12 +73,20 @@ public:
     return iter().begin();
   }
 
+  [[nodiscard]] constexpr auto begin() const noexcept -> const_iterator {
+    return cbegin();
+  }
+
   [[nodiscard]] constexpr auto cbegin() const noexcept -> const_iterator {
     return iter().cbegin();
   }
 
   [[nodiscard]] constexpr auto end() noexcept -> iterator {
     return iter().end();
+  }
+
+  [[nodiscard]] constexpr auto end() const noexcept -> const_iterator {
+    return cend();
   }
 
   [[nodiscard]] constexpr auto cend() const noexcept -> const_iterator {
