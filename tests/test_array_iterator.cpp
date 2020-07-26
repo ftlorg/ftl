@@ -50,6 +50,15 @@ TEST_CASE("collect", "[array_iterator]") {
   REQUIRE(mapped_arr2 == ftl::array<int, size2>{ 1, 2, 3 });
 }
 
+TEST_CASE("collect to std::vector", "[array_iterator]") {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+
+  auto mapped_arr = arr.iter().collect<std::vector<int>>();
+
+  REQUIRE(mapped_arr == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
 TEST_CASE("collect const", "[array_iterator]") {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
