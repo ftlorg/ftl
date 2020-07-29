@@ -5,7 +5,7 @@ namespace ftl {
 template<typename T, typename U>
 struct from_iterator_trait {
   [[nodiscard]] constexpr static auto from_iter(const T &iter) -> U {
-    return U { iter.begin(), iter.end() };
+    return { iter.begin(), iter.end() };
   }
 };
 

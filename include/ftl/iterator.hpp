@@ -1,9 +1,10 @@
 #pragma once
 
+#include <ftl/from_iterator_trait.hpp>
+#include <memory>
 #include <cassert>
 #include <tuple>
 #include <optional>
-#include <ftl/from_iterator_trait.hpp>
 
 namespace ftl {
 
@@ -446,12 +447,14 @@ class map_iterator
   friend const_iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
 
 public:
-  using size_type = typename Iter::size_type;
+  using difference_type = typename Iter::difference_type;
   using value_type = typename Iter::value_type;
   using pointer = typename Iter::pointer;
   using reference = typename Iter::reference;
   using const_pointer = typename Iter::const_pointer;
   using const_reference = typename Iter::const_reference;
+  using iterator_category = typename Iter::iterator_category;
+  using size_type = typename Iter::size_type;
 
   map_iterator(Iter iterator, Callable callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
   }
@@ -495,9 +498,64 @@ private:
     ++iterator_;
   }
 
+  [[nodiscard]] friend constexpr auto operator+=(const map_iterator<Iter, Callable> &lhs, size_type n)
+    -> map_iterator<Iter, Callable> & {
+    return lhs.iterator_ += n;
+  }
+
+  [[nodiscard]] friend constexpr auto operator+(const map_iterator<Iter, Callable> &lhs, size_type n)
+    -> map_iterator<Iter, Callable> {
+    return lhs.iterator_ += n;
+  }
+
+  [[nodiscard]] friend constexpr auto operator+(size_type n, const map_iterator<Iter, Callable> &rhs)
+    -> map_iterator<Iter, Callable> {
+    return rhs.iterator_ += n;
+  }
+
+  [[nodiscard]] friend constexpr auto operator-=(const map_iterator<Iter, Callable> &lhs, size_type n)
+    -> map_iterator<Iter, Callable> & {
+    return lhs.iterator_ += -n;
+  }
+
+  [[nodiscard]] friend constexpr auto operator-(const map_iterator<Iter, Callable> &lhs, size_type n)
+    -> map_iterator<Iter, Callable> {
+    return lhs.iterator_ -= n;
+  }
+
+  [[nodiscard]] friend constexpr auto operator-(const map_iterator<Iter, Callable> &lhs,
+    const map_iterator<Iter, Callable> &rhs) -> difference_type {
+    return lhs.iterator_ - rhs.iterator_;
+  }
+
+  [[nodiscard]] friend constexpr auto operator==(const map_iterator<Iter, Callable> &lhs,
+    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
+    return lhs.iterator_ == rhs.iterator_;
+  }
+
   [[nodiscard]] friend constexpr auto operator!=(const map_iterator<Iter, Callable> &lhs,
-    const map_iterator<Iter, Callable> &rhs) -> bool {
+    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
     return lhs.iterator_ != rhs.iterator_;
+  }
+
+  [[nodiscard]] friend constexpr auto operator<(const map_iterator<Iter, Callable> &lhs,
+    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
+    return rhs.iterator_ - lhs.iterator_ > 0;
+  }
+
+  [[nodiscard]] friend constexpr auto operator<=(const map_iterator<Iter, Callable> &lhs,
+    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
+    return !(rhs.iterator_ < lhs.iterator_);
+  }
+
+  [[nodiscard]] friend constexpr auto operator>(const map_iterator<Iter, Callable> &lhs,
+    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
+    return rhs.iterator_ < lhs.iterator_;
+  }
+
+  [[nodiscard]] friend constexpr auto operator>=(const map_iterator<Iter, Callable> &lhs,
+    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
+    return !(lhs.iterator_ < rhs.iterator_);
   }
 
 private:
@@ -507,17 +565,11 @@ private:
 
 }// namespace ftl
 
-template<typename Iter, typename Callable, typename Collection>
-struct ftl::from_iterator_trait<ftl::map_iterator<Iter, Callable>, Collection> {
-  [[nodiscard]] constexpr static auto from_iter(const ftl::map_iterator<Iter, Callable> &iter) -> Collection {
-    Collection result{};
-
-    std::size_t i = 0;
-    for (auto &&item : iter) {
-      result[i] = item;
-      ++i;
-    }
-
-    return result;
-  }
+template<typename Iter, typename Callable>
+struct std::iterator_traits<ftl::map_iterator<Iter, Callable>> {
+  using difference_type = typename ftl::map_iterator<Iter, Callable>::difference_type;
+  using value_type = typename ftl::map_iterator<Iter, Callable>::value_type;
+  using pointer = typename ftl::map_iterator<Iter, Callable>::pointer;
+  using reference = typename ftl::map_iterator<Iter, Callable>::reference;
+  using iterator_category = typename ftl::map_iterator<Iter, Callable>::iterator_category;
 };

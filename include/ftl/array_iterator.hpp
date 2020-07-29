@@ -10,13 +10,13 @@ class array_iterator final : public iterator_interface<array_iterator<Item, N>, 
   friend iterator_interface<array_iterator<Item, N>, Item, std::size_t>;
 
 public:
-  using iterator_category = std::random_access_iterator_tag;
-  using value_type = typename std::remove_cv_t<Item>;
   using difference_type = std::ptrdiff_t;
+  using value_type = typename std::remove_cv_t<Item>;
   using pointer = value_type *;
   using reference = value_type &;
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
+  using iterator_category = std::random_access_iterator_tag;
   using size_type = std::size_t;
 
   constexpr array_iterator(pointer const begin, pointer const end) : position_{ 0 }, begin_{ begin }, end_{ end } {

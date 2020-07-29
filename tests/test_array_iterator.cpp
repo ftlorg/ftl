@@ -3,7 +3,9 @@
 #include <vector>
 #include <list>
 
-TEST_CASE("next", "[array_iterator]") {
+#define TEST_TAG "[array_iterator]"
+
+TEST_CASE(TEST_TAG "next", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
@@ -11,7 +13,7 @@ TEST_CASE("next", "[array_iterator]") {
   REQUIRE(arr[1] == *iter.next());
 }
 
-TEST_CASE("next const", "[array_iterator]") {
+TEST_CASE(TEST_TAG "next const", TEST_TAG) {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
@@ -19,7 +21,7 @@ TEST_CASE("next const", "[array_iterator]") {
   REQUIRE(arr[1] == *iter.next());
 }
 
-TEST_CASE("next nullopt", "[array_iterator]") {
+TEST_CASE(TEST_TAG "next nullopt", TEST_TAG) {
   constexpr std::size_t size = 2;
   ftl::array<int, size> arr = { 1, 2 };
 
@@ -28,7 +30,7 @@ TEST_CASE("next nullopt", "[array_iterator]") {
   REQUIRE(iter.next().has_value() == false);
 }
 
-TEST_CASE("next const nullopt", "[array_iterator]") {
+TEST_CASE(TEST_TAG "next const nullopt", TEST_TAG) {
   constexpr std::size_t size = 2;
   const ftl::array<int, size> arr = { 1, 2 };
 
@@ -37,7 +39,7 @@ TEST_CASE("next const nullopt", "[array_iterator]") {
   REQUIRE(iter.next().has_value() == false);
 }
 
-TEST_CASE("collect", "[array_iterator]") {
+TEST_CASE(TEST_TAG "collect", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
@@ -52,7 +54,7 @@ TEST_CASE("collect", "[array_iterator]") {
   REQUIRE(mapped_arr2 == ftl::array<int, size2>{ 1, 2, 3 });
 }
 
-TEST_CASE("collect to std::vector", "[array_iterator]") {
+TEST_CASE(TEST_TAG "collect to std::vector", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
@@ -61,7 +63,7 @@ TEST_CASE("collect to std::vector", "[array_iterator]") {
   REQUIRE(mapped_arr == std::vector<int>{ 1, 2, 3, 4, 5 });
 }
 
-TEST_CASE("collect const to std::vector", "[array_iterator]") {
+TEST_CASE(TEST_TAG "collect const to std::vector", TEST_TAG) {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
@@ -70,7 +72,7 @@ TEST_CASE("collect const to std::vector", "[array_iterator]") {
   REQUIRE(mapped_arr == std::vector<int>{ 1, 2, 3, 4, 5 });
 }
 
-TEST_CASE("collect to std::list", "[array_iterator]") {
+TEST_CASE(TEST_TAG "collect to std::list", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
@@ -79,7 +81,7 @@ TEST_CASE("collect to std::list", "[array_iterator]") {
   REQUIRE(mapped_arr == std::list<int>{ 1, 2, 3, 4, 5 });
 }
 
-TEST_CASE("collect const to std::list", "[array_iterator]") {
+TEST_CASE(TEST_TAG "collect const to std::list", TEST_TAG) {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
@@ -88,7 +90,7 @@ TEST_CASE("collect const to std::list", "[array_iterator]") {
   REQUIRE(mapped_arr == std::list<int>{ 1, 2, 3, 4, 5 });
 }
 
-TEST_CASE("collect const", "[array_iterator]") {
+TEST_CASE(TEST_TAG "collect const", TEST_TAG) {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
@@ -103,21 +105,21 @@ TEST_CASE("collect const", "[array_iterator]") {
   REQUIRE(mapped_arr2 == ftl::array<int, size2>{ 1, 2, 3 });
 }
 
-TEST_CASE("count", "[array_iterator]") {
+TEST_CASE(TEST_TAG "count", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
   REQUIRE(5 == arr.iter().count());
 }
 
-TEST_CASE("count const", "[array_iterator]") {
+TEST_CASE(TEST_TAG "count const", TEST_TAG) {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
   REQUIRE(5 == arr.iter().count());
 }
 
-TEST_CASE("begin", "[array_iterator]") {
+TEST_CASE(TEST_TAG "begin", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
@@ -128,7 +130,7 @@ TEST_CASE("begin", "[array_iterator]") {
   REQUIRE(arr[1] == *iter);
 }
 
-TEST_CASE("begin const", "[array_iterator]") {
+TEST_CASE(TEST_TAG "begin const", TEST_TAG) {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
@@ -139,7 +141,7 @@ TEST_CASE("begin const", "[array_iterator]") {
   REQUIRE(arr[1] == *iter);
 }
 
-TEST_CASE("cbegin", "[array_iterator]") {
+TEST_CASE(TEST_TAG "cbegin", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
@@ -150,7 +152,7 @@ TEST_CASE("cbegin", "[array_iterator]") {
   REQUIRE(arr[1] == *iter);
 }
 
-TEST_CASE("cbegin const", "[array_iterator]") {
+TEST_CASE(TEST_TAG "cbegin const", TEST_TAG) {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
@@ -161,7 +163,7 @@ TEST_CASE("cbegin const", "[array_iterator]") {
   REQUIRE(arr[1] == *iter);
 }
 
-TEST_CASE("operator++", "[array_iterator]") {
+TEST_CASE(TEST_TAG "operator++", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
@@ -181,7 +183,7 @@ TEST_CASE("operator++", "[array_iterator]") {
   REQUIRE(arr[4] == *iter);
 }
 
-TEST_CASE("operator++ const", "[array_iterator]") {
+TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
