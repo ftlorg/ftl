@@ -1,6 +1,7 @@
 #pragma once
 
-#include <ftl/iterator.hpp>
+#include <ftl/iterator_interface.hpp>
+#include <ftl/map_iterator.hpp>
 
 namespace ftl {
 
