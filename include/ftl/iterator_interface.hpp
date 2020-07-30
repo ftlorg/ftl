@@ -32,6 +32,13 @@ class take_iterator : public iterator_interface<take_iterator<Item>, Item, std::
 template<typename Item>
 class rev_iterator : public iterator_interface<rev_iterator<Item>, Item, std::size_t> {};
 
+/**
+ * Interface for iterators.
+
+ * @tparam Derived The type of iterator implementing this interface.
+ * @tparam Item The type of the underlying item.
+ * @tparam SizeType The size type.
+ */
 template<typename Derived, typename Item, typename SizeType>
 class iterator_interface {
 public:
@@ -46,6 +53,7 @@ public:
 
   /**
    * Checks if all of the items matche a predicate.
+   * 
    * @tparam Predicate
    * @param predicate
    */
@@ -54,6 +62,7 @@ public:
 
   /**
    * Checks if any of the items matches a predicate.
+   * 
    * @tparam Predicate
    * @param predicate
    */
@@ -62,6 +71,7 @@ public:
 
   /**
    * Transforms an iterator into collection.
+   * 
    * @tparam Collection
    */
   template<typename Collection>
@@ -85,6 +95,7 @@ public:
   /**
    * Creates an iterator which uses a predicate to determine if an element
    * should be yielded.
+   * 
    * @tparam Predicate
    * @param predicate
    */
@@ -93,6 +104,7 @@ public:
 
   /**
    * Searches for an element of an iterator that satisfies a predicate.
+   * 
    * @tparam Predicate
    * @param predicate
    */
@@ -106,6 +118,7 @@ public:
 
   /**
    * Applies a function, producing a single, final value.
+   * 
    * @tparam Operator
    * @param initial
    * @param op
@@ -115,6 +128,7 @@ public:
 
   /**
    * Calls a callable on each element of an iterator.
+   * 
    * @tparam Callable
    * @param callable
    */
@@ -123,6 +137,7 @@ public:
 
   /**
    * Does something with each element of an iterator, passing the value on.
+   * 
    * @tparam Callable
    * @param callable
    */
@@ -132,6 +147,7 @@ public:
   /**
    * Takes a callable and creates an iterator which calls that callable on
    * each element.
+   * 
    * @tparam Callable
    * @param callable
    */
@@ -152,6 +168,7 @@ public:
 
   /**
    * Consumes an iterator, creating two collections from it.
+   * 
    * @tparam Collection
    * @tparam Predicate
    * @param predicate
@@ -171,8 +188,7 @@ public:
   [[nodiscard]] auto sum() const -> value_type;
 
   /**
-   * Reverses an iterator's direction.
-   * @tparam Iterator
+   * Creates an iterator that reverses traversal direction.
    */
   [[nodiscard]] auto rev() const -> rev_iterator<Item>;
 
@@ -273,6 +289,7 @@ public:
 
   /**
    * Checks if all of the items matche a predicate.
+   * 
    * @tparam Predicate
    * @param predicate
    */
@@ -281,6 +298,7 @@ public:
 
   /**
    * Checks if any of the items matches a predicate.
+   * 
    * @tparam Predicate
    * @param predicate
    */
@@ -289,6 +307,7 @@ public:
 
   /**
    * Transforms an iterator into collection.
+   * 
    * @tparam Collection
    */
   template<typename Collection>
@@ -312,6 +331,7 @@ public:
   /**
    * Creates an iterator which uses a predicate to determine if an element
    * should be yielded.
+   * 
    * @tparam Predicate
    * @param predicate
    */
@@ -320,6 +340,7 @@ public:
 
   /**
    * Searches for an element of an iterator that satisfies a predicate.
+   * 
    * @tparam Predicate
    * @param predicate
    */
@@ -333,6 +354,7 @@ public:
 
   /**
    * Applies a function, producing a single, final value.
+   * 
    * @tparam Operator
    * @param initial
    * @param op
@@ -342,6 +364,7 @@ public:
 
   /**
    * Calls a callable on each element of an iterator.
+   * 
    * @tparam Callable
    * @param callable
    */
@@ -350,6 +373,7 @@ public:
 
   /**
    * Does something with each element of an iterator, passing the value on.
+   * 
    * @tparam Callable
    * @param callable
    */
@@ -359,6 +383,7 @@ public:
   /**
    * Takes a callable and creates an iterator which calls that callable on
    * each element.
+   * 
    * @tparam Callable
    * @param callable
    */
@@ -379,6 +404,7 @@ public:
 
   /**
    * Consumes an iterator, creating two collections from it.
+   * 
    * @tparam Collection
    * @tparam Predicate
    * @param predicate
