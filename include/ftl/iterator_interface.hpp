@@ -46,18 +46,23 @@ public:
 
   /**
    * @brief Checks if all of the items matche a predicate.
+   * @tparam Predicate
+   * @param predicate
    */
   template<typename Predicate>
   [[nodiscard]] auto all(Predicate &&predicate) const -> bool;
 
   /**
    * @brief Checks if any of the items matches a predicate.
+   * @tparam Predicate
+   * @param predicate
    */
   template<typename Predicate>
   [[nodiscard]] auto any(Predicate &&predicate) const -> bool;
 
   /**
    * @brief Transforms an iterator into collection.
+   * @tparam Collection
    */
   template<typename Collection>
   [[nodiscard]] auto collect() -> Collection {
@@ -261,18 +266,23 @@ public:
 
   /**
    * @brief Checks if all of the items matche a predicate.
+   * @tparam Predicate
+   * @param predicate
    */
   template<typename Predicate>
   [[nodiscard]] auto all(Predicate &&predicate) const -> bool;
 
   /**
    * @brief Checks if any of the items matches a predicate.
+   * @tparam Predicate
+   * @param predicate
    */
   template<typename Predicate>
   [[nodiscard]] auto any(Predicate &&predicate) const -> bool;
 
   /**
    * @brief Transforms an iterator into collection.
+   * @tparam Collection
    */
   template<typename Collection>
   [[nodiscard]] auto collect() const -> Collection {
