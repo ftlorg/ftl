@@ -1,6 +1,7 @@
 #pragma once
 
-#include <ftl/iterator.hpp>
+#include <ftl/iterator_interface.hpp>
+#include <ftl/map_iterator.hpp>
 
 namespace ftl {
 
@@ -10,13 +11,13 @@ class array_const_iterator final : public const_iterator_interface<array_const_i
   friend const_iterator_interface<array_const_iterator<Item, N>, Item, std::size_t>;
 
 public:
-  using iterator_category = /* */ void;
-  using value_type = typename std::remove_cv_t<Item>;
   using difference_type = std::ptrdiff_t;
+  using value_type = typename std::remove_cv_t<Item>;
   using pointer = value_type *;
   using reference = value_type &;
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
+  using iterator_category = std::random_access_iterator_tag;
   using size_type = std::size_t;
 
   constexpr array_const_iterator(const_pointer const begin, const_pointer const end)
@@ -75,9 +76,74 @@ private:
     position_++;
   }
 
+  [[nodiscard]] constexpr auto operator[](size_type pos) noexcept -> reference {
+    return begin_[pos];
+  }
+
+  [[nodiscard]] constexpr auto operator[](size_type pos) const noexcept -> const_reference {
+    return begin_[pos];
+  }
+
+  [[nodiscard]] friend constexpr auto operator+=(const array_const_iterator<Item, N> &lhs, size_type n)
+    -> array_const_iterator<Item, N> & {
+    lhs.position_ += n;
+    return lhs;
+  }
+
+  [[nodiscard]] friend constexpr auto operator+(const array_const_iterator<Item, N> &lhs, size_type n)
+    -> array_const_iterator<Item, N> {
+    return lhs += n;
+  }
+
+  [[nodiscard]] friend constexpr auto operator+(size_type n, const array_const_iterator<Item, N> &rhs)
+    -> array_const_iterator<Item, N> {
+    return rhs += n;
+  }
+
+  [[nodiscard]] friend constexpr auto operator-=(const array_const_iterator<Item, N> &lhs, size_type n)
+    -> array_const_iterator<Item, N> & {
+    return lhs += -n;
+  }
+
+  [[nodiscard]] friend constexpr auto operator-(const array_const_iterator<Item, N> &lhs, size_type n)
+    -> array_const_iterator<Item, N> {
+    return lhs -= n;
+  }
+
+  [[nodiscard]] friend constexpr auto operator-(const array_const_iterator<Item, N> &lhs,
+    const array_const_iterator<Item, N> &rhs) -> difference_type {
+    return std::distance(rhs.begin_ + rhs.position_, lhs.begin_ + lhs.position_);
+  }
+
+  [[nodiscard]] friend constexpr auto operator==(const array_const_iterator<Item, N> &lhs,
+    const array_const_iterator<Item, N> &rhs) noexcept -> bool {
+    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.position_ == rhs.position_;
+  }
+
   [[nodiscard]] friend constexpr auto operator!=(const array_const_iterator<Item, N> &lhs,
-    const array_const_iterator<Item, N> &rhs) -> bool {
-    return lhs.position_ != rhs.position_;
+    const array_const_iterator<Item, N> &rhs) noexcept -> bool {
+    return !(lhs == rhs);
+  }
+
+  [[nodiscard]] friend constexpr auto operator<(const array_const_iterator<Item, N> &lhs,
+    const array_const_iterator<Item, N> &rhs) noexcept -> bool {
+    return rhs - lhs > 0;
+  }
+
+  [[nodiscard]] friend constexpr auto operator<=(const array_const_iterator &lhs, const array_const_iterator &rhs) noexcept
+    -> bool {
+    return !(rhs < lhs);
+  }
+
+
+  [[nodiscard]] friend constexpr auto operator>(const array_const_iterator &lhs, const array_const_iterator &rhs) noexcept
+    -> bool {
+    return rhs < lhs;
+  }
+
+  [[nodiscard]] friend constexpr auto operator>=(const array_const_iterator &lhs, const array_const_iterator &rhs) noexcept
+    -> bool {
+    return !(lhs < rhs);
   }
 
 private:
