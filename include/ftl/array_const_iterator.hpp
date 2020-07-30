@@ -2,6 +2,7 @@
 
 #include <ftl/iterator_interface.hpp>
 #include <ftl/map_iterator.hpp>
+#include <ftl/enumerate_iterator.hpp>
 
 namespace ftl {
 
@@ -42,9 +43,13 @@ private:
     return from_iterator_trait<array_const_iterator<Item, N>, Collection>::from_iter(*this);
   }
 
+  [[nodiscard]] auto enumerate_impl() const -> enumerate_iterator<array_const_iterator<Item, N>> {
+    return { *this };
+  }
+
   template<typename Callable>
   [[nodiscard]] auto map_impl(Callable &&callable) const -> map_iterator<array_const_iterator<Item, N>, Callable> {
-    return { array_const_iterator<Item, N>{ begin_, end_ }, std::forward<Callable>(callable) };
+    return { *this, std::forward<Callable>(callable) };
   }
 
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
