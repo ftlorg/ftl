@@ -16,46 +16,53 @@ public:
   using iterator = void;      // TODO: vector_iterator
   using const_iterator = void;// TODO: const_vector_iterator
 
-  vector(std::vector<T, Allocator> vec) : vector_(std::move(vec)) {
+  vector(std::vector<T> vec) : vector_(std::move(vec)) {
   }
 
-  vector(std::initializer_list<T> vec) : vector(std::move(vec)) {
+  vector(std::initializer_list<T> list) : vector_(std::move(list)) {
   }
 
-  [[nodiscard]] constexpr reference operator[](std::size_t pos) {
+  [[nodiscard]] constexpr auto operator[](std::size_t pos) -> reference {
     if (pos >= vector_.size()) std::terminate();
     return vector_[pos];
   }
 
-  [[nodiscard]] constexpr const_reference operator[](std::size_t pos) const {
+  [[nodiscard]] constexpr auto operator[](std::size_t pos) const -> const_reference  {
     if (pos >= vector_.size()) std::terminate();
     return vector_[pos];
   }
 
-  [[nodiscard]] constexpr reference front() {
+  [[nodiscard]] constexpr auto front() -> reference {
     return vector_.front();
   }
 
-  [[nodiscard]] constexpr const_reference front() const {
+  [[nodiscard]] constexpr auto front() const -> const_reference {
     return vector_.front();
   }
 
-  [[nodiscard]] constexpr reference back() {
+  [[nodiscard]] constexpr auto back() -> reference {
     return vector_.back();
   }
 
-  [[nodiscard]] constexpr const_reference back() const {
+  [[nodiscard]] constexpr auto back() const -> const_reference {
     return vector_.back();
   }
 
+  [[nodiscard]] constexpr auto data() -> pointer {
+    return vector_.data();
+  }
+
+  [[nodiscard]] constexpr auto data() const -> const_pointer {
+    return vector_.data();
+  }
 
 private:
   std::vector<T, Allocator> vector_;
 };
 
 template<typename T, typename Allocator = std::allocator<T>>
-[[nodiscard]] constexpr auto to_vector(std::vector<T, Allocator> vec) -> vector<T, Allocator> {
-  return vector{ std::move(vec) };
+[[nodiscard]] constexpr auto to_vector(std::vector<T> vec) -> vector<T, Allocator> {
+  return vector<T, Allocator>{ std::move(vec) };
 }
 
 }// namespace ftl

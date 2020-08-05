@@ -42,7 +42,7 @@ TEST_CASE(TEST_TAG "front", TEST_TAG) {
   REQUIRE(vec.front() == 2);
 }
 
-TEST_CASE(TEST_TAG "front", TEST_TAG) {
+TEST_CASE(TEST_TAG "front const", TEST_TAG) {
   const ftl::vector<int> vec = { 2, 3 };
 
   REQUIRE(vec.front() == 2);
@@ -60,21 +60,20 @@ TEST_CASE(TEST_TAG "back const", TEST_TAG) {
   REQUIRE(vec.back() == 3);
 }
 
-//TEST_CASE(TEST_TAG "data", TEST_TAG) {
-//  constexpr std::size_t size = 2;
-//  ftl::array<int, size> arr = { 2, 3 };
-//
-//  REQUIRE(arr.data()[0] == 2);
-//  REQUIRE(arr.data()[1] == 3);
-//}
-//
-//TEST_CASE(TEST_TAG "data const", TEST_TAG) {
-//  constexpr std::size_t size = 2;
-//  const ftl::array<int, size> arr = { 2, 3 };
-//
-//  REQUIRE(arr.data()[0] == 2);
-//  REQUIRE(arr.data()[1] == 3);
-//}
+TEST_CASE(TEST_TAG "data", TEST_TAG) {
+  ftl::vector<int> vec = { 2, 3 };
+
+  REQUIRE(vec.data()[0] == 2);
+  REQUIRE(vec.data()[1] == 3);
+}
+
+TEST_CASE(TEST_TAG "data const", TEST_TAG) {
+  const ftl::vector<int> vec = { 2, 3 };
+
+  REQUIRE(vec.data()[0] == 2);
+  REQUIRE(vec.data()[1] == 3);
+}
+
 //
 //TEST_CASE(TEST_TAG "size", TEST_TAG) {
 //  constexpr std::size_t size = 2;
