@@ -26,45 +26,40 @@ TEST_CASE(TEST_TAG "operator[]", TEST_TAG) {
   REQUIRE(vec[4] == 6);
 }
 
-//TEST_CASE(TEST_TAG "operator[] const", TEST_TAG) {
-//  constexpr std::size_t size = 5;
-//  const ftl::array<int, size> arr = { 1, 2, 3, 4, 6 };
-//
-//  REQUIRE(arr[0] == 1);
-//  REQUIRE(arr[1] == 2);
-//  REQUIRE(arr[2] == 3);
-//  REQUIRE(arr[3] == 4);
-//  REQUIRE(arr[4] == 6);
-//}
-//
-//TEST_CASE(TEST_TAG "front", TEST_TAG) {
-//  constexpr std::size_t size = 2;
-//  ftl::array<int, size> arr = { 2, 3 };
-//
-//  REQUIRE(arr.front() == 2);
-//}
-//
-//TEST_CASE(TEST_TAG "front const", TEST_TAG) {
-//  constexpr std::size_t size = 2;
-//  const ftl::array<int, size> arr = { 2, 3 };
-//
-//  REQUIRE(arr.front() == 2);
-//}
-//
-//TEST_CASE(TEST_TAG "back", TEST_TAG) {
-//  constexpr std::size_t size = 2;
-//  ftl::array<int, size> arr = { 2, 3 };
-//
-//  REQUIRE(arr.back() == 3);
-//}
-//
-//TEST_CASE(TEST_TAG "back const", TEST_TAG) {
-//  constexpr std::size_t size = 2;
-//  const ftl::array<int, size> arr = { 2, 3 };
-//
-//  REQUIRE(arr.back() == 3);
-//}
-//
+TEST_CASE(TEST_TAG "operator[] const", TEST_TAG) {
+  const ftl::vector<int> vec = { 1, 2, 3, 4, 6 };
+
+  REQUIRE(vec[0] == 1);
+  REQUIRE(vec[1] == 2);
+  REQUIRE(vec[2] == 3);
+  REQUIRE(vec[3] == 4);
+  REQUIRE(vec[4] == 6);
+}
+
+TEST_CASE(TEST_TAG "front", TEST_TAG) {
+  ftl::vector<int> vec = { 2, 3 };
+
+  REQUIRE(vec.front() == 2);
+}
+
+TEST_CASE(TEST_TAG "front", TEST_TAG) {
+  const ftl::vector<int> vec = { 2, 3 };
+
+  REQUIRE(vec.front() == 2);
+}
+
+TEST_CASE(TEST_TAG "back", TEST_TAG) {
+  ftl::vector<int> vec = { 2, 3 };
+
+  REQUIRE(vec.back() == 3);
+}
+
+TEST_CASE(TEST_TAG "back const", TEST_TAG) {
+  const ftl::vector<int> vec = { 2, 3 };
+
+  REQUIRE(vec.back() == 3);
+}
+
 //TEST_CASE(TEST_TAG "data", TEST_TAG) {
 //  constexpr std::size_t size = 2;
 //  ftl::array<int, size> arr = { 2, 3 };

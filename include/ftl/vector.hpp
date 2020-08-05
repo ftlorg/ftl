@@ -32,6 +32,22 @@ public:
     return vector_[pos];
   }
 
+  [[nodiscard]] constexpr reference front() {
+    return vector_.front();
+  }
+
+  [[nodiscard]] constexpr const_reference front() const {
+    return vector_.front();
+  }
+
+  [[nodiscard]] constexpr reference back() {
+    return vector_.back();
+  }
+
+  [[nodiscard]] constexpr const_reference back() const {
+    return vector_.back();
+  }
+
 
 private:
   std::vector<T, Allocator> vector_;
