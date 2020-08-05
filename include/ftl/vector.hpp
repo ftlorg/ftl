@@ -16,18 +16,23 @@ public:
   using iterator = void;      // TODO: vector_iterator
   using const_iterator = void;// TODO: const_vector_iterator
 
+  vector() = default;
+
+  vector(size_type size) : vector_(size) {
+  }
+
   vector(std::vector<T> vec) : vector_(std::move(vec)) {
   }
 
   vector(std::initializer_list<T> list) : vector_(std::move(list)) {
   }
 
-  [[nodiscard]] constexpr auto operator[](std::size_t pos) -> reference {
+  [[nodiscard]] constexpr auto operator[](const std::size_t pos) -> reference {
     if (pos >= vector_.size()) std::terminate();
     return vector_[pos];
   }
 
-  [[nodiscard]] constexpr auto operator[](std::size_t pos) const -> const_reference  {
+  [[nodiscard]] constexpr auto operator[](const std::size_t pos) const -> const_reference {
     if (pos >= vector_.size()) std::terminate();
     return vector_[pos];
   }
@@ -54,6 +59,30 @@ public:
 
   [[nodiscard]] constexpr auto data() const -> const_pointer {
     return vector_.data();
+  }
+
+  [[nodiscard]] constexpr auto size() const noexcept -> size_type {
+    return vector_.size();
+  }
+
+  constexpr auto resize(const size_type size) -> void {
+    vector_.resize(size);
+  }
+
+  [[nodiscard]] constexpr auto empty() const noexcept -> bool {
+    return vector_.empty();
+  }
+
+  constexpr auto fill(const_reference val) -> void {
+    std::fill(vector_.begin(), vector_.end(), val);
+  }
+
+  [[nodiscard]] constexpr auto operator==(const vector<T> &rhs) const noexcept -> bool {
+    return vector_ == rhs.vector_;
+  }
+
+  constexpr auto swap(vector<T> &other) noexcept -> void {
+    std::swap(vector_, other.vector_);
   }
 
 private:
