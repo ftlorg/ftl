@@ -27,6 +27,8 @@ public:
     : position_{ position }, begin_{ begin }, end_{ end } {
   }
 
+  constexpr auto operator=(const array_iterator &) -> array_iterator & = default; //TODO: maybe dangerous
+
 private:
   [[nodiscard]] auto next_impl() -> std::optional<value_type> {
     ++position_;
