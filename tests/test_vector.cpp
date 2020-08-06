@@ -145,7 +145,7 @@ TEST_CASE(TEST_TAG "operator= rvalue reference", TEST_TAG) {
 
 TEST_CASE(TEST_TAG "assign value", TEST_TAG) {
   ftl::vector<int> vec1;
-  vec1.assign(5, 5);
+  vec1.assign(static_cast<std::size_t>(5), 5);
   REQUIRE(vec1 == ftl::vector<int>{ 5, 5, 5, 5, 5 });
 }
 
