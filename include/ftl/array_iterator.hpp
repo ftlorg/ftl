@@ -87,7 +87,7 @@ private:
   }
 
   [[nodiscard]] friend constexpr auto operator+=(const array_iterator<Item, N> &lhs, size_type n)
-    -> array_iterator<Item, N> & {
+    -> const array_iterator<Item, N> & {
     lhs.position_ += n;
     return lhs;
   }

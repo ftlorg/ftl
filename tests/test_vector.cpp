@@ -108,13 +108,76 @@ TEST_CASE(TEST_TAG "fill", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "swap", TEST_TAG) {
-  ftl::vector<int> arr1 = { 5, 5, 5, 5, 5 };
-  ftl::vector<int> arr2 = { 1337, 1337, 1337, 1337, 1337 };
-  arr1.swap(arr2);
+  ftl::vector<int> vec1 = { 5, 5, 5, 5, 5 };
+  ftl::vector<int> vec2 = { 1337, 1337, 1337, 1337, 1337 };
+  vec1.swap(vec2);
 
-  REQUIRE(arr1 == ftl::vector<int>{ 1337, 1337, 1337, 1337, 1337 });
-  REQUIRE(arr2 == ftl::vector<int>{ 5, 5, 5, 5, 5 });
+  REQUIRE(vec1 == ftl::vector<int>{ 1337, 1337, 1337, 1337, 1337 });
+  REQUIRE(vec2 == ftl::vector<int>{ 5, 5, 5, 5, 5 });
 }
+
+TEST_CASE(TEST_TAG "push_back", TEST_TAG) {
+  ftl::vector<int> vec1 = { 5, 5, 5, 5, 5 };
+  vec1.push_back(20);
+  REQUIRE(vec1.back() == 20);
+}
+
+TEST_CASE(TEST_TAG "emplace_back trivial type", TEST_TAG) {
+  ftl::vector<int> vec1 = { 5, 5, 5, 5, 5 };
+  vec1.emplace_back(20);
+  REQUIRE(vec1.back() == 20);
+}
+
+//TODO: test with custom class with non-trivial constructor
+
+TEST_CASE(TEST_TAG "operator= const reference", TEST_TAG) {
+  ftl::vector<int> vec1 = { 5, 5, 5, 5, 5 };
+  ftl::vector<int> vec2;
+  vec2 = vec1;
+  REQUIRE(vec1 == vec2);
+}
+
+TEST_CASE(TEST_TAG "operator= rvalue reference", TEST_TAG) {
+  ftl::vector<int> vec1;
+  vec1 = ftl::vector<int>{ 5, 5, 5, 5, 5 };
+  REQUIRE(vec1 == ftl::vector<int>{ 5, 5, 5, 5, 5 });
+}
+
+TEST_CASE(TEST_TAG "assign value", TEST_TAG) {
+  ftl::vector<int> vec1;
+  vec1.assign(5, 5);
+  REQUIRE(vec1 == ftl::vector<int>{ 5, 5, 5, 5, 5 });
+}
+
+TEST_CASE(TEST_TAG "assign initializer_list", TEST_TAG) {
+  ftl::vector<int> vec1;
+  vec1.assign({ 5, 5, 5, 5, 5 });
+  REQUIRE(vec1 == ftl::vector<int>{ 5, 5, 5, 5, 5 });
+}
+
+TEST_CASE(TEST_TAG "assign iterators", TEST_TAG) {
+  ftl::vector<int> vec1;
+  ftl::array<int, 5> arr = { 1, 2, 3, 4, 5 };
+  vec1.assign(arr.begin(), arr.end());
+  REQUIRE(vec1 == ftl::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "at", TEST_TAG) {
+  ftl::vector<int> vec1 = { 1, 2, 3, 4, 5 };
+  REQUIRE(vec1.at(3) == 4);
+}
+
+TEST_CASE(TEST_TAG "at const", TEST_TAG) {
+  const ftl::vector<int> vec1 = { 1, 2, 3, 4, 5 };
+  REQUIRE(vec1.at(3) == 4);
+}
+
+TEST_CASE(TEST_TAG "at out of range", TEST_TAG) {
+  const ftl::vector<int> vec1 = { 1, 2, 3, 4, 5 };
+  REQUIRE_THROWS(vec1.at(120));
+  REQUIRE(vec1.at(3) == 4);
+}
+
 //
 // TEST_CASE(TEST_TAG "iter", TEST_TAG) {
 //  constexpr std::size_t size = 5;

@@ -13,6 +13,7 @@ public:
   using reference = value_type &;
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
+  using allocator_type = Allocator;
   using iterator = void;      // TODO: vector_iterator
   using const_iterator = void;// TODO: const_vector_iterator
 
@@ -25,6 +26,18 @@ public:
   }
 
   vector(std::initializer_list<T> list) : vector_(std::move(list)) {
+  }
+
+  constexpr auto operator=(const vector<T, Allocator> &rhs) -> vector<T, Allocator> & {
+    if (this == &rhs) return *this;
+    vector_ = rhs.vector_;
+    return *this;
+  }
+
+  constexpr auto operator=(const vector<T, Allocator> &&rhs) -> vector<T, Allocator> & {
+    if (this == &rhs) return *this;
+    vector_ = std::move(rhs.vector_);
+    return *this;
   }
 
   [[nodiscard]] constexpr auto operator[](const std::size_t pos) -> reference {
@@ -84,6 +97,46 @@ public:
   constexpr auto swap(vector<T> &other) noexcept -> void {
     std::swap(vector_, other.vector_);
   }
+
+  constexpr auto push_back(const_reference value) -> void {
+    vector_.push_back(value);
+  }
+
+  constexpr auto push_back(value_type &&value) -> void {
+    vector_.push_back(std::move(value));
+  }
+
+  template<typename... Args>
+  constexpr auto emplace_back(Args &&... args) -> void {
+    vector_.emplace_back(std::forward<Args...>(args...));
+  }
+
+  constexpr auto assign(size_type size, const_reference value) -> void {
+    vector_.assign(size, value);
+  }
+
+  constexpr auto assign(std::initializer_list<value_type> list) -> void {
+    vector_.assign(list);
+  }
+  
+  template<class InputIt>
+  constexpr auto assign(InputIt first, InputIt last) -> void {
+    vector_.assign(first, last);
+  }
+
+  [[nodiscard]] constexpr auto get_allocator() const noexcept -> allocator_type {
+    return vector_.get_allocator();
+  }
+
+  [[nodiscard]] constexpr auto at(const size_type pos) -> reference {
+    return vector_.at(pos);
+  }
+
+  [[nodiscard]] constexpr auto at(const size_type pos) const -> const_reference {
+    return vector_.at(pos);
+  }
+
+
 
 private:
   std::vector<T, Allocator> vector_;
