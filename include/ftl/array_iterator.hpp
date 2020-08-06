@@ -76,8 +76,12 @@ private:
     return begin_[position_];
   }
 
-  auto preincrement_impl() const {
+  auto preincrement_impl() const -> void {
     ++position_;
+  }
+
+  auto predecrement_impl() const -> void {
+    --position_;
   }
 
   [[nodiscard]] constexpr auto operator[](size_type pos) noexcept -> reference {

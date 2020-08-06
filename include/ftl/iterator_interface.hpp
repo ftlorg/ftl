@@ -53,7 +53,7 @@ public:
 
   /**
    * Checks if all of the items matche a predicate.
-   * 
+   *
    * @tparam Predicate
    * @param predicate
    */
@@ -62,7 +62,7 @@ public:
 
   /**
    * Checks if any of the items matches a predicate.
-   * 
+   *
    * @tparam Predicate
    * @param predicate
    */
@@ -71,7 +71,7 @@ public:
 
   /**
    * Transforms an iterator into collection.
-   * 
+   *
    * @tparam Collection
    */
   template<typename Collection>
@@ -95,7 +95,7 @@ public:
   /**
    * Creates an iterator which uses a predicate to determine if an element
    * should be yielded.
-   * 
+   *
    * @tparam Predicate
    * @param predicate
    */
@@ -104,7 +104,7 @@ public:
 
   /**
    * Searches for an element of an iterator that satisfies a predicate.
-   * 
+   *
    * @tparam Predicate
    * @param predicate
    */
@@ -118,7 +118,7 @@ public:
 
   /**
    * Applies a function, producing a single, final value.
-   * 
+   *
    * @tparam Operator
    * @param initial
    * @param op
@@ -128,7 +128,7 @@ public:
 
   /**
    * Calls a callable on each element of an iterator.
-   * 
+   *
    * @tparam Callable
    * @param callable
    */
@@ -137,7 +137,7 @@ public:
 
   /**
    * Does something with each element of an iterator, passing the value on.
-   * 
+   *
    * @tparam Callable
    * @param callable
    */
@@ -147,7 +147,7 @@ public:
   /**
    * Takes a callable and creates an iterator which calls that callable on
    * each element.
-   * 
+   *
    * @tparam Callable
    * @param callable
    */
@@ -168,7 +168,7 @@ public:
 
   /**
    * Consumes an iterator, creating two collections from it.
-   * 
+   *
    * @tparam Collection
    * @tparam Predicate
    * @param predicate
@@ -223,6 +223,13 @@ public:
    */
   auto operator++() const -> void {
     static_cast<const Derived &>(*this).preincrement_impl();
+  }
+
+  /**
+   * Decreases the iterator.
+   */
+  auto operator--() const -> void {
+    static_cast<const Derived &>(*this).predecrement_impl();
   }
 
   /**
@@ -289,7 +296,7 @@ public:
 
   /**
    * Checks if all of the items matche a predicate.
-   * 
+   *
    * @tparam Predicate
    * @param predicate
    */
@@ -298,7 +305,7 @@ public:
 
   /**
    * Checks if any of the items matches a predicate.
-   * 
+   *
    * @tparam Predicate
    * @param predicate
    */
@@ -307,7 +314,7 @@ public:
 
   /**
    * Transforms an iterator into collection.
-   * 
+   *
    * @tparam Collection
    */
   template<typename Collection>
@@ -331,7 +338,7 @@ public:
   /**
    * Creates an iterator which uses a predicate to determine if an element
    * should be yielded.
-   * 
+   *
    * @tparam Predicate
    * @param predicate
    */
@@ -340,7 +347,7 @@ public:
 
   /**
    * Searches for an element of an iterator that satisfies a predicate.
-   * 
+   *
    * @tparam Predicate
    * @param predicate
    */
@@ -354,7 +361,7 @@ public:
 
   /**
    * Applies a function, producing a single, final value.
-   * 
+   *
    * @tparam Operator
    * @param initial
    * @param op
@@ -364,7 +371,7 @@ public:
 
   /**
    * Calls a callable on each element of an iterator.
-   * 
+   *
    * @tparam Callable
    * @param callable
    */
@@ -373,7 +380,7 @@ public:
 
   /**
    * Does something with each element of an iterator, passing the value on.
-   * 
+   *
    * @tparam Callable
    * @param callable
    */
@@ -383,7 +390,7 @@ public:
   /**
    * Takes a callable and creates an iterator which calls that callable on
    * each element.
-   * 
+   *
    * @tparam Callable
    * @param callable
    */
@@ -404,7 +411,7 @@ public:
 
   /**
    * Consumes an iterator, creating two collections from it.
-   * 
+   *
    * @tparam Collection
    * @tparam Predicate
    * @param predicate
