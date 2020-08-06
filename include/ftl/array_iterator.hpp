@@ -27,7 +27,7 @@ public:
     : position_{ position }, begin_{ begin }, end_{ end } {
   }
 
-  constexpr auto operator=(const array_iterator &) -> array_iterator & = default; //TODO: maybe dangerous
+  //constexpr auto operator=(const array_iterator &) -> array_iterator & = default; //TODO: maybe dangerous
 
 private:
   [[nodiscard]] auto next_impl() -> std::optional<value_type> {
@@ -145,8 +145,8 @@ private:
 
 private:
   mutable size_type position_;
-  pointer const begin_;
-  pointer const end_;
+  pointer /* const */ begin_;
+  pointer /* const */ end_;
 };
 
 }// namespace ftl
