@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+//#include <vector_iterator.hpp>
+#include "vector_iterator.hpp"
 
 namespace ftl {
 template<typename T, typename Allocator = std::allocator<T>>
@@ -14,7 +16,7 @@ public:
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
   using allocator_type = Allocator;
-  using iterator = void;      // TODO: vector_iterator
+  using iterator = typename std::vector<value_type, Allocator>::iterator ;      // TODO: vector_iterator
   using const_iterator = void;// TODO: const_vector_iterator
 
   vector() = default;
@@ -34,7 +36,7 @@ public:
     return *this;
   }
 
-  constexpr auto operator=(const vector<T, Allocator> &&rhs) -> vector<T, Allocator> & {
+  constexpr auto operator=(vector<T, Allocator> &&rhs) -> vector<T, Allocator> & {
     if (this == &rhs) return *this;
     vector_ = std::move(rhs.vector_);
     return *this;
@@ -118,7 +120,7 @@ public:
   constexpr auto assign(std::initializer_list<value_type> list) -> void {
     vector_.assign(list);
   }
-  
+
   template<class InputIt>
   constexpr auto assign(InputIt first, InputIt last) -> void {
     vector_.assign(first, last);
@@ -136,6 +138,11 @@ public:
     return vector_.at(pos);
   }
 
+  [[nodiscard]] constexpr auto iter() noexcept -> iterator {
+    return into_iterator_trait<ftl::vector<T, Allocator>, iterator>::into_iter(*this);
+  }
+
+
 
 
 private:
@@ -148,3 +155,11 @@ template<typename T, typename Allocator = std::allocator<T>>
 }
 
 }// namespace ftl
+
+template <typename Item, typename Allocator>
+struct ftl::into_iterator_trait<ftl::vector<Item, Allocator>, ftl::vector_iterator<Item, Allocator>> {
+    using iterator = typename ftl::vector<Item, Allocator>::iterator;
+    [[nodiscard]] constexpr static auto into_iter(ftl::vector<Item, Allocator>& vec){
+      return iterator{};
+    }
+};
