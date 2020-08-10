@@ -9,50 +9,39 @@ TEST_CASE(TEST_TAG "next", TEST_TAG) {
   ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
 
   [[maybe_unused]] auto iter = vec.iter();
-  //REQUIRE(vec[1] == *iter.next());
+  REQUIRE(vec[1] == *iter.next());
 }
-//
-//TEST_CASE(TEST_TAG "next const", TEST_TAG) {
-//  constexpr std::size_t size = 5;
-//  const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
-//
-//  auto iter = arr.iter();
-//  REQUIRE(arr[1] == *iter.next());
-//}
-//
-//TEST_CASE(TEST_TAG "next nullopt", TEST_TAG) {
-//  constexpr std::size_t size = 2;
-//  ftl::array<int, size> arr = { 1, 2 };
-//
-//  auto iter = arr.iter();
-//  REQUIRE(arr[1] == *iter.next());
-//  REQUIRE(iter.next().has_value() == false);
-//}
-//
-//TEST_CASE(TEST_TAG "next const nullopt", TEST_TAG) {
-//  constexpr std::size_t size = 2;
-//  const ftl::array<int, size> arr = { 1, 2 };
-//
-//  auto iter = arr.iter();
-//  REQUIRE(arr[1] == *iter.next());
-//  REQUIRE(iter.next().has_value() == false);
-//}
+
+TEST_CASE(TEST_TAG "next const", TEST_TAG) {
+  const ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
+
+  auto iter = vec.iter();
+  REQUIRE(vec[1] == *iter.next());
+}
+
+TEST_CASE(TEST_TAG "next nullopt", TEST_TAG) {
+  constexpr std::size_t size = 2;
+  ftl::array<int, size> arr = { 1, 2 };
+
+  auto iter = arr.iter();
+  REQUIRE(arr[1] == *iter.next());
+  REQUIRE(iter.next().has_value() == false);
+}
+
 //
 //TEST_CASE(TEST_TAG "collect", TEST_TAG) {
-//  constexpr std::size_t size = 5;
-//  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+//  ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
 //
-//  auto mapped_arr = arr.iter().collect<ftl::array<int, size>>();
+//  auto mapped_vec = vec.iter().collect<ftl::vector<int>>();
 //
-//  constexpr std::size_t size2 = 3;
-//  ftl::array<int, size2> arr2 = { 1, 2, 3 };
+//  ftl::vector<int> vec2 = { 1, 2, 3 };
 //
-//  auto mapped_arr2 = arr2.iter().collect<ftl::array<int, size2>>();
+//  auto mapped_vec2 = vec2.iter().collect<ftl::vector<int>>();
 //
-//  REQUIRE(mapped_arr == ftl::array<int, size>{ 1, 2, 3, 4, 5 });
-//  REQUIRE(mapped_arr2 == ftl::array<int, size2>{ 1, 2, 3 });
+//  REQUIRE(mapped_vec == ftl::vector<int>{ 1, 2, 3, 4, 5 });
+//  REQUIRE(mapped_vec2 == ftl::vector<int>{ 1, 2, 3 });
 //}
-//
+
 //TEST_CASE(TEST_TAG "collect to std::vector", TEST_TAG) {
 //  constexpr std::size_t size = 5;
 //  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
