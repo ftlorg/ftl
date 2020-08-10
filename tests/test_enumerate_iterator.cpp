@@ -23,6 +23,46 @@ TEST_CASE(TEST_TAG "enumerate const", TEST_TAG) {
   }
 }
 
+TEST_CASE(TEST_TAG "preincrement", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+
+  auto iter = arr.iter().enumerate();
+  REQUIRE(*iter == std::make_tuple(0, 1));
+
+  ++iter;
+  REQUIRE(*iter == std::make_tuple(1, 2));
+
+  ++iter;
+  REQUIRE(*iter == std::make_tuple(2, 3));
+
+  ++iter;
+  REQUIRE(*iter == std::make_tuple(3, 4));
+
+  ++iter;
+  REQUIRE(*iter == std::make_tuple(4, 5));
+}
+
+TEST_CASE(TEST_TAG "preincrement const", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+
+  auto iter = arr.iter().enumerate();
+  REQUIRE(*iter == std::make_tuple(0, 1));
+
+  ++iter;
+  REQUIRE(*iter == std::make_tuple(1, 2));
+
+  ++iter;
+  REQUIRE(*iter == std::make_tuple(2, 3));
+
+  ++iter;
+  REQUIRE(*iter == std::make_tuple(3, 4));
+
+  ++iter;
+  REQUIRE(*iter == std::make_tuple(4, 5));
+}
+
 TEST_CASE(TEST_TAG "enumerate with side effects", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };

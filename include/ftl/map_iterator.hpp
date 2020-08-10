@@ -33,7 +33,7 @@ private:
     return iterator_.count();
   }
 
-    [[nodiscard]] auto enumerate_impl() const -> enumerate_iterator<map_iterator<Iter, Callable>> {
+  [[nodiscard]] auto enumerate_impl() const -> enumerate_iterator<map_iterator<Iter, Callable>> {
     return { *this };
   }
 
