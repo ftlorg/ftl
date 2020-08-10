@@ -35,6 +35,10 @@ private:
     return iterator_.count();
   }
 
+  [[nodiscard]] auto enumerate_impl() const -> enumerate_iterator<enumerate_iterator<Iter>> {
+    return { *this };
+  }
+
   template<typename NewCallable>
   [[nodiscard]] auto map_impl(NewCallable &&callable) const -> map_iterator<enumerate_iterator<Iter>, NewCallable> {
     return { *this, std::forward<NewCallable>(callable) };
