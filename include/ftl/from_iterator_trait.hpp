@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 namespace ftl {
 
 /**
@@ -12,7 +14,7 @@ namespace ftl {
 template<typename T, typename U>
 struct from_iterator_trait {
   [[nodiscard]] constexpr static auto from_iter(const T &iter) -> U {
-    return { iter.begin(), iter.end() };
+    return { iter.begin(), iter.end(), std::allocator<typename T::value_type>{} };
   }
 };
 
