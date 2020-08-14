@@ -2,6 +2,7 @@
 
 #include <ftl/iterator_interface.hpp>
 #include <ftl/map_iterator.hpp>
+#include <ftl/enumerate_iterator.hpp>
 
 namespace ftl {
 
@@ -12,7 +13,7 @@ class array_const_iterator final : public const_iterator_interface<array_const_i
 
 public:
   using difference_type = std::ptrdiff_t;
-  using value_type = typename std::remove_cv_t<Item>;
+  using value_type = std::remove_cv_t<Item>;
   using pointer = value_type *;
   using reference = value_type &;
   using const_pointer = const value_type *;
@@ -42,9 +43,13 @@ private:
     return from_iterator_trait<array_const_iterator<Item, N>, Collection>::from_iter(*this);
   }
 
+  [[nodiscard]] auto enumerate_impl() const -> enumerate_iterator<array_const_iterator<Item, N>> {
+    return { *this };
+  }
+
   template<typename Callable>
   [[nodiscard]] auto map_impl(Callable &&callable) const -> map_iterator<array_const_iterator<Item, N>, Callable> {
-    return { array_const_iterator<Item, N>{ begin_, end_ }, std::forward<Callable>(callable) };
+    return { *this, std::forward<Callable>(callable) };
   }
 
   [[nodiscard]] constexpr auto count_impl() const -> size_type {

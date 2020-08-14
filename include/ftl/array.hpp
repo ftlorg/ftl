@@ -22,8 +22,8 @@ public:
   using reference = value_type &;
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
-  using iterator = typename ftl::array_iterator<T, N>;
-  using const_iterator = typename ftl::array_const_iterator<T, N>;
+  using iterator = array_iterator<T, N>;
+  using const_iterator = array_const_iterator<T, N>;
 
   [[nodiscard]] constexpr auto operator[](size_type pos) noexcept -> reference {
     if (pos >= N) std::terminate();
@@ -147,7 +147,7 @@ template<typename T, std::size_t N>
 }
 
 template<typename T, std::size_t N>
-[[nodiscard]] constexpr auto to_array(const std::array<T, N> &arr) -> ftl::array<T, N> {
+[[nodiscard]] constexpr auto to_array(const std::array<T, N> &arr) -> array<T, N> {
   array<T, N> result = {};
   std::copy(arr.data(), arr.data() + arr.size(), result.data());
   return result;
@@ -157,8 +157,8 @@ template<typename T, std::size_t N>
 
 template<typename Item, std::size_t N>
 struct ftl::from_iterator_trait<ftl::array_iterator<Item, N>, ftl::array<Item, N>> {
-  [[nodiscard]] constexpr static auto from_iter(ftl::array_iterator<Item, N> &iter) {
-    ftl::array<Item, N> result{};
+  [[nodiscard]] constexpr static auto from_iter(array_iterator<Item, N> &iter) {
+    array<Item, N> result{};
     std::size_t i = 0;
     for (auto &&item : iter) {
       result[i] = item;
@@ -171,8 +171,8 @@ struct ftl::from_iterator_trait<ftl::array_iterator<Item, N>, ftl::array<Item, N
 
 template<typename Item, std::size_t N>
 struct ftl::from_iterator_trait<ftl::array_const_iterator<Item, N>, ftl::array<Item, N>> {
-  [[nodiscard]] constexpr static auto from_iter(const ftl::array_const_iterator<Item, N> &iter) {
-    ftl::array<Item, N> result{};
+  [[nodiscard]] constexpr static auto from_iter(const array_const_iterator<Item, N> &iter) {
+    array<Item, N> result{};
     std::size_t i = 0;
     for (auto &&item : iter) {
       result[i] = item;
@@ -185,8 +185,23 @@ struct ftl::from_iterator_trait<ftl::array_const_iterator<Item, N>, ftl::array<I
 
 template<typename Iter, typename Callable, typename Item, std::size_t N>
 struct ftl::from_iterator_trait<ftl::map_iterator<Iter, Callable>, ftl::array<Item, N>> {
-  [[nodiscard]] constexpr static auto from_iter(const ftl::map_iterator<Iter, Callable> &iter) -> ftl::array<Item, N> {
-    ftl::array<Item, N> result{};
+  [[nodiscard]] constexpr static auto from_iter(const map_iterator<Iter, Callable> &iter) -> array<Item, N> {
+    array<Item, N> result{};
+    std::size_t i = 0;
+    for (auto &&item : iter) {
+      result[i] = item;
+      ++i;
+    }
+
+    return result;
+  }
+};
+
+template<typename Iter, typename Item, std::size_t N>
+struct ftl::from_iterator_trait<ftl::enumerate_iterator<Iter>, ftl::array<std::tuple<std::size_t, Item>, N>> {
+  [[nodiscard]] constexpr static auto from_iter(const enumerate_iterator<Iter> &iter)
+    -> array<std::tuple<std::size_t, Item>, N> {
+    array<std::tuple<std::size_t, Item>, N> result{};
     std::size_t i = 0;
     for (auto &&item : iter) {
       result[i] = item;

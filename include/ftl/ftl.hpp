@@ -7,6 +7,7 @@
 #include <ftl/into_iterator_trait.hpp>
 #include <ftl/iterator_interface.hpp>
 #include <ftl/map_iterator.hpp>
+#include <ftl/enumerate_iterator.hpp>
 
 namespace ftl {
 
