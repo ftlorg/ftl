@@ -138,13 +138,19 @@ TEST_CASE(TEST_TAG "enumerate collect to std::vector", TEST_TAG) {
   int i4 = 4;
   int i5 = 5;
   REQUIRE(mapped_arr
-          == std::vector<std::tuple<std::size_t, int &>>{
-            { 0, i1 },
-            { 1, i2 },
-            { 2, i3 },
-            { 3, i4 },
-            { 4, i5 },
-          });
+    == std::vector<std::tuple<std::size_t,
+    int &>>{
+    { 0,
+    i1 },
+    { 1,
+    i2 },
+    { 2,
+    i3 },
+    { 3,
+    i4 },
+    { 4,
+    i5 },
+    });
 }
 
 TEST_CASE(TEST_TAG "enumerate collect to std::vector const", TEST_TAG) {
@@ -154,11 +160,17 @@ TEST_CASE(TEST_TAG "enumerate collect to std::vector const", TEST_TAG) {
   auto mapped_arr = arr.iter().enumerate().collect<std::vector<std::tuple<std::size_t, const int &>>>();
 
   REQUIRE(mapped_arr
-          == std::vector<std::tuple<std::size_t, const int &>>{
-            { 0, 1 },
-            { 1, 2 },
-            { 2, 3 },
-            { 3, 4 },
-            { 4, 5 },
-          });
+    == std::vector<std::tuple<std::size_t,
+    const int &>>{
+    { 0,
+    1 },
+    { 1,
+    2 },
+    { 2,
+    3 },
+    { 3,
+    4 },
+    { 4,
+    5 },
+    });
 }

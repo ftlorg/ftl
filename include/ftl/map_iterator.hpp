@@ -20,7 +20,8 @@ public:
   using iterator_category = typename Iter::iterator_category;
   using size_type = typename Iter::size_type;
 
-  map_iterator(Iter iterator, Callable callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
+  map_iterator(Iter iterator, Callable callable)
+    : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
   }
 
 private:
@@ -66,28 +67,33 @@ private:
     ++iterator_;
   }
 
-  [[nodiscard]] friend constexpr auto operator+=(const map_iterator<Iter, Callable> &lhs, size_type n)
-    -> map_iterator<Iter, Callable> & {
+  [[nodiscard]] friend constexpr auto operator+=(const map_iterator<Iter, Callable> &lhs,
+    size_type n)
+  -> map_iterator<Iter, Callable>& {
     return lhs.iterator_ += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator+(const map_iterator<Iter, Callable> &lhs, size_type n)
-    -> map_iterator<Iter, Callable> {
+  [[nodiscard]] friend constexpr auto operator+(const map_iterator<Iter, Callable> &lhs,
+    size_type n)
+  -> map_iterator<Iter, Callable> {
     return lhs.iterator_ += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator+(size_type n, const map_iterator<Iter, Callable> &rhs)
-    -> map_iterator<Iter, Callable> {
+  [[nodiscard]] friend constexpr auto operator+(size_type n,
+    const map_iterator<Iter, Callable> &rhs)
+  -> map_iterator<Iter, Callable> {
     return rhs.iterator_ += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator-=(const map_iterator<Iter, Callable> &lhs, size_type n)
-    -> map_iterator<Iter, Callable> & {
+  [[nodiscard]] friend constexpr auto operator-=(const map_iterator<Iter, Callable> &lhs,
+    size_type n)
+  -> map_iterator<Iter, Callable>& {
     return lhs.iterator_ += -n;
   }
 
-  [[nodiscard]] friend constexpr auto operator-(const map_iterator<Iter, Callable> &lhs, size_type n)
-    -> map_iterator<Iter, Callable> {
+  [[nodiscard]] friend constexpr auto operator-(const map_iterator<Iter, Callable> &lhs,
+    size_type n)
+  -> map_iterator<Iter, Callable> {
     return lhs.iterator_ -= n;
   }
 

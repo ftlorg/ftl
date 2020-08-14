@@ -150,7 +150,8 @@ TEST_CASE(TEST_TAG "range-based for loop const", TEST_TAG) {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
-  for ([[maybe_unused]] const auto &x : arr) {}
+  for ([[maybe_unused]] const auto &x : arr) {
+  }
 }
 
 TEST_CASE(TEST_TAG "operator==", TEST_TAG) {

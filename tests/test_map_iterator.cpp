@@ -64,9 +64,9 @@ TEST_CASE(TEST_TAG "chain map", TEST_TAG) {
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
   auto mapped_arr = arr.iter()
-                      .map([](const auto &x) { return x * x; })
-                      .map([](const auto &x) { return 2 * x; })
-                      .collect<ftl::array<int, size>>();
+                       .map([](const auto &x) { return x * x; })
+                       .map([](const auto &x) { return 2 * x; })
+                       .collect<ftl::array<int, size>>();
 
   REQUIRE(mapped_arr == ftl::array<int, size>{ 2, 8, 18, 32, 50 });
 }
@@ -76,9 +76,9 @@ TEST_CASE(TEST_TAG "chain map const", TEST_TAG) {
   const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
   auto mapped_arr = arr.iter()
-                      .map([](const auto &x) { return x * x; })
-                      .map([](const auto &x) { return 2 * x; })
-                      .collect<ftl::array<int, size>>();
+                       .map([](const auto &x) { return x * x; })
+                       .map([](const auto &x) { return 2 * x; })
+                       .collect<ftl::array<int, size>>();
 
   REQUIRE(mapped_arr == ftl::array<int, size>{ 2, 8, 18, 32, 50 });
 }

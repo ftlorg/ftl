@@ -15,22 +15,27 @@ template<typename Iter, typename Callable>
 class map_iterator;
 
 template<typename Iter>
-class filter_iterator : public iterator_interface<filter_iterator<Iter>, Iter, std::size_t> {};
+class filter_iterator : public iterator_interface<filter_iterator<Iter>, Iter, std::size_t> {
+};
 
 template<typename Iter>
-class flatten_iterator : public iterator_interface<flatten_iterator<Iter>, Iter, std::size_t> {};
+class flatten_iterator : public iterator_interface<flatten_iterator<Iter>, Iter, std::size_t> {
+};
 
 template<typename Iter>
 class enumerate_iterator;
 
 template<typename Iter>
-class inspect_iterator : public iterator_interface<inspect_iterator<Iter>, Iter, std::size_t> {};
+class inspect_iterator : public iterator_interface<inspect_iterator<Iter>, Iter, std::size_t> {
+};
 
 template<typename Iter>
-class take_iterator : public iterator_interface<take_iterator<Iter>, Iter, std::size_t> {};
+class take_iterator : public iterator_interface<take_iterator<Iter>, Iter, std::size_t> {
+};
 
 template<typename Iter>
-class rev_iterator : public iterator_interface<rev_iterator<Iter>, Iter, std::size_t> {};
+class rev_iterator : public iterator_interface<rev_iterator<Iter>, Iter, std::size_t> {
+};
 
 /**
  * Interface for iterators.
@@ -43,7 +48,7 @@ template<typename Derived, typename Item, typename SizeType>
 class iterator_interface {
 public:
   using size_type = SizeType;
-  using value_type = typename std::remove_cv_t<Item>;
+  using value_type = std::remove_cv_t<Item>;
   using pointer = value_type *;
   using reference = value_type &;
   using const_pointer = const value_type *;
@@ -281,7 +286,7 @@ template<typename Derived, typename Item, typename SizeType>
 class const_iterator_interface {
 public:
   using size_type = SizeType;
-  using value_type = typename std::remove_cv_t<Item>;
+  using value_type = std::remove_cv_t<Item>;
   using pointer = value_type *;
   using reference = value_type &;
   using const_pointer = const value_type *;
