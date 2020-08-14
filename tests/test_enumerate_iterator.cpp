@@ -63,7 +63,7 @@ TEST_CASE(TEST_TAG "enumerate with side effects", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
-  for (const auto &[index, item] : arr.iter().enumerate()) { item = size - index; }
+  for (const auto &[index, item] : arr.iter().enumerate()) { item = static_cast<int>(size - index); }
 
   REQUIRE(arr == ftl::array<int, size>{ 5, 4, 3, 2, 1 });
 }
