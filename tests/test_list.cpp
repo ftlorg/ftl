@@ -234,5 +234,5 @@ TEST_CASE(TEST_TAG "erase", TEST_TAG) {
   ftl::list<int> list1 = { 1, 2, 3, 4, 5 };
   list1.erase(list1.begin());
 
-  REQUIRE(list1 == ftl::list{ 2, 3, 4, 5 });
+  REQUIRE(list1 == ftl::list<int>{ 2, 3, 4, 5 });
 }

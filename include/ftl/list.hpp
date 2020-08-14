@@ -216,7 +216,7 @@ public:
 
   template<class... Args>
   auto emplace_front(Args &&... args) -> reference {
-    return list_.emplace_front<Args>(std::forward<Args>(args)...);
+    return list_.template emplace_front<Args...>(std::forward<Args>(args)...);
   }
 
   auto pop_front() -> void {
@@ -308,51 +308,33 @@ public:
     list_.sort(std::move(comp));
   }
 
-  friend bool operator==(const list &lhs, const list &rhs);
+  [[nodiscard]] friend auto operator==(const list<T, Allocator> &lhs, const list<T, Allocator> &rhs) -> bool {
+    return lhs.list_ == rhs.list_;
+  }
 
-  friend bool operator!=(const list &lhs, const list &rhs);
+  [[nodiscard]] friend auto operator!=(const list<T, Allocator> &lhs, const list<T, Allocator> &rhs) -> bool {
+    return lhs.list_ != rhs.list_;
+  }
 
-  friend bool operator<(const list &lhs, const list &rhs);
+  [[nodiscard]] friend auto operator<(const list<T, Allocator> &lhs, const list<T, Allocator> &rhs) -> bool {
+    return lhs.list_ < rhs.list_;
+  }
 
-  friend bool operator<=(const list &lhs, const list &rhs);
+  [[nodiscard]] friend auto operator<=(const list<T, Allocator> &lhs, const list<T, Allocator> &rhs) -> bool {
+    return lhs.list_ <= rhs.list_;
+  }
 
-  friend bool operator>(const list &lhs, const list &rhs);
+  [[nodiscard]] friend auto operator>(const list<T, Allocator> &lhs, const list<T, Allocator> &rhs) -> bool {
+    return lhs.list_ > rhs.list_;
+  }
 
-  friend bool operator>=(const list &lhs, const list &rhs);
+  [[nodiscard]] friend auto operator>=(const list<T, Allocator> &lhs, const list<T, Allocator> &rhs) -> bool {
+    return lhs.list_ >= rhs.list_;
+  }
 
 private:
   std::list<value_type, allocator_type> list_{};
 };
-
-template<typename T, typename Allocator = std::allocator<T>>
-[[nodiscard]] bool operator==(const list<T, Allocator> &lhs, const list<T, Allocator> &rhs) {
-  return lhs.list_ == rhs.list_;
-}
-
-template<typename T, typename Allocator = std::allocator<T>>
-[[nodiscard]] bool operator!=(const list<T, Allocator> &lhs, const list<T, Allocator> &rhs) {
-  return lhs.list_ != rhs.list_;
-}
-
-template<typename T, typename Allocator = std::allocator<T>>
-[[nodiscard]] bool operator<(const list<T, Allocator> &lhs, const list<T, Allocator> &rhs) {
-  return lhs.list_ < rhs.list_;
-}
-
-template<typename T, typename Allocator = std::allocator<T>>
-[[nodiscard]] bool operator<=(const list<T, Allocator> &lhs, const list<T, Allocator> &rhs) {
-  return lhs.list_ <= rhs.list_;
-}
-
-template<typename T, typename Allocator = std::allocator<T>>
-[[nodiscard]] bool operator>(const list<T, Allocator> &lhs, const list<T, Allocator> &rhs) {
-  return lhs.list_ > rhs.list_;
-}
-
-template<typename T, typename Allocator = std::allocator<T>>
-[[nodiscard]] bool operator>=(const list<T, Allocator> &lhs, const list<T, Allocator> &rhs) {
-  return lhs.list_ >= rhs.list_;
-}
 
 template<class T, class Alloc>
 void swap(std::list<T, Alloc> &lhs, std::list<T, Alloc> &rhs) noexcept(noexcept(lhs.swap(rhs))) {
