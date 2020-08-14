@@ -199,7 +199,7 @@ public:
 
   template<class... Args>
   auto emplace_back(Args &&... args) -> reference {
-    return list_.template emplace_back<Args>(std::forward<Args>(args)...);
+    return list_.template emplace_back<Args...>(std::forward<Args>(args)...);
   }
 
   auto pop_back() -> void {
