@@ -62,12 +62,12 @@ private:
 
   // TODO: Think about return type
   [[nodiscard]] constexpr auto deref_impl()
-    -> std::tuple<size_type, std::remove_reference_t<decltype(std::declval<Iter>().operator*())>> {
+    -> std::tuple<size_type, decltype(std::declval<Iter>().operator*())> {
     return { index_, *iterator_ };
   }
 
   [[nodiscard]] constexpr auto const_deref_impl() const
-    -> std::tuple<size_type, std::remove_reference_t<decltype(std::declval<Iter>().operator*())>> {
+    -> std::tuple<size_type, decltype(std::declval<Iter>().operator*())> {
     return { index_, *iterator_ };
   }
 
