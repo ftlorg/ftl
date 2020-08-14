@@ -7,20 +7,14 @@ TEST_CASE(TEST_TAG "enumerate", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
-  for (const auto &[index, item] : arr.iter().enumerate()) {
-    REQUIRE(arr[index] == item);
-    REQUIRE(&arr[index] == &item);
-  }
+  for (const auto &[index, item] : arr.iter().enumerate()) { REQUIRE(arr[index] == item); }
 }
 
 TEST_CASE(TEST_TAG "enumerate const", TEST_TAG) {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
-  for (const auto &[index, item] : arr.iter().enumerate()) {
-    REQUIRE(arr[index] == item);
-    REQUIRE(&arr[index] == &item);
-  }
+  for (const auto &[index, item] : arr.iter().enumerate()) { REQUIRE(arr[index] == item); }
 }
 
 TEST_CASE(TEST_TAG "enumerate enumerate", TEST_TAG) {
@@ -30,7 +24,6 @@ TEST_CASE(TEST_TAG "enumerate enumerate", TEST_TAG) {
   for (const auto &[index, enumerateTuple] : arr.iter().enumerate().enumerate()) {
     REQUIRE(index == std::get<0>(enumerateTuple));
     REQUIRE(arr[index] == std::get<1>(enumerateTuple));
-    REQUIRE(&arr[index] == &std::get<1>(enumerateTuple));
   }
 }
 
@@ -41,7 +34,6 @@ TEST_CASE(TEST_TAG "enumerate enumerate const", TEST_TAG) {
   for (const auto &[index, enumerateTuple] : arr.iter().enumerate().enumerate()) {
     REQUIRE(index == std::get<0>(enumerateTuple));
     REQUIRE(arr[index] == std::get<1>(enumerateTuple));
-    REQUIRE(&arr[index] == &std::get<1>(enumerateTuple));
   }
 }
 
@@ -99,15 +91,6 @@ TEST_CASE(TEST_TAG "preincrement const", TEST_TAG) {
   REQUIRE(*iter == std::make_tuple(4, 5));
 }
 
-TEST_CASE(TEST_TAG "enumerate with side effects", TEST_TAG) {
-  constexpr std::size_t size = 5;
-  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
-
-  for (auto [index, item] : arr.iter().enumerate()) { item = static_cast<int>(size - index); }
-
-  REQUIRE(arr == ftl::array<int, size>{ 5, 4, 3, 2, 1 });
-}
-
 TEST_CASE(TEST_TAG "map enumerate", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
@@ -130,7 +113,7 @@ TEST_CASE(TEST_TAG "enumerate collect to std::vector", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
-  auto mapped_arr = arr.iter().enumerate().collect<std::vector<std::tuple<std::size_t, int &>>>();
+  auto mapped_arr = arr.iter().enumerate().collect<std::vector<std::tuple<std::size_t, int>>>();
 
   int i1 = 1;
   int i2 = 2;
@@ -138,7 +121,7 @@ TEST_CASE(TEST_TAG "enumerate collect to std::vector", TEST_TAG) {
   int i4 = 4;
   int i5 = 5;
   REQUIRE(mapped_arr
-          == std::vector<std::tuple<std::size_t, int &>>{
+          == std::vector<std::tuple<std::size_t, int>>{
             { 0, i1 },
             { 1, i2 },
             { 2, i3 },
@@ -151,10 +134,10 @@ TEST_CASE(TEST_TAG "enumerate collect to std::vector const", TEST_TAG) {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
-  auto mapped_arr = arr.iter().enumerate().collect<std::vector<std::tuple<std::size_t, const int &>>>();
+  auto mapped_arr = arr.iter().enumerate().collect<std::vector<std::tuple<std::size_t, int>>>();
 
   REQUIRE(mapped_arr
-          == std::vector<std::tuple<std::size_t, const int &>>{
+          == std::vector<std::tuple<std::size_t, int>>{
             { 0, 1 },
             { 1, 2 },
             { 2, 3 },
