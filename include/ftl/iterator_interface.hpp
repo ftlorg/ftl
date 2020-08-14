@@ -15,27 +15,22 @@ template<typename Iter, typename Callable>
 class map_iterator;
 
 template<typename Iter>
-class filter_iterator : public iterator_interface<filter_iterator<Iter>, Iter, std::size_t> {
-};
+class filter_iterator : public iterator_interface<filter_iterator<Iter>, Iter, std::size_t> {};
 
 template<typename Iter>
-class flatten_iterator : public iterator_interface<flatten_iterator<Iter>, Iter, std::size_t> {
-};
+class flatten_iterator : public iterator_interface<flatten_iterator<Iter>, Iter, std::size_t> {};
 
 template<typename Iter>
 class enumerate_iterator;
 
 template<typename Iter>
-class inspect_iterator : public iterator_interface<inspect_iterator<Iter>, Iter, std::size_t> {
-};
+class inspect_iterator : public iterator_interface<inspect_iterator<Iter>, Iter, std::size_t> {};
 
 template<typename Iter>
-class take_iterator : public iterator_interface<take_iterator<Iter>, Iter, std::size_t> {
-};
+class take_iterator : public iterator_interface<take_iterator<Iter>, Iter, std::size_t> {};
 
 template<typename Iter>
-class rev_iterator : public iterator_interface<rev_iterator<Iter>, Iter, std::size_t> {
-};
+class rev_iterator : public iterator_interface<rev_iterator<Iter>, Iter, std::size_t> {};
 
 /**
  * Interface for iterators.
@@ -58,7 +53,7 @@ public:
 
   /**
    * Checks if all of the items matche a predicate.
-   * 
+   *
    * @tparam Predicate
    * @param predicate
    */
@@ -67,7 +62,7 @@ public:
 
   /**
    * Checks if any of the items matches a predicate.
-   * 
+   *
    * @tparam Predicate
    * @param predicate
    */
@@ -76,7 +71,7 @@ public:
 
   /**
    * Transforms an iterator into collection.
-   * 
+   *
    * @tparam Collection
    */
   template<typename Collection>
@@ -102,7 +97,7 @@ public:
   /**
    * Creates an iterator which uses a predicate to determine if an element
    * should be yielded.
-   * 
+   *
    * @tparam Predicate
    * @param predicate
    */
@@ -111,7 +106,7 @@ public:
 
   /**
    * Searches for an element of an iterator that satisfies a predicate.
-   * 
+   *
    * @tparam Predicate
    * @param predicate
    */
@@ -125,7 +120,7 @@ public:
 
   /**
    * Applies a function, producing a single, final value.
-   * 
+   *
    * @tparam Operator
    * @param initial
    * @param op
@@ -135,7 +130,7 @@ public:
 
   /**
    * Calls a callable on each element of an iterator.
-   * 
+   *
    * @tparam Callable
    * @param callable
    */
@@ -144,7 +139,7 @@ public:
 
   /**
    * Does something with each element of an iterator, passing the value on.
-   * 
+   *
    * @tparam Callable
    * @param callable
    */
@@ -154,7 +149,7 @@ public:
   /**
    * Takes a callable and creates an iterator which calls that callable on
    * each element.
-   * 
+   *
    * @tparam Callable
    * @param callable
    */
@@ -175,7 +170,7 @@ public:
 
   /**
    * Consumes an iterator, creating two collections from it.
-   * 
+   *
    * @tparam Collection
    * @tparam Predicate
    * @param predicate
@@ -296,7 +291,7 @@ public:
 
   /**
    * Checks if all of the items matche a predicate.
-   * 
+   *
    * @tparam Predicate
    * @param predicate
    */
@@ -305,7 +300,7 @@ public:
 
   /**
    * Checks if any of the items matches a predicate.
-   * 
+   *
    * @tparam Predicate
    * @param predicate
    */
@@ -314,7 +309,7 @@ public:
 
   /**
    * Transforms an iterator into collection.
-   * 
+   *
    * @tparam Collection
    */
   template<typename Collection>
@@ -340,7 +335,7 @@ public:
   /**
    * Creates an iterator which uses a predicate to determine if an element
    * should be yielded.
-   * 
+   *
    * @tparam Predicate
    * @param predicate
    */
@@ -349,7 +344,7 @@ public:
 
   /**
    * Searches for an element of an iterator that satisfies a predicate.
-   * 
+   *
    * @tparam Predicate
    * @param predicate
    */
@@ -363,7 +358,7 @@ public:
 
   /**
    * Applies a function, producing a single, final value.
-   * 
+   *
    * @tparam Operator
    * @param initial
    * @param op
@@ -373,7 +368,7 @@ public:
 
   /**
    * Calls a callable on each element of an iterator.
-   * 
+   *
    * @tparam Callable
    * @param callable
    */
@@ -382,7 +377,7 @@ public:
 
   /**
    * Does something with each element of an iterator, passing the value on.
-   * 
+   *
    * @tparam Callable
    * @param callable
    */
@@ -392,7 +387,7 @@ public:
   /**
    * Takes a callable and creates an iterator which calls that callable on
    * each element.
-   * 
+   *
    * @tparam Callable
    * @param callable
    */
@@ -413,7 +408,7 @@ public:
 
   /**
    * Consumes an iterator, creating two collections from it.
-   * 
+   *
    * @tparam Collection
    * @tparam Predicate
    * @param predicate

@@ -22,8 +22,7 @@ public:
   using iterator_category = typename Iter::iterator_category;
   using size_type = typename Iter::size_type;
 
-  enumerate_iterator(Iter iterator)
-    : iterator_{ std::move(iterator) }, index_{ 0 } {
+  enumerate_iterator(Iter iterator) : iterator_{ std::move(iterator) }, index_{ 0 } {
   }
 
 private:
@@ -67,7 +66,7 @@ private:
   }
 
   [[nodiscard]] constexpr auto const_deref_impl() const
-  -> std::tuple<size_type, decltype(std::declval<Iter>().operator*())> {
+    -> std::tuple<size_type, decltype(std::declval<Iter>().operator*())> {
     return { index_, *iterator_ };
   }
 
@@ -76,39 +75,33 @@ private:
     ++index_;
   }
 
-  [[nodiscard]] friend constexpr auto operator+=(const enumerate_iterator<Iter> &lhs,
-    size_type n)
-  -> enumerate_iterator<Iter>& {
+  [[nodiscard]] friend constexpr auto operator+=(const enumerate_iterator<Iter> &lhs, size_type n)
+    -> enumerate_iterator<Iter> & {
     return lhs.iterator_ += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator+(const enumerate_iterator<Iter> &lhs,
-    size_type n)
-  -> enumerate_iterator<Iter> {
+  [[nodiscard]] friend constexpr auto operator+(const enumerate_iterator<Iter> &lhs, size_type n)
+    -> enumerate_iterator<Iter> {
     return lhs.iterator_ += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator+(size_type n,
-    const enumerate_iterator<Iter> &rhs)
-  -> enumerate_iterator<Iter> {
+  [[nodiscard]] friend constexpr auto operator+(size_type n, const enumerate_iterator<Iter> &rhs)
+    -> enumerate_iterator<Iter> {
     return rhs.iterator_ += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator-=(const enumerate_iterator<Iter> &lhs,
-    size_type n)
-  -> enumerate_iterator<Iter>& {
+  [[nodiscard]] friend constexpr auto operator-=(const enumerate_iterator<Iter> &lhs, size_type n)
+    -> enumerate_iterator<Iter> & {
     return lhs.iterator_ += -n;
   }
 
-  [[nodiscard]] friend constexpr auto operator-(const enumerate_iterator<Iter> &lhs,
-    size_type n)
-  -> enumerate_iterator<Iter> {
+  [[nodiscard]] friend constexpr auto operator-(const enumerate_iterator<Iter> &lhs, size_type n)
+    -> enumerate_iterator<Iter> {
     return lhs.iterator_ -= n;
   }
 
-  [[nodiscard]] friend constexpr auto operator-(const enumerate_iterator<Iter> &lhs,
-    const enumerate_iterator<Iter> &rhs)
-  -> difference_type {
+  [[nodiscard]] friend constexpr auto operator-(const enumerate_iterator<Iter> &lhs, const enumerate_iterator<Iter> &rhs)
+    -> difference_type {
     return lhs.iterator_ - rhs.iterator_;
   }
 

@@ -89,34 +89,29 @@ private:
     return begin_[pos];
   }
 
-  [[nodiscard]] friend constexpr auto operator+=(const array_const_iterator<Item, N> &lhs,
-    size_type n)
-  -> array_const_iterator<Item, N>& {
+  [[nodiscard]] friend constexpr auto operator+=(const array_const_iterator<Item, N> &lhs, size_type n)
+    -> array_const_iterator<Item, N> & {
     lhs.position_ += n;
     return lhs;
   }
 
-  [[nodiscard]] friend constexpr auto operator+(const array_const_iterator<Item, N> &lhs,
-    size_type n)
-  -> array_const_iterator<Item, N> {
+  [[nodiscard]] friend constexpr auto operator+(const array_const_iterator<Item, N> &lhs, size_type n)
+    -> array_const_iterator<Item, N> {
     return lhs += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator+(size_type n,
-    const array_const_iterator<Item, N> &rhs)
-  -> array_const_iterator<Item, N> {
+  [[nodiscard]] friend constexpr auto operator+(size_type n, const array_const_iterator<Item, N> &rhs)
+    -> array_const_iterator<Item, N> {
     return rhs += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator-=(const array_const_iterator<Item, N> &lhs,
-    size_type n)
-  -> array_const_iterator<Item, N>& {
+  [[nodiscard]] friend constexpr auto operator-=(const array_const_iterator<Item, N> &lhs, size_type n)
+    -> array_const_iterator<Item, N> & {
     return lhs += -n;
   }
 
-  [[nodiscard]] friend constexpr auto operator-(const array_const_iterator<Item, N> &lhs,
-    size_type n)
-  -> array_const_iterator<Item, N> {
+  [[nodiscard]] friend constexpr auto operator-(const array_const_iterator<Item, N> &lhs, size_type n)
+    -> array_const_iterator<Item, N> {
     return lhs -= n;
   }
 
@@ -140,22 +135,19 @@ private:
     return rhs - lhs > 0;
   }
 
-  [[nodiscard]] friend constexpr auto operator<=(const array_const_iterator &lhs,
-    const array_const_iterator &rhs) noexcept
-  -> bool {
+  [[nodiscard]] friend constexpr auto operator<=(const array_const_iterator &lhs, const array_const_iterator &rhs) noexcept
+    -> bool {
     return !(rhs < lhs);
   }
 
 
-  [[nodiscard]] friend constexpr auto operator>(const array_const_iterator &lhs,
-    const array_const_iterator &rhs) noexcept
-  -> bool {
+  [[nodiscard]] friend constexpr auto operator>(const array_const_iterator &lhs, const array_const_iterator &rhs) noexcept
+    -> bool {
     return rhs < lhs;
   }
 
-  [[nodiscard]] friend constexpr auto operator>=(const array_const_iterator &lhs,
-    const array_const_iterator &rhs) noexcept
-  -> bool {
+  [[nodiscard]] friend constexpr auto operator>=(const array_const_iterator &lhs, const array_const_iterator &rhs) noexcept
+    -> bool {
     return !(lhs < rhs);
   }
 
