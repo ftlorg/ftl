@@ -212,6 +212,20 @@ struct ftl::from_iterator_trait<ftl::enumerate_iterator<Iter>, ftl::array<std::t
   }
 };
 
+template<typename Iter, typename Callable, typename Item, std::size_t N>
+struct ftl::from_iterator_trait<ftl::inspect_iterator<Iter, Callable>, ftl::array<Item, N>> {
+  [[nodiscard]] constexpr static auto from_iter(const inspect_iterator<Iter, Callable> &iter) -> array<Item, N> {
+    array<Item, N> result{};
+    std::size_t i = 0;
+    for (auto &&item : iter) {
+      result[i] = item;
+      ++i;
+    }
+
+    return result;
+  }
+};
+
 template<typename T, std::size_t N>
 struct ftl::into_iterator_trait<ftl::array<T, N>, typename ftl::array<T, N>::iterator> {
   using iterator = typename array<T, N>::iterator;

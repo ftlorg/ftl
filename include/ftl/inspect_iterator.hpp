@@ -64,9 +64,9 @@ private:
     return { iterator_.cend(), callable_ };
   }
 
-  [[nodiscard]] constexpr auto const_deref_impl() const -> value_type {
+  [[nodiscard]] constexpr auto const_deref_impl() const -> decltype(std::declval<const Iter&>().operator*()) {
     callable_(*iterator_);
-    return *iterator_;
+    return *static_cast<const Iter&>(iterator_);
   }
 
   auto preincrement_impl() const -> void {
