@@ -236,3 +236,169 @@ TEST_CASE(TEST_TAG "erase", TEST_TAG) {
 
   REQUIRE(list1 == ftl::list<int>{ 2, 3, 4, 5 });
 }
+
+TEST_CASE(TEST_TAG "push_back", TEST_TAG) {
+  ftl::list<int> list1 = {};
+
+  list1.push_back(1);
+  REQUIRE(list1 == ftl::list<int>{ 1 });
+
+  list1.push_back(2);
+  REQUIRE(list1 == ftl::list<int>{ 1, 2 });
+
+  list1.push_back(3);
+  REQUIRE(list1 == ftl::list<int>{ 1, 2, 3 });
+}
+
+TEST_CASE(TEST_TAG "emplace_back", TEST_TAG) {
+  ftl::list<int> list1 = {};
+
+  list1.emplace_back(1);
+  REQUIRE(list1 == ftl::list<int>{ 1 });
+
+  list1.emplace_back(2);
+  REQUIRE(list1 == ftl::list<int>{ 1, 2 });
+
+  list1.emplace_back(3);
+  REQUIRE(list1 == ftl::list<int>{ 1, 2, 3 });
+}
+
+TEST_CASE(TEST_TAG "pop_back", TEST_TAG) {
+  ftl::list<int> list1 = { 1, 2, 3, 4 };
+
+  list1.pop_back();
+  REQUIRE(list1 == ftl::list<int>{ 1, 2, 3 });
+
+  list1.pop_back();
+  REQUIRE(list1 == ftl::list<int>{ 1, 2 });
+
+  list1.pop_back();
+  REQUIRE(list1 == ftl::list<int>{ 1 });
+}
+
+TEST_CASE(TEST_TAG "push_front", TEST_TAG) {
+  ftl::list<int> list1 = {};
+
+  list1.push_front(1);
+  REQUIRE(list1 == ftl::list<int>{ 1 });
+
+  list1.push_front(2);
+  REQUIRE(list1 == ftl::list<int>{ 2, 1 });
+
+  list1.push_front(3);
+  REQUIRE(list1 == ftl::list<int>{ 3, 2, 1 });
+}
+
+TEST_CASE(TEST_TAG "emplace_front", TEST_TAG) {
+  ftl::list<int> list1 = {};
+
+  list1.emplace_front(1);
+  REQUIRE(list1 == ftl::list<int>{ 1 });
+
+  list1.emplace_front(2);
+  REQUIRE(list1 == ftl::list<int>{ 2, 1 });
+
+  list1.emplace_front(3);
+  REQUIRE(list1 == ftl::list<int>{ 3, 2, 1 });
+}
+
+TEST_CASE(TEST_TAG "pop_front", TEST_TAG) {
+  ftl::list<int> list1 = { 1, 2, 3, 4 };
+
+  list1.pop_front();
+  REQUIRE(list1 == ftl::list<int>{ 2, 3, 4 });
+
+  list1.pop_front();
+  REQUIRE(list1 == ftl::list<int>{ 3, 4 });
+
+  list1.pop_front();
+  REQUIRE(list1 == ftl::list<int>{ 4 });
+}
+
+TEST_CASE(TEST_TAG "resize", TEST_TAG) {
+  ftl::list<int> list1 = {};
+  list1.resize(5);
+
+  REQUIRE(list1.size() == 5);
+  REQUIRE(list1 == ftl::list<int>{ 0, 0, 0, 0, 0 });
+}
+
+TEST_CASE(TEST_TAG "swap", TEST_TAG) {
+  ftl::list<int> list1 = { 1, 2, 3 };
+  ftl::list<int> list2 = { 3, 2, 1 };
+  list1.swap(list2);
+
+  REQUIRE(list1 == ftl::list<int>{ 3, 2, 1 });
+  REQUIRE(list2 == ftl::list<int>{ 1, 2, 3 });
+}
+
+TEST_CASE(TEST_TAG "merge", TEST_TAG) {
+  ftl::list<int> list1 = { 1, 2, 3 };
+  ftl::list<int> list2 = { 4, 5, 6 };
+  list1.merge(list2);
+
+  REQUIRE(list1 == ftl::list<int>{ 1, 2, 3, 4, 5, 6 });
+  REQUIRE(list2.empty() == true);
+}
+
+TEST_CASE(TEST_TAG "splice whole", TEST_TAG) {
+  ftl::list<int> list1 = { 1, 2, 3 };
+  ftl::list<int> list2 = { 4, 5, 6 };
+  list1.splice(list1.begin(), list2);
+
+  REQUIRE(list1 == ftl::list<int>{ 4, 5, 6, 1, 2, 3 });
+  REQUIRE(list2.empty() == true);
+}
+
+TEST_CASE(TEST_TAG "splice partial", TEST_TAG) {
+  ftl::list<int> list1 = { 1, 2, 3 };
+  ftl::list<int> list2 = { 4, 5, 6 };
+  auto it = list2.begin();
+  std::advance(it, 1);
+  list1.splice(list1.begin(), list2, it, list2.end());
+
+  REQUIRE(list1 == ftl::list<int>{ 5, 6, 1, 2, 3 });
+  REQUIRE(list2 == ftl::list<int>{ 4 });
+}
+
+TEST_CASE(TEST_TAG "remove", TEST_TAG) {
+  ftl::list<int> list1 = { 1, 2, 3 };
+  list1.remove(2);
+
+  REQUIRE(list1 == ftl::list<int>{ 1, 3 });
+}
+
+TEST_CASE(TEST_TAG "remove_if", TEST_TAG) {
+  ftl::list<int> list1 = { 1, 2, 3 };
+  list1.remove_if([](const auto &x) { return x % 2 == 0; });
+
+  REQUIRE(list1 == ftl::list<int>{ 1, 3 });
+}
+
+TEST_CASE(TEST_TAG "reverse", TEST_TAG) {
+  ftl::list<int> list1 = { 1, 2, 3 };
+  list1.reverse();
+
+  REQUIRE(list1 == ftl::list<int>{ 3, 2, 1 });
+}
+
+TEST_CASE(TEST_TAG "unique", TEST_TAG) {
+  ftl::list<int> list1 = { 1, 2, 2, 3, 3, 4 };
+  list1.unique();
+
+  REQUIRE(list1 == ftl::list<int>{ 1, 2, 3, 4 });
+}
+
+TEST_CASE(TEST_TAG "unique predicate", TEST_TAG) {
+  ftl::list<int> list1 = { 1, 2, 2, 3, 3, 4 };
+  list1.unique([](const auto &a, const auto &b) { return a < b; });
+
+  REQUIRE(list1 == ftl::list<int>{ 1 });
+}
+
+TEST_CASE(TEST_TAG "sort", TEST_TAG) {
+  ftl::list<int> list1 = { 5, 1, 3, 2, 4 };
+  list1.sort();
+
+  REQUIRE(list1 == ftl::list<int>{ 1, 2, 3, 4, 5 });
+}

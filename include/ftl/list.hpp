@@ -232,11 +232,12 @@ public:
   }
 
   auto swap(list &other) noexcept(std::allocator_traits<allocator_type>::is_always_equal::value) -> void {
-    list_.swap(other);
+    list_.swap(other.list_);
   }
 
   auto merge(list &other) -> void {
-    list_.merge(other);
+    list_.merge(other.list_);
+    list_.merge(other.list_);
   }
 
   auto merge(list &&other) -> void {
@@ -254,7 +255,7 @@ public:
   }
 
   auto splice(const_iterator pos, list &other) -> void {
-    list_.splice(std::move(pos), other);
+    list_.splice(std::move(pos), other.list_);
   }
 
   auto splice(const_iterator pos, list &&other) -> void {
@@ -262,7 +263,7 @@ public:
   }
 
   auto splice(const_iterator pos, list &other, const_iterator it) -> void {
-    list_.splice(std::move(pos), other, std::move(it));
+    list_.splice(std::move(pos), other.list_, std::move(it));
   }
 
   auto splice(const_iterator pos, list &&other, const_iterator it) -> void {
@@ -270,7 +271,7 @@ public:
   }
 
   auto splice(const_iterator pos, list &other, const_iterator first, const_iterator last) -> void {
-    list_.splice(std::move(pos), other, std::move(first), std::move(last));
+    list_.splice(std::move(pos), other.list_, std::move(first), std::move(last));
   }
 
   auto splice(const_iterator pos, list &&other, const_iterator first, const_iterator last) -> void {
