@@ -1,10 +1,9 @@
 #pragma once
 
-#include <ftl/from_iterator_trait.hpp>
 #include <memory>
-#include <cassert>
 #include <tuple>
 #include <optional>
+#include <type_traits>
 
 namespace ftl {
 

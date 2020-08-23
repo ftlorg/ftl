@@ -5,10 +5,10 @@
 namespace ftl {
 
 template<typename Iter, typename Callable>
-class inspect_iterator
-  : public const_iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type> {
+class inspect_iterator final
+  : public iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type> {
 
-  friend const_iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
+  friend iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
 
 public:
   using difference_type = typename Iter::difference_type;
@@ -64,9 +64,14 @@ private:
     return { iterator_.cend(), callable_ };
   }
 
+  [[nodiscard]] constexpr auto deref_impl() -> decltype(std::declval<Iter>().operator*()) {
+    callable_(*static_cast<const Iter &>(iterator_));
+    return *iterator_;
+  }
+
   [[nodiscard]] constexpr auto const_deref_impl() const -> decltype(std::declval<const Iter&>().operator*()) {
-    callable_(*iterator_);
-    return *static_cast<const Iter&>(iterator_);
+    callable_(*static_cast<const Iter &>(iterator_));
+    return *static_cast<const Iter &>(iterator_);
   }
 
   auto preincrement_impl() const -> void {
