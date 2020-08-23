@@ -212,14 +212,14 @@ public:
    */
   [[nodiscard]] auto operator*() -> decltype(auto) {
     return static_cast<Derived &>(*this).deref_impl();
-  };
+  }
 
   /**
    * Returns currently pointed-to value.
    */
   [[nodiscard]] auto operator*() const -> decltype(auto) {
     return static_cast<const Derived &>(*this).const_deref_impl();
-  };
+  }
 
   /**
    * Advances the iterator.
@@ -452,7 +452,7 @@ public:
    */
   [[nodiscard]] auto operator*() const -> decltype(auto) {
     return static_cast<const Derived &>(*this).const_deref_impl();
-  };
+  }
 
   /**
    * Advances the iterator.

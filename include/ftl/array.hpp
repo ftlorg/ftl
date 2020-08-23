@@ -109,7 +109,7 @@ public:
     std::fill_n(data_, N, value);
   }
 
-  constexpr auto swap(array &other) -> void {
+  constexpr auto swap(array &other) noexcept -> void {
     std::swap_ranges(data(), data() + size(), other.data());
   }
 
