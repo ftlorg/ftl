@@ -1,7 +1,9 @@
 #pragma once
 
 #include <ftl/iterator_interface.hpp>
+#include <ftl/enumerate_iterator.hpp>
 #include <ftl/map_iterator.hpp>
+#include <ftl/inspect_iterator.hpp>
 
 namespace ftl {
 
@@ -43,6 +45,11 @@ private:
 
   [[nodiscard]] auto enumerate_impl() const -> enumerate_iterator<array_iterator<Item, N>> {
     return { *this };
+  }
+
+  template<typename NewCallable>
+  [[nodiscard]] auto inspect_impl(NewCallable &&callable) const -> inspect_iterator<array_iterator<Item, N>, NewCallable> {
+    return { *this, std::forward<NewCallable>(callable) };
   }
 
   template<typename Callable>

@@ -38,6 +38,12 @@ private:
   }
 
   template<typename NewCallable>
+  [[nodiscard]] auto inspect_impl(NewCallable &&callable) const
+    -> inspect_iterator<map_iterator<Iter, Callable>, NewCallable> {
+    return { *this, std::forward<NewCallable>(callable) };
+  }
+
+  template<typename NewCallable>
   [[nodiscard]] auto map_impl(NewCallable &&callable) const -> map_iterator<map_iterator<Iter, Callable>, NewCallable> {
     return { *this, std::forward<NewCallable>(callable) };
   }
