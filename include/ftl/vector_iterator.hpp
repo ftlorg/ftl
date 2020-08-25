@@ -109,7 +109,7 @@ private:
 
   [[nodiscard]] friend constexpr auto operator==(const vector_iterator<Item> &lhs,
                                                  const vector_iterator<Item> &rhs) noexcept -> bool {
-    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.current_ == rhs.current_;
+    return lhs.current_ == rhs.current_;
   }
 
   [[nodiscard]] friend constexpr auto operator!=(const vector_iterator<Item> &lhs,

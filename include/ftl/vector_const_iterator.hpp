@@ -75,7 +75,7 @@ private:
 
   [[nodiscard]] friend constexpr auto operator==(const vector_const_iterator<Item> &lhs,
     const vector_const_iterator<Item> &rhs) noexcept -> bool {
-    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && rhs.current_ == lhs.current_;
+    return rhs.current_ == lhs.current_;
   }
 
   [[nodiscard]] constexpr auto operator[](size_type pos) noexcept -> reference {
