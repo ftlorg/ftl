@@ -2,6 +2,11 @@
 
 #include <list>
 
+#include <ftl/list_iterator.hpp>
+#include <ftl/list_const_iterator.hpp>
+#include <ftl/into_iterator_trait.hpp>
+#include <ftl/from_iterator_trait.hpp>
+
 namespace ftl {
 
 template<typename T, typename Allocator = std::allocator<T>>
@@ -40,7 +45,7 @@ public:
   list(const list &rhs, const Allocator &alloc) : list_{ rhs, alloc } {
   }
 
-  list(list &&rhs) = default;
+  list(list &&rhs) noexcept = default;
 
   list(list &&rhs, const Allocator &alloc) : list_{ rhs, alloc } {
   }
@@ -55,7 +60,9 @@ public:
   list &operator=(list &&rhs) noexcept(std::allocator_traits<Allocator>::is_always_equal::value) = default;
 
   list &operator=(std::initializer_list<T> init) {
-    return list_ = std::move(init);
+    list_ = std::move(init);
+
+    return *this;
   }
 
   void assign(size_type count, const value_type &value) {
@@ -90,29 +97,36 @@ public:
   [[nodiscard]] auto back() const -> const_reference {
     return list_.back();
   }
+  [[nodiscard]] auto iter() noexcept -> iterator {
+    return into_iterator_trait<list<T, Allocator>, iterator>::into_iter(*this);
+  }
+
+  [[nodiscard]] auto iter() const noexcept -> const_iterator {
+    return into_iterator_trait<list<T, Allocator>, const_iterator>::into_iter(*this);
+  }
 
   [[nodiscard]] auto begin() noexcept -> iterator {
-    return list_.begin();
+    return iter().begin();
   }
 
   [[nodiscard]] auto begin() const noexcept -> const_iterator {
-    return list_.begin();
+    return cbegin();
   }
 
   [[nodiscard]] auto cbegin() const noexcept -> const_iterator {
-    return list_.cbegin();
+    return iter().cbegin();
   }
 
   [[nodiscard]] auto end() noexcept -> iterator {
-    return list_.end();
+    return iter().end();
   }
 
   [[nodiscard]] auto end() const noexcept -> const_iterator {
-    return list_.end();
+    return cend();
   }
 
   [[nodiscard]] auto cend() const noexcept -> const_iterator {
-    return list_.cend();
+    return iter().cend();
   }
 
   [[nodiscard]] auto rbegin() noexcept -> reverse_iterator {
@@ -335,6 +349,8 @@ public:
 
 private:
   std::list<value_type, allocator_type> list_{};
+
+  friend class into_iterator_trait<list<T, Allocator>, list_iterator<T>>;
 };
 
 template<class T, class Alloc>
@@ -343,3 +359,21 @@ void swap(std::list<T, Alloc> &lhs, std::list<T, Alloc> &rhs) noexcept(noexcept(
 }
 
 }// namespace ftl
+
+template<typename Item, typename Allocator>
+struct ftl::into_iterator_trait<ftl::list<Item, Allocator>, ftl::list_iterator<Item>> {
+  using iterator = typename ftl::list<Item, Allocator>::iterator;
+
+  [[nodiscard]] constexpr static auto into_iter(const ftl::list<Item, Allocator> &list) {
+    return iterator{ list.list_.begin(), list.list_.end() };
+  }
+};
+
+template<typename Item, typename Allocator>
+struct ftl::into_iterator_trait<ftl::list<Item, Allocator>, ftl::list_const_iterator<Item>> {
+  using const_iterator = typename ftl::list<Item, Allocator>::const_iterator;
+
+  [[nodiscard]] constexpr static auto into_iter(const ftl::list<Item, Allocator> &list) {
+    return const_iterator{ list.list_.begin(), list.list_.end() };
+  }
+};
