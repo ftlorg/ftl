@@ -31,35 +31,6 @@ public:
     : current_{ current }, begin_{ begin }, end_{ end } {
   }
 
-  auto operator++() -> list_iterator & {
-    ++current_;
-
-    return *this;
-  }
-
-  auto operator++(int) -> list_iterator {
-    const auto it = *this;
-
-    ++current_;
-
-    return it;
-  }
-
-  auto operator--() -> list_iterator & {
-    --current_;
-
-    return *this;
-  }
-
-
-  auto operator--(int) -> list_iterator {
-    const auto it = *this;
-
-    --current_;
-
-    return it;
-  }
-
 private:
   [[nodiscard]] auto next_impl() -> std::optional<value_type> {
     if (++current_ != end_) { return { *current_ }; }
@@ -109,7 +80,7 @@ private:
     return *current_;
   }
 
-  auto preincrement_impl() const -> list_iterator & {
+  auto preincrement_impl() -> list_iterator & {
     ++current_;
 
     return *this;

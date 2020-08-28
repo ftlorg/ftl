@@ -127,7 +127,7 @@ private:
   }
 
 private:
-  Iter iterator_;
+  mutable Iter iterator_;
   Callable callable_;
 };
 

@@ -74,8 +74,10 @@ private:
     return *current_;
   }
 
-  auto preincrement_impl() const {
+  auto preincrement_impl() const -> const list_const_iterator & {
     ++current_;
+
+    return *this;
   }
 
   [[nodiscard]] friend constexpr auto operator==(const list_const_iterator<Item> &lhs,
