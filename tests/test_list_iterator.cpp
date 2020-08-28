@@ -35,17 +35,6 @@ TEST_CASE(TEST_TAG "next const nullopt", TEST_TAG) {
   REQUIRE(iter.next().has_value() == false);
 }
 
-TEST_CASE(TEST_TAG "collect", TEST_TAG) {
-  ftl::list<int> list = { 1, 2, 3, 4, 5 };
-  auto mapped_list = list.iter().collect<ftl::list<int>>();
-
-  ftl::list<int> list2 = { 1, 2, 3 };
-  auto mapped_list2 = list2.iter().collect<ftl::list<int>>();
-
-  REQUIRE(mapped_list == ftl::list<int>{ 1, 2, 3, 4, 5 });
-  REQUIRE(mapped_list2 == ftl::list<int>{ 1, 2, 3 });
-}
-
 TEST_CASE(TEST_TAG "collect to std::vector", TEST_TAG) {
   ftl::list<int> list = { 1, 2, 3, 4, 5 };
 
