@@ -99,14 +99,6 @@ TEST_CASE(TEST_TAG "empty", TEST_TAG) {
   REQUIRE(vec1.empty() == false);
 }
 
-TEST_CASE(TEST_TAG "fill", TEST_TAG) {
-  ftl::vector<int> vec1(5);
-  ftl::vector<int> vec2 = { 1337, 1337, 1337, 1337, 1337 };
-  vec1.fill(1337);
-
-  REQUIRE(vec1 == vec2);
-}
-
 TEST_CASE(TEST_TAG "swap", TEST_TAG) {
   ftl::vector<int> vec1 = { 5, 5, 5, 5, 5 };
   ftl::vector<int> vec2 = { 1337, 1337, 1337, 1337, 1337 };
