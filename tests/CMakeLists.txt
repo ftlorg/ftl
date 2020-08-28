@@ -14,6 +14,7 @@ add_executable(tests
   test_array_iterator.cpp
   test_enumerate_iterator.cpp
   test_list.cpp
+  test_list_iterator.cpp
   test_map_iterator.cpp)
 target_link_libraries(tests PRIVATE project_warnings project_options ftl catch_main)
 

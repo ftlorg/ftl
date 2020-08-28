@@ -23,8 +23,12 @@ public:
   using iterator_category = std::bidirectional_iterator_tag;
   using size_type = std::size_t;
   using std_list_iterator = typename std::list<value_type>::iterator;
-  
+
   list_iterator(std_list_iterator begin, std_list_iterator end) : current_{ begin }, begin_{ begin }, end_{ end } {
+  }
+
+  list_iterator(std_list_iterator current, std_list_iterator begin, std_list_iterator end)
+    : current_{ current }, begin_{ begin }, end_{ end } {
   }
 
   auto operator++() -> list_iterator & {
@@ -56,10 +60,6 @@ public:
     return it;
   }
 
-  operator list_const_iterator<Item>() {
-    return { begin_, end_ };
-  }
-
 private:
   [[nodiscard]] auto next_impl() -> std::optional<value_type> {
     if (++current_ != end_) { return { *current_ }; }
@@ -82,23 +82,23 @@ private:
   }
 
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    return static_cast<size_type>(end_ - begin_);
+    return static_cast<size_type>(std::distance(begin_, end_));
   }
 
   [[nodiscard]] constexpr auto begin_impl() noexcept -> list_iterator<Item> {
-    return { begin_, end_ };
+    return { begin_, begin_, end_ };
   }
 
   [[nodiscard]] constexpr auto cbegin_impl() const noexcept -> list_iterator<Item> {
-    return { begin_, end_ };
+    return { begin_, begin_, end_ };
   }
 
   [[nodiscard]] constexpr auto end_impl() noexcept -> list_iterator<Item> {
-    return { end_, end_ };
+    return { end_, begin_, end_ };
   }
 
   [[nodiscard]] constexpr auto cend_impl() const noexcept -> list_iterator<Item> {
-    return { end_, end_ };
+    return { end_, begin_, end_ };
   }
 
   [[nodiscard]] constexpr auto deref_impl() -> reference {

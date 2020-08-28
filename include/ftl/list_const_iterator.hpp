@@ -25,15 +25,19 @@ public:
   list_const_iterator(std_list_iterator begin, std_list_iterator end) : current_{ begin }, begin_{ begin }, end_{ end } {
   }
 
+  list_const_iterator(std_list_iterator current, std_list_iterator begin, std_list_iterator end)
+    : current_{ current }, begin_{ begin }, end_{ end } {
+  }
+
 private:
-  [[nodiscard]] auto next_impl() -> std::optional<value_type> {
+  [[nodiscard]] auto next_impl() const -> std::optional<value_type> {
     if (++current_ != end_) { return { *current_ }; }
 
     return std::nullopt;
   }
 
   template<typename Collection>
-  [[nodiscard]] auto collect_impl() -> Collection {
+  [[nodiscard]] auto collect_impl() const -> Collection {
     return from_iterator_trait<list_const_iterator<Item>, Collection>::from_iter(*this);
   }
 
@@ -47,23 +51,23 @@ private:
   }
 
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    return static_cast<size_type>(end_ - begin_);
+    return static_cast<size_type>(std::distance(begin_, end_));
   }
 
-  [[nodiscard]] constexpr auto begin_impl() noexcept -> list_const_iterator<Item> {
-    return { begin_, end_ };
+  [[nodiscard]] constexpr auto begin_impl() const noexcept -> list_const_iterator<Item> {
+    return { begin_, begin_, end_ };
   }
 
   [[nodiscard]] constexpr auto cbegin_impl() const noexcept -> list_const_iterator<Item> {
-    return { begin_, end_ };
+    return { begin_, begin_, end_ };
   }
 
-  [[nodiscard]] constexpr auto end_impl() noexcept -> list_const_iterator<Item> {
-    return { end_, end_ };
+  [[nodiscard]] constexpr auto end_impl() const noexcept -> list_const_iterator<Item> {
+    return { end_, begin_, end_ };
   }
 
   [[nodiscard]] constexpr auto cend_impl() const noexcept -> list_const_iterator<Item> {
-    return { end_, end_ };
+    return { end_, begin_, end_ };
   }
 
   [[nodiscard]] constexpr auto const_deref_impl() const -> const_reference {
@@ -76,7 +80,7 @@ private:
 
   [[nodiscard]] friend constexpr auto operator==(const list_const_iterator<Item> &lhs,
     const list_const_iterator<Item> &rhs) noexcept -> bool {
-    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.position_ == rhs.position_;
+    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.current_ == rhs.current_;
   }
 
   [[nodiscard]] friend constexpr auto operator!=(const list_const_iterator<Item> &lhs,

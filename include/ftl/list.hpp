@@ -40,19 +40,19 @@ public:
 }// namespace ftl
 
 template<typename Item, typename Allocator>
-struct ftl::into_iterator_trait<ftl::list<Item, Allocator>, typename ftl::list<Item, Allocator>::iterator> {
-  using iterator = typename ftl::list<Item, Allocator>::iterator;
+struct ftl::into_iterator_trait<ftl::list<Item, Allocator>, typename ftl::list<Item, Allocator>::ftl_iterator> {
+  using iterator = typename ftl::list<Item, Allocator>::ftl_iterator;
 
   [[nodiscard]] static auto into_iter(ftl::list<Item, Allocator> &list) -> iterator {
-    return { list.list_.begin(), list.list_.end() };
+    return { list.begin(), list.end() };
   }
 };
 
 template<typename Item, typename Allocator>
-struct ftl::into_iterator_trait<ftl::list<Item, Allocator>, typename ftl::list<Item, Allocator>::const_iterator> {
-  using const_iterator = typename ftl::list<Item, Allocator>::const_iterator;
+struct ftl::into_iterator_trait<ftl::list<Item, Allocator>, typename ftl::list<Item, Allocator>::ftl_const_iterator> {
+  using const_iterator = typename ftl::list<Item, Allocator>::ftl_const_iterator;
 
   [[nodiscard]] static auto into_iter(const ftl::list<Item, Allocator> &list) -> const_iterator {
-    return { list.list_.begin(), list.list_.end() };
+    return { list.begin(), list.end() };
   }
 };
