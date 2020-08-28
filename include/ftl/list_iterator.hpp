@@ -80,7 +80,7 @@ private:
     return *current_;
   }
 
-  auto preincrement_impl() -> list_iterator & {
+  auto preincrement_impl() -> list_iterator<Item> & {
     ++current_;
 
     return *this;

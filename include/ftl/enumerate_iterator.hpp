@@ -70,9 +70,11 @@ private:
     return { index_, *iterator_ };
   }
 
-  auto preincrement_impl() const -> void {
+  auto preincrement_impl() -> enumerate_iterator<Iter>& {
     ++iterator_;
     ++index_;
+
+    return *this;
   }
 
   [[nodiscard]] friend constexpr auto operator+=(const enumerate_iterator<Iter> &lhs, size_type n)
