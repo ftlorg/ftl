@@ -33,6 +33,10 @@ private:
     return iterator_.count();
   }
 
+  [[nodiscard]] auto enumerate_impl() const -> enumerate_iterator<map_iterator<Iter, Callable>> {
+    return { *this };
+  }
+
   template<typename NewCallable>
   [[nodiscard]] auto map_impl(NewCallable &&callable) const -> map_iterator<map_iterator<Iter, Callable>, NewCallable> {
     return { *this, std::forward<NewCallable>(callable) };
@@ -58,8 +62,10 @@ private:
     return callable_(*iterator_);
   }
 
-  auto preincrement_impl() const -> void {
+  auto preincrement_impl() const -> const map_iterator<Iter, Callable>& {
     ++iterator_;
+
+    return *this;
   }
 
   [[nodiscard]] friend constexpr auto operator+=(const map_iterator<Iter, Callable> &lhs, size_type n)
@@ -123,7 +129,7 @@ private:
   }
 
 private:
-  Iter iterator_;
+  mutable Iter iterator_;
   Callable callable_;
 };
 

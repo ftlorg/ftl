@@ -12,7 +12,7 @@ class array_iterator final : public iterator_interface<array_iterator<Item, N>, 
 
 public:
   using difference_type = std::ptrdiff_t;
-  using value_type = typename std::remove_cv_t<Item>;
+  using value_type = std::remove_cv_t<Item>;
   using pointer = value_type *;
   using reference = value_type &;
   using const_pointer = const value_type *;
@@ -43,9 +43,13 @@ private:
     return from_iterator_trait<array_iterator<Item, N>, Collection>::from_iter(*this);
   }
 
+  [[nodiscard]] auto enumerate_impl() const -> enumerate_iterator<array_iterator<Item, N>> {
+    return { *this };
+  }
+
   template<typename Callable>
   [[nodiscard]] auto map_impl(Callable &&callable) -> map_iterator<array_iterator<Item, N>, Callable> {
-    return { array_iterator<Item, N>{ begin_, end_ }, std::forward<Callable>(callable) };
+    return { *this, std::forward<Callable>(callable) };
   }
 
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
@@ -76,8 +80,10 @@ private:
     return begin_[position_];
   }
 
-  auto preincrement_impl() const -> void {
+  auto preincrement_impl() -> array_iterator<Item, N> & {
     ++position_;
+
+    return *this;
   }
 
   auto predecrement_impl() const -> void {

@@ -14,23 +14,23 @@ class iterator_interface;
 template<typename Iter, typename Callable>
 class map_iterator;
 
-template<typename Item>
-class filter_iterator : public iterator_interface<filter_iterator<Item>, Item, std::size_t> {};
+template<typename Iter>
+class filter_iterator : public iterator_interface<filter_iterator<Iter>, Iter, std::size_t> {};
 
-template<typename Item>
-class flatten_iterator : public iterator_interface<flatten_iterator<Item>, Item, std::size_t> {};
+template<typename Iter>
+class flatten_iterator : public iterator_interface<flatten_iterator<Iter>, Iter, std::size_t> {};
 
-template<typename Item>
-class enumerate_iterator : public iterator_interface<enumerate_iterator<Item>, Item, std::size_t> {};
+template<typename Iter>
+class enumerate_iterator;
 
-template<typename Item>
-class inspect_iterator : public iterator_interface<inspect_iterator<Item>, Item, std::size_t> {};
+template<typename Iter>
+class inspect_iterator : public iterator_interface<inspect_iterator<Iter>, Iter, std::size_t> {};
 
-template<typename Item>
-class take_iterator : public iterator_interface<take_iterator<Item>, Item, std::size_t> {};
+template<typename Iter>
+class take_iterator : public iterator_interface<take_iterator<Iter>, Iter, std::size_t> {};
 
-template<typename Item>
-class rev_iterator : public iterator_interface<rev_iterator<Item>, Item, std::size_t> {};
+template<typename Iter>
+class rev_iterator : public iterator_interface<rev_iterator<Iter>, Iter, std::size_t> {};
 
 /**
  * Interface for iterators.
@@ -43,7 +43,7 @@ template<typename Derived, typename Item, typename SizeType>
 class iterator_interface {
 public:
   using size_type = SizeType;
-  using value_type = typename std::remove_cv_t<Item>;
+  using value_type = std::remove_cv_t<Item>;
   using pointer = value_type *;
   using reference = value_type &;
   using const_pointer = const value_type *;
@@ -90,7 +90,9 @@ public:
    * Creates an iterator which gives the current iteration count as well as
    * the next value
    */
-  [[nodiscard]] auto enumerate() -> enumerate_iterator<value_type>;
+  [[nodiscard]] auto enumerate() -> enumerate_iterator<Derived> {
+    return static_cast<Derived &>(*this).enumerate_impl();
+  }
 
   /**
    * Creates an iterator which uses a predicate to determine if an element
@@ -100,7 +102,7 @@ public:
    * @param predicate
    */
   template<typename Predicate>
-  [[nodiscard]] auto filter(Predicate &&predicate) const -> filter_iterator<value_type>;
+  [[nodiscard]] auto filter(Predicate &&predicate) const -> filter_iterator<Derived>;
 
   /**
    * Searches for an element of an iterator that satisfies a predicate.
@@ -114,7 +116,7 @@ public:
   /**
    * Creates an iterator that flattens nested structure.
    */
-  [[nodiscard]] auto flatten() const -> flatten_iterator<value_type>;
+  [[nodiscard]] auto flatten() const -> flatten_iterator<Derived>;
 
   /**
    * Applies a function, producing a single, final value.
@@ -142,7 +144,7 @@ public:
    * @param callable
    */
   template<typename Callable>
-  [[nodiscard]] auto inspect(Callable &&callable) const -> inspect_iterator<value_type>;
+  [[nodiscard]] auto inspect(Callable &&callable) const -> inspect_iterator<Derived>;
 
   /**
    * Takes a callable and creates an iterator which calls that callable on
@@ -190,12 +192,12 @@ public:
   /**
    * Creates an iterator that reverses traversal direction.
    */
-  [[nodiscard]] auto rev() const -> rev_iterator<Item>;
+  [[nodiscard]] auto rev() const -> rev_iterator<Derived>;
 
   /**
    * Creates an iterator that yields its first n elements.
    */
-  [[nodiscard]] auto take(size_type n) const -> take_iterator<value_type>;
+  [[nodiscard]] auto take(size_type n) const -> take_iterator<Derived>;
 
   /**
    * Advances the iterator and returns the next value.
@@ -221,8 +223,8 @@ public:
   /**
    * Advances the iterator.
    */
-  auto operator++() const -> void {
-    static_cast<const Derived &>(*this).preincrement_impl();
+  auto operator++() -> decltype(auto) {
+    return static_cast<Derived &>(*this).preincrement_impl();
   }
 
   /**
@@ -286,7 +288,7 @@ template<typename Derived, typename Item, typename SizeType>
 class const_iterator_interface {
 public:
   using size_type = SizeType;
-  using value_type = typename std::remove_cv_t<Item>;
+  using value_type = std::remove_cv_t<Item>;
   using pointer = value_type *;
   using reference = value_type &;
   using const_pointer = const value_type *;
@@ -333,7 +335,9 @@ public:
    * Creates an iterator which gives the current iteration count as well as
    * the next value
    */
-  [[nodiscard]] auto enumerate() const -> enumerate_iterator<value_type>;
+  [[nodiscard]] auto enumerate() const -> enumerate_iterator<Derived> {
+    return static_cast<const Derived &>(*this).enumerate_impl();
+  }
 
   /**
    * Creates an iterator which uses a predicate to determine if an element
@@ -343,7 +347,7 @@ public:
    * @param predicate
    */
   template<typename Predicate>
-  [[nodiscard]] auto filter(Predicate &&predicate) const -> filter_iterator<value_type>;
+  [[nodiscard]] auto filter(Predicate &&predicate) const -> filter_iterator<Derived>;
 
   /**
    * Searches for an element of an iterator that satisfies a predicate.
@@ -357,7 +361,7 @@ public:
   /**
    * Creates an iterator that flattens nested structure.
    */
-  [[nodiscard]] auto flatten() const -> flatten_iterator<value_type>;
+  [[nodiscard]] auto flatten() const -> flatten_iterator<Derived>;
 
   /**
    * Applies a function, producing a single, final value.
@@ -385,7 +389,7 @@ public:
    * @param callable
    */
   template<typename Callable>
-  [[nodiscard]] auto inspect(Callable &&callable) const -> inspect_iterator<value_type>;
+  [[nodiscard]] auto inspect(Callable &&callable) const -> inspect_iterator<Derived>;
 
   /**
    * Takes a callable and creates an iterator which calls that callable on
@@ -433,12 +437,12 @@ public:
   /**
    * Creates an iterator that reverses traversal direction.
    */
-  [[nodiscard]] auto rev() const -> rev_iterator<Item>;
+  [[nodiscard]] auto rev() const -> rev_iterator<Derived>;
 
   /**
    * Creates an iterator that yields its first n elements.
    */
-  [[nodiscard]] auto take(size_type n) const -> take_iterator<value_type>;
+  [[nodiscard]] auto take(size_type n) const -> take_iterator<Derived>;
 
   /**
    * Advances the iterator and returns the next value.
@@ -457,8 +461,8 @@ public:
   /**
    * Advances the iterator.
    */
-  auto operator++() const -> void {
-    static_cast<const Derived &>(*this).preincrement_impl();
+  auto operator++() const -> decltype(auto) {
+    return static_cast<const Derived &>(*this).preincrement_impl();
   }
 
   /**
