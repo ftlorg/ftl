@@ -1,7 +1,9 @@
 #pragma once
 
 #include <ftl/iterator_interface.hpp>
+#include <ftl/list_const_iterator.hpp>
 #include <ftl/map_iterator.hpp>
+
 #include <list>
 
 namespace ftl {
@@ -18,11 +20,44 @@ public:
   using reference = value_type &;
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
-  using iterator_category = typename std::list<value_type>::iterator_category;
+  using iterator_category = std::bidirectional_iterator_tag;
   using size_type = std::size_t;
   using std_list_iterator = typename std::list<value_type>::iterator;
+  
+  list_iterator(std_list_iterator begin, std_list_iterator end) : current_{ begin }, begin_{ begin }, end_{ end } {
+  }
 
-  constexpr list_iterator(std_list_iterator begin, std_list_iterator end) : begin_{ begin }, end_{ end } {
+  auto operator++() -> list_iterator & {
+    ++current_;
+
+    return *this;
+  }
+
+  auto operator++(int) -> list_iterator {
+    const auto it = *this;
+
+    ++current_;
+
+    return it;
+  }
+
+  auto operator--() -> list_iterator & {
+    --current_;
+
+    return *this;
+  }
+
+
+  auto operator--(int) -> list_iterator {
+    const auto it = *this;
+
+    --current_;
+
+    return it;
+  }
+
+  operator list_const_iterator<Item>() {
+    return { begin_, end_ };
   }
 
 private:
@@ -74,13 +109,15 @@ private:
     return *current_;
   }
 
-  auto preincrement_impl() const {
+  auto preincrement_impl() const -> list_iterator & {
     ++current_;
+
+    return *this;
   }
 
   [[nodiscard]] friend constexpr auto operator==(const list_iterator<Item> &lhs, const list_iterator<Item> &rhs) noexcept
     -> bool {
-    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.position_ == rhs.position_;
+    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.current_ == rhs.current_;
   }
 
   [[nodiscard]] friend constexpr auto operator!=(const list_iterator<Item> &lhs, const list_iterator<Item> &rhs) noexcept
@@ -103,4 +140,3 @@ struct std::iterator_traits<ftl::list_iterator<Item>> {
   using reference = typename ftl::list_iterator<Item>::reference;
   using iterator_category = typename ftl::list_iterator<Item>::iterator_category;
 };
-

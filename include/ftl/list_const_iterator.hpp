@@ -7,9 +7,9 @@
 namespace ftl {
 
 template<typename Item>
-class list_const_iterator final : public iterator_interface<list_const_iterator<Item>, Item, std::size_t> {
+class list_const_iterator final : public const_iterator_interface<list_const_iterator<Item>, Item, std::size_t> {
 
-  friend iterator_interface<list_const_iterator<Item>, Item, std::size_t>;
+  friend const_iterator_interface<list_const_iterator<Item>, Item, std::size_t>;
 
 public:
   using difference_type = std::ptrdiff_t;
@@ -18,11 +18,11 @@ public:
   using reference = value_type &;
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
-  using iterator_category = typename std::list<value_type>::iterator_category;
+  using iterator_category = std::bidirectional_iterator_tag;
   using size_type = std::size_t;
-  using std_list_iterator= typename std::list<value_type>::const_iterator;
+  using std_list_iterator = typename std::list<value_type>::const_iterator;
 
-  constexpr list_const_iterator(std_list_iterator begin, std_list_iterator end) : begin_{ begin }, end_{ end } {
+  list_const_iterator(std_list_iterator begin, std_list_iterator end) : current_{ begin }, begin_{ begin }, end_{ end } {
   }
 
 private:
@@ -66,10 +66,6 @@ private:
     return { end_, end_ };
   }
 
-  [[nodiscard]] constexpr auto deref_impl() -> reference {
-    return *current_;
-  }
-
   [[nodiscard]] constexpr auto const_deref_impl() const -> const_reference {
     return *current_;
   }
@@ -78,16 +74,18 @@ private:
     ++current_;
   }
 
-  [[nodiscard]] friend constexpr auto operator==(const list_const_iterator<Item> &lhs, const list_const_iterator<Item> &rhs) noexcept
-    -> bool {
+  [[nodiscard]] friend constexpr auto operator==(const list_const_iterator<Item> &lhs,
+    const list_const_iterator<Item> &rhs) noexcept -> bool {
     return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.position_ == rhs.position_;
   }
 
-  [[nodiscard]] friend constexpr auto operator!=(const list_const_iterator<Item> &lhs, const list_const_iterator<Item> &rhs) noexcept
-    -> bool {
+  [[nodiscard]] friend constexpr auto operator!=(const list_const_iterator<Item> &lhs,
+    const list_const_iterator<Item> &rhs) noexcept -> bool {
     return !(lhs == rhs);
   }
 
+  // TODO: Temporary!
+public:
   mutable std_list_iterator current_;
   std_list_iterator begin_;
   std_list_iterator end_;
@@ -103,4 +101,3 @@ struct std::iterator_traits<ftl::list_const_iterator<Item>> {
   using reference = typename ftl::list_const_iterator<Item>::reference;
   using iterator_category = typename ftl::list_const_iterator<Item>::iterator_category;
 };
-
