@@ -223,8 +223,8 @@ public:
   /**
    * Advances the iterator.
    */
-  auto operator++() const -> void {
-    static_cast<const Derived &>(*this).preincrement_impl();
+  auto operator++() -> decltype(auto) {
+    return static_cast<Derived &>(*this).preincrement_impl();
   }
 
   /**
@@ -454,8 +454,8 @@ public:
   /**
    * Advances the iterator.
    */
-  auto operator++() const -> void {
-    static_cast<const Derived &>(*this).preincrement_impl();
+  auto operator++() const -> decltype(auto) {
+    return static_cast<const Derived &>(*this).preincrement_impl();
   }
 
   /**
