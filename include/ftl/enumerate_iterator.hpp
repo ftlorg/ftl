@@ -22,7 +22,7 @@ public:
   using iterator_category = typename Iter::iterator_category;
   using size_type = typename Iter::size_type;
 
-  explicit enumerate_iterator(Iter iterator) : iterator_{ std::move(iterator) }, index_{ 0 } {
+  enumerate_iterator(Iter iterator) : iterator_{ std::move(iterator) }, index_{ 0 } {
   }
 
 private:

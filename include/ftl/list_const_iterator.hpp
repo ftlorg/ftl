@@ -90,8 +90,7 @@ private:
     return !(lhs == rhs);
   }
 
-  // TODO: Temporary!
-public:
+private:
   mutable std_list_iterator current_;
   std_list_iterator begin_;
   std_list_iterator end_;
