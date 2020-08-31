@@ -45,8 +45,8 @@ public:
 };
 
 template<typename T, typename Allocator = std::allocator<T>>
-[[nodiscard]] constexpr auto to_vector(std::vector<T> vec) -> vector<T, Allocator> {
-  return vector<T, Allocator>{ std::move(vec) };
+[[nodiscard]] constexpr auto to_vector(const std::vector<T> &vec) -> vector<T, Allocator> {
+  return vector<T, Allocator>{ vec };
 }
 
 }// namespace ftl

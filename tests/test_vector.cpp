@@ -199,7 +199,6 @@ TEST_CASE(TEST_TAG "range-based for loop const", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "operator==", TEST_TAG) {
-  constexpr std::size_t size = 5;
   const ftl::vector<int> vec1 = { 1, 2, 3, 4, 5 };
   const ftl::vector<int> vec2 = { 1, 2, 3, 4, 5 };
 
@@ -207,7 +206,6 @@ TEST_CASE(TEST_TAG "operator==", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "operator!=", TEST_TAG) {
-  constexpr std::size_t size = 5;
   const ftl::vector<int> vec1 = { 1, 2, 3, 4, 5 };
   const ftl::vector<int> vec2 = { 1, 2, 3, 4, 5 };
 
