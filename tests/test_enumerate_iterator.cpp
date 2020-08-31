@@ -68,7 +68,6 @@ TEST_CASE(TEST_TAG "enumerate with side effects", TEST_TAG) {
   REQUIRE(arr == ftl::array<int, size>{ 5, 4, 3, 2, 1 });
 }
 
-
 TEST_CASE(TEST_TAG "preincrement", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
