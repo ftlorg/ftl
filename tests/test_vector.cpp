@@ -209,7 +209,7 @@ TEST_CASE(TEST_TAG "operator!=", TEST_TAG) {
   const ftl::vector<int> vec1 = { 1, 2, 3, 4, 5 };
   const ftl::vector<int> vec2 = { 1, 2, 3, 4, 5 };
 
-  REQUIRE(vec1 != vec2);
+  REQUIRE_FALSE(vec1 != vec2);
 }
 
 TEST_CASE(TEST_TAG "operator<", TEST_TAG) {
