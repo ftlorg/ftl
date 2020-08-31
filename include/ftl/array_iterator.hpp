@@ -27,7 +27,7 @@ public:
     : position_{ position }, begin_{ begin }, end_{ end } {
   }
 
-  //constexpr auto operator=(const array_iterator &) -> array_iterator & = default; //TODO: maybe dangerous
+  constexpr auto operator=(const array_iterator &) -> array_iterator & = default;
 
 private:
   [[nodiscard]] auto next_impl() -> std::optional<value_type> {
@@ -86,8 +86,9 @@ private:
     return *this;
   }
 
-  auto predecrement_impl() const -> void {
+  auto predecrement_impl() const -> array_iterator<Item, N> & {
     --position_;
+    return *this;
   }
 
   [[nodiscard]] constexpr auto operator[](size_type pos) noexcept -> reference {
@@ -98,8 +99,8 @@ private:
     return begin_[pos];
   }
 
-  [[nodiscard]] friend constexpr auto operator+=(const array_iterator<Item, N> &lhs, size_type n)
-    -> const array_iterator<Item, N> & {
+  [[nodiscard]] friend constexpr auto operator+=(array_iterator<Item, N> &lhs, size_type n)
+    -> array_iterator<Item, N> & {
     lhs.position_ += n;
     return lhs;
   }
@@ -155,8 +156,8 @@ private:
 
 private:
   mutable size_type position_;
-  pointer /* const */ begin_;
-  pointer /* const */ end_;
+  pointer const  begin_;
+  pointer const  end_;
 };
 
 }// namespace ftl

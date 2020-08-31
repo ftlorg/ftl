@@ -19,6 +19,7 @@ TEST_CASE(TEST_TAG "to_vector", TEST_TAG) {
 TEST_CASE(TEST_TAG "operator[]", TEST_TAG) {
   ftl::vector<int> vec = { 1, 2, 3, 4, 6 };
 
+  REQUIRE(vec.data() != nullptr);
   REQUIRE(vec[0] == 1);
   REQUIRE(vec[1] == 2);
   REQUIRE(vec[2] == 3);
@@ -120,7 +121,7 @@ TEST_CASE(TEST_TAG "emplace_back trivial type", TEST_TAG) {
   REQUIRE(vec1.back() == 20);
 }
 
-//TODO: test with custom class with non-trivial constructor
+// TODO: test with custom class with non-trivial constructor
 
 TEST_CASE(TEST_TAG "operator= const reference", TEST_TAG) {
   ftl::vector<int> vec1 = { 5, 5, 5, 5, 5 };
@@ -170,81 +171,73 @@ TEST_CASE(TEST_TAG "at out of range", TEST_TAG) {
   REQUIRE(vec1.at(3) == 4);
 }
 
-//
-// TEST_CASE(TEST_TAG "iter", TEST_TAG) {
-//  constexpr std::size_t size = 5;
-//  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
-//
-//  [[maybe_unused]] auto iter = arr.iter();
-//}
-//
-// TEST_CASE(TEST_TAG "iter const", TEST_TAG) {
-//  constexpr std::size_t size = 5;
-//  const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
-//
-//  [[maybe_unused]] auto iter = arr.iter();
-//}
-//
-// TEST_CASE(TEST_TAG "range-based for loop", TEST_TAG) {
-//  constexpr std::size_t size = 5;
-//  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
-//
-//  for (auto &x : arr) { x = 7; }
-//
-//  REQUIRE(arr == ftl::array<int, size>{ 7, 7, 7, 7, 7 });
-//}
-//
-// TEST_CASE(TEST_TAG "range-based for loop const", TEST_TAG) {
-//  constexpr std::size_t size = 5;
-//  const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
-//
-//  for ([[maybe_unused]] const auto &x : arr) {}
-//}
-//
-// TEST_CASE(TEST_TAG "operator==", TEST_TAG) {
-//  constexpr std::size_t size = 5;
-//  ftl::array<int, size> arr1 = { 1, 2, 3, 4, 5 };
-//  ftl::array<int, size> arr2 = { 1, 2, 3, 4, 5 };
-//
-//  REQUIRE(arr1 == arr2);
-//}
-//
-// TEST_CASE(TEST_TAG "operator!=", TEST_TAG) {
-//  constexpr std::size_t size = 5;
-//  ftl::array<int, size> arr1 = { 1, 2, 3, 4, 5 };
-//  ftl::array<int, size> arr2 = { 5, 2, 3, 4, 5 };
-//
-//  REQUIRE(arr1 != arr2);
-//}
-//
-// TEST_CASE(TEST_TAG "operator<", TEST_TAG) {
-//  constexpr std::size_t size = 5;
-//  ftl::array<int, size> arr1 = { 1, 2, 3, 4, 5 };
-//  ftl::array<int, size> arr2 = { 5, 2, 3, 4, 5 };
-//
-//  REQUIRE(arr1 < arr2);
-//}
-//
-// TEST_CASE(TEST_TAG "operator<=", TEST_TAG) {
-//  constexpr std::size_t size = 5;
-//  ftl::array<int, size> arr1 = { 1, 2, 3, 4, 5 };
-//  ftl::array<int, size> arr2 = { 5, 2, 3, 4, 5 };
-//
-//  REQUIRE(arr1 <= arr2);
-//}
-//
-// TEST_CASE(TEST_TAG "operator>", TEST_TAG) {
-//  constexpr std::size_t size = 5;
-//  ftl::array<int, size> arr1 = { 6, 2, 3, 4, 5 };
-//  ftl::array<int, size> arr2 = { 5, 2, 3, 4, 5 };
-//
-//  REQUIRE(arr1 > arr2);
-//}
-//
-// TEST_CASE(TEST_TAG "operator>=", TEST_TAG) {
-//  constexpr std::size_t size = 5;
-//  ftl::array<int, size> arr1 = { 5, 2, 3, 4, 5 };
-//  ftl::array<int, size> arr2 = { 5, 2, 3, 4, 5 };
-//
-//  REQUIRE(arr1 >= arr2);
-//}
+
+TEST_CASE(TEST_TAG "iter", TEST_TAG) {
+  ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
+
+  [[maybe_unused]] auto iter = vec.iter();
+}
+
+TEST_CASE(TEST_TAG "iter const", TEST_TAG) {
+  const ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
+
+  [[maybe_unused]] auto iter = vec.iter();
+}
+
+TEST_CASE(TEST_TAG "range-based for loop", TEST_TAG) {
+  ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
+
+  for (auto &x : vec) { x = 7; }
+
+  REQUIRE(vec == ftl::vector<int>{ 7, 7, 7, 7, 7 });
+}
+
+TEST_CASE(TEST_TAG "range-based for loop const", TEST_TAG) {
+  ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
+
+  for ([[maybe_unused]] const auto &x : vec) {}
+}
+
+TEST_CASE(TEST_TAG "operator==", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::vector<int> vec1 = { 1, 2, 3, 4, 5 };
+  const ftl::vector<int> vec2 = { 1, 2, 3, 4, 5 };
+
+  REQUIRE(vec1 == vec2);
+}
+
+TEST_CASE(TEST_TAG "operator!=", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::vector<int> vec1 = { 1, 2, 3, 4, 5 };
+  const ftl::vector<int> vec2 = { 1, 2, 3, 4, 5 };
+
+  REQUIRE(vec1 != vec2);
+}
+
+TEST_CASE(TEST_TAG "operator<", TEST_TAG) {
+  const ftl::vector<int> vec1 = { 1, 2, 3, 4, 5 };
+  const ftl::vector<int> vec2 = { 5, 2, 3, 4, 5 };
+
+  REQUIRE(vec1 < vec2);
+}
+
+TEST_CASE(TEST_TAG "operator<=", TEST_TAG) {
+  const ftl::vector<int> vec1 = { 1, 2, 3, 4, 5 };
+  const ftl::vector<int> vec2 = { 5, 2, 3, 4, 5 };
+
+  REQUIRE(vec1 <= vec2);
+}
+
+TEST_CASE(TEST_TAG "operator>", TEST_TAG) {
+  const ftl::vector<int> vec1 = { 6, 2, 3, 4, 5 };
+  const ftl::vector<int> vec2 = { 5, 2, 3, 4, 5 };
+
+  REQUIRE(vec1 > vec2);
+}
+
+TEST_CASE(TEST_TAG "operator>=", TEST_TAG) {
+  const ftl::vector<int> vec1 = { 5, 2, 3, 4, 5 };
+  const ftl::vector<int> vec2 = { 5, 2, 3, 4, 5 };
+
+  REQUIRE(vec1 >= vec2);
+}

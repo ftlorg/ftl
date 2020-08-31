@@ -61,12 +61,14 @@ private:
     return *current_;
   }
 
-  auto preincrement_impl() const -> void {
+  auto preincrement_impl() const -> const vector_const_iterator<Item>& {
     ++current_;
+    return *this;
   }
 
-  auto predecrement_impl() const -> void {
+  auto predecrement_impl() const -> const vector_const_iterator<Item> & {
     --current_;
+    return *this;
   }
 
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
