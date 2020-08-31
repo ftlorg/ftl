@@ -75,8 +75,10 @@ private:
     return *static_cast<const Iter &>(iterator_);
   }
 
-  auto preincrement_impl() const -> void {
+  auto preincrement_impl() -> inspect_iterator<Iter, Callable> & {
     ++iterator_;
+
+    return *this;
   }
 
   [[nodiscard]] friend constexpr auto operator+=(const inspect_iterator<Iter, Callable> &lhs, size_type n)
@@ -140,7 +142,7 @@ private:
   }
 
 private:
-  Iter iterator_;
+  mutable Iter iterator_;
   Callable callable_;
 };
 
