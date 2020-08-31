@@ -156,8 +156,8 @@ private:
 
 private:
   mutable size_type position_;
-  pointer const  begin_;
-  pointer const  end_;
+  pointer begin_;
+  pointer end_;
 };
 
 }// namespace ftl
