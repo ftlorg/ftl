@@ -20,14 +20,12 @@ TEST_CASE(TEST_TAG "next const", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "next nullopt", TEST_TAG) {
-  constexpr std::size_t size = 2;
-  ftl::array<int, size> arr = { 1, 2 };
+  ftl::vector<int> vec = { 1, 2 };
 
-  auto iter = arr.iter();
-  REQUIRE(arr[1] == *iter.next());
+  auto iter = vec.iter();
+  REQUIRE(vec[1] == *iter.next());
   REQUIRE(!iter.next().has_value());
 }
-
 
 TEST_CASE(TEST_TAG "collect", TEST_TAG) {
   ftl::vector<int> vec = { 1, 2, 3, 4, 5 };

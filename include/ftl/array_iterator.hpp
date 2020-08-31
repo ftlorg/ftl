@@ -99,8 +99,7 @@ private:
     return begin_[pos];
   }
 
-  [[nodiscard]] friend constexpr auto operator+=(array_iterator<Item, N> &lhs, size_type n)
-    -> array_iterator<Item, N> & {
+  friend constexpr auto operator+=(array_iterator<Item, N> &lhs, size_type n) -> array_iterator<Item, N> & {
     lhs.position_ += n;
     return lhs;
   }
