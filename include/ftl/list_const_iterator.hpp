@@ -51,7 +51,7 @@ private:
   }
 
   template<typename Callable>
-  [[nodiscard]] auto map_impl(Callable &&callable) -> map_iterator<list_const_iterator<Item>, Callable> {
+  [[nodiscard]] auto map_impl(Callable &&callable) const -> map_iterator<list_const_iterator<Item>, Callable> {
     return { *this, std::forward<Callable>(callable) };
   }
 
