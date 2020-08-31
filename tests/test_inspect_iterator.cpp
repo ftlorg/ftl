@@ -65,7 +65,7 @@ TEST_CASE(TEST_TAG "map enumerate inspect map", TEST_TAG) {
                        .map([](const auto &x) { return x; })
                        .enumerate()
                        .inspect([](const auto &x) { INFO("Inspecting x = " << std::get<0>(x)) })
-                       .map([](const auto &x) { return std::get<0>(x) * std::get<0>(x); })
+                       .map([](const auto &x) { return static_cast<int>(std::get<0>(x) * std::get<0>(x)); })
                        .collect<ftl::list<int>>();
 
   REQUIRE(mapped_list == ftl::list<int>{ 0, 1, 4, 9, 16 });
@@ -78,7 +78,7 @@ TEST_CASE(TEST_TAG "map enumerate inspect map const", TEST_TAG) {
                        .map([](const auto &x) { return x; })
                        .enumerate()
                        .inspect([](const auto &x) { INFO("Inspecting x = " << std::get<0>(x)) })
-                       .map([](const auto &x) { return std::get<0>(x) * std::get<0>(x); })
+                       .map([](const auto &x) { return static_cast<int>(std::get<0>(x) * std::get<0>(x)); })
                        .collect<ftl::list<int>>();
 
   REQUIRE(mapped_list == ftl::list<int>{ 0, 1, 4, 9, 16 });
@@ -153,3 +153,4 @@ TEST_CASE(TEST_TAG "inspect collect to std::vector const", TEST_TAG) {
 
   REQUIRE(mapped_list == std::vector<int>{ 1, 2, 3, 4, 5 });
 }
+
