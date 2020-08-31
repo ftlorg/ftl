@@ -86,7 +86,7 @@ private:
     return *this;
   }
 
-  auto predecrement_impl() const -> array_iterator<Item, N> & {
+  auto predecrement_impl() const -> const array_iterator<Item, N> & {
     --position_;
     return *this;
   }
