@@ -27,6 +27,14 @@ TEST_CASE(TEST_TAG "next nullopt", TEST_TAG) {
   REQUIRE(!iter.next().has_value());
 }
 
+TEST_CASE(TEST_TAG "const next nullopt", TEST_TAG) {
+  const ftl::vector<int> vec = { 1, 2 };
+
+  auto iter = vec.iter();
+  REQUIRE(vec[1] == *iter.next());
+  REQUIRE(!iter.next().has_value());
+}
+
 TEST_CASE(TEST_TAG "collect", TEST_TAG) {
   ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
 
