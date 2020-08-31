@@ -3,6 +3,7 @@
 #include <optional>
 
 #include <ftl/array.hpp>
+#include <ftl/list.hpp>
 #include <ftl/from_iterator_trait.hpp>
 #include <ftl/into_iterator_trait.hpp>
 #include <ftl/iterator_interface.hpp>

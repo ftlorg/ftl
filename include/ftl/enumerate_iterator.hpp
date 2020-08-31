@@ -9,7 +9,7 @@
 namespace ftl {
 
 template<typename Iter>
-class enumerate_iterator
+class enumerate_iterator final
   : public iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type> {
 
   friend iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type>;
@@ -69,8 +69,7 @@ private:
   }
 
   // TODO: Think about return type
-  [[nodiscard]] constexpr auto deref_impl()
-    -> std::tuple<size_type, decltype(std::declval<Iter>().operator*())> {
+  [[nodiscard]] constexpr auto deref_impl() -> std::tuple<size_type, decltype(std::declval<Iter>().operator*())> {
     return { index_, *iterator_ };
   }
 
@@ -79,9 +78,11 @@ private:
     return { index_, *iterator_ };
   }
 
-  auto preincrement_impl() const -> void {
+  auto preincrement_impl() -> enumerate_iterator<Iter>& {
     ++iterator_;
     ++index_;
+
+    return *this;
   }
 
   [[nodiscard]] friend constexpr auto operator+=(const enumerate_iterator<Iter> &lhs, size_type n)
@@ -145,7 +146,7 @@ private:
   }
 
 private:
-  Iter iterator_;
+  mutable Iter iterator_;
   mutable size_type index_;
 };
 

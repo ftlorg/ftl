@@ -85,8 +85,10 @@ private:
     return begin_[position_];
   }
 
-  auto preincrement_impl() const {
+  auto preincrement_impl() -> array_iterator<Item, N> & {
     ++position_;
+
+    return *this;
   }
 
   [[nodiscard]] constexpr auto operator[](size_type pos) noexcept -> reference {

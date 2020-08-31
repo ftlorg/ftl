@@ -26,14 +26,10 @@ public:
   using const_iterator = array_const_iterator<T, N>;
 
   [[nodiscard]] constexpr auto operator[](size_type pos) noexcept -> reference {
-    if (pos >= N) std::terminate();
-
     return data_[pos];
   }
 
   [[nodiscard]] constexpr auto operator[](size_type pos) const noexcept -> const_reference {
-    if (pos >= N) std::terminate();
-
     return data_[pos];
   }
 
