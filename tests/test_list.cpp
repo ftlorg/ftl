@@ -402,3 +402,11 @@ TEST_CASE(TEST_TAG "sort", TEST_TAG) {
 
   REQUIRE(list1 == ftl::list<int>{ 1, 2, 3, 4, 5 });
 }
+
+TEST_CASE(TEST_TAG "to_list", TEST_TAG) {
+  std::list<int> list = { 1, 2, 3, 4, 5 };
+  const auto ftl_list = ftl::to_list(list);
+
+  REQUIRE(ftl_list == ftl::list<int>{ 1, 2, 3, 4, 5 });
+}
+
