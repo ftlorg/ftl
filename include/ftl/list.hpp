@@ -37,6 +37,11 @@ public:
   }
 };
 
+template<typename T, typename Allocator = std::allocator<T>>
+[[nodiscard]] constexpr auto to_list(const std::list<T, Allocator> &list) -> ftl::list<T, Allocator> {
+  return { std::begin(list), std::end(list) };
+}
+
 }// namespace ftl
 
 template<typename Item, typename Allocator>
