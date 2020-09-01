@@ -229,6 +229,13 @@ public:
   }
 
   /**
+   * Decreases the iterator.
+   */
+  auto operator--() const -> void {
+    static_cast<const Derived &>(*this).predecrement_impl();
+  }
+
+  /**
    * Returns begin iterator.
    */
   [[nodiscard]] constexpr auto begin() noexcept -> Derived {
