@@ -202,3 +202,12 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   ++iter;
   REQUIRE(arr[4] == *iter);
 }
+
+TEST_CASE(TEST_TAG "operator+=", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+
+  auto iter = arr.iter();
+  iter += 4; 
+  REQUIRE(arr[4] == *iter);
+}
