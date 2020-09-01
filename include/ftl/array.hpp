@@ -212,7 +212,7 @@ template<typename T, std::size_t N>
 struct ftl::into_iterator_trait<ftl::array<T, N>, typename ftl::array<T, N>::iterator> {
   using iterator = typename ftl::array<T, N>::iterator;
 
-  [[nodiscard]] constexpr static auto into_iter(ftl::array<T, N> &arr) -> iterator {// TODO: ftl::array?
+  [[nodiscard]] constexpr static auto into_iter(ftl::array<T, N> &arr) -> iterator {
     return iterator{ arr.data(), arr.data() + arr.size() };
   }
 };
