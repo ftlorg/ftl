@@ -105,7 +105,7 @@ public:
     std::fill_n(data_, N, value);
   }
 
-  constexpr auto swap(array &other) noexcept -> void {
+  constexpr auto swap(ftl::array<T, N> &other) noexcept -> void {
     std::swap_ranges(data(), data() + size(), other.data());
   }
 
@@ -210,7 +210,7 @@ struct ftl::from_iterator_trait<ftl::enumerate_iterator<Iter>, ftl::array<std::t
 
 template<typename Iter, typename Callable, typename Item, std::size_t N>
 struct ftl::from_iterator_trait<ftl::inspect_iterator<Iter, Callable>, ftl::array<Item, N>> {
-  [[nodiscard]] constexpr static auto from_iter(const inspect_iterator<Iter, Callable> &iter) -> array<Item, N> {
+  [[nodiscard]] constexpr static auto from_iter(const inspect_iterator<Iter, Callable> &iter) -> ftl::array<Item, N> {
     array<Item, N> result{};
     std::size_t i = 0;
     for (auto &&item : iter) {
