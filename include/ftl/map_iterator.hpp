@@ -5,10 +5,10 @@
 namespace ftl {
 
 template<typename Iter, typename Callable>
-class map_iterator
-  : public const_iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type> {
+class map_iterator final
+  : public iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type> {
 
-  friend const_iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
+  friend iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
 
 public:
   using difference_type = typename Iter::difference_type;
@@ -38,6 +38,12 @@ private:
   }
 
   template<typename NewCallable>
+  [[nodiscard]] auto inspect_impl(NewCallable &&callable) const
+    -> inspect_iterator<map_iterator<Iter, Callable>, NewCallable> {
+    return { *this, std::forward<NewCallable>(callable) };
+  }
+
+  template<typename NewCallable>
   [[nodiscard]] auto map_impl(NewCallable &&callable) const -> map_iterator<map_iterator<Iter, Callable>, NewCallable> {
     return { *this, std::forward<NewCallable>(callable) };
   }
@@ -56,6 +62,10 @@ private:
 
   [[nodiscard]] constexpr auto cend_impl() const noexcept -> map_iterator<Iter, Callable> {
     return { iterator_.cend(), callable_ };
+  }
+
+  [[nodiscard]] constexpr auto deref_impl() -> value_type {
+    return callable_(*iterator_);
   }
 
   [[nodiscard]] constexpr auto const_deref_impl() const -> value_type {

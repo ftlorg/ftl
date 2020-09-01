@@ -1,6 +1,8 @@
 #pragma once
 
 #include <ftl/iterator_interface.hpp>
+#include <ftl/inspect_iterator.hpp>
+#include <ftl/map_iterator.hpp>
 #include <tuple>
 #include <utility>
 
@@ -40,6 +42,11 @@ private:
   }
 
   template<typename NewCallable>
+  [[nodiscard]] auto inspect_impl(NewCallable &&callable) const -> inspect_iterator<enumerate_iterator<Iter>, NewCallable> {
+    return { *this, std::forward<NewCallable>(callable) };
+  }
+
+  template<typename NewCallable>
   [[nodiscard]] auto map_impl(NewCallable &&callable) const -> map_iterator<enumerate_iterator<Iter>, NewCallable> {
     return { *this, std::forward<NewCallable>(callable) };
   }
@@ -70,7 +77,7 @@ private:
     return { index_, *iterator_ };
   }
 
-  auto preincrement_impl() -> enumerate_iterator<Iter>& {
+  auto preincrement_impl() -> enumerate_iterator<Iter> & {
     ++iterator_;
     ++index_;
 

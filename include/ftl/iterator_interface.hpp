@@ -1,10 +1,9 @@
 #pragma once
 
-#include <ftl/from_iterator_trait.hpp>
 #include <memory>
-#include <cassert>
 #include <tuple>
 #include <optional>
+#include <type_traits>
 
 namespace ftl {
 
@@ -23,8 +22,8 @@ class flatten_iterator : public iterator_interface<flatten_iterator<Iter>, Iter,
 template<typename Iter>
 class enumerate_iterator;
 
-template<typename Iter>
-class inspect_iterator : public iterator_interface<inspect_iterator<Iter>, Iter, std::size_t> {};
+template<typename Iter, typename Callable>
+class inspect_iterator;
 
 template<typename Iter>
 class take_iterator : public iterator_interface<take_iterator<Iter>, Iter, std::size_t> {};
@@ -144,7 +143,9 @@ public:
    * @param callable
    */
   template<typename Callable>
-  [[nodiscard]] auto inspect(Callable &&callable) const -> inspect_iterator<Derived>;
+  [[nodiscard]] auto inspect(Callable &&callable) const -> inspect_iterator<Derived, Callable> {
+    return static_cast<const Derived &>(*this).inspect_impl(std::forward<Callable>(callable));
+  }
 
   /**
    * Takes a callable and creates an iterator which calls that callable on
@@ -211,14 +212,14 @@ public:
    */
   [[nodiscard]] auto operator*() -> decltype(auto) {
     return static_cast<Derived &>(*this).deref_impl();
-  };
+  }
 
   /**
    * Returns currently pointed-to value.
    */
   [[nodiscard]] auto operator*() const -> decltype(auto) {
     return static_cast<const Derived &>(*this).const_deref_impl();
-  };
+  }
 
   /**
    * Advances the iterator.
@@ -389,7 +390,9 @@ public:
    * @param callable
    */
   template<typename Callable>
-  [[nodiscard]] auto inspect(Callable &&callable) const -> inspect_iterator<Derived>;
+  [[nodiscard]] auto inspect(Callable &&callable) const -> inspect_iterator<Derived, Callable> {
+    return static_cast<const Derived &>(*this).inspect_impl(std::forward<Callable>(callable));
+  }
 
   /**
    * Takes a callable and creates an iterator which calls that callable on
@@ -456,7 +459,7 @@ public:
    */
   [[nodiscard]] auto operator*() const -> decltype(auto) {
     return static_cast<const Derived &>(*this).const_deref_impl();
-  };
+  }
 
   /**
    * Advances the iterator.
