@@ -239,4 +239,3 @@ TEST_CASE(TEST_TAG "operator>=", TEST_TAG) {
 
   REQUIRE(vec1 >= vec2);
 }
-

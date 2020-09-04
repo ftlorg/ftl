@@ -1,6 +1,7 @@
 #pragma once
 #include <iterator>
 
+
 namespace ftl {
 
 template<typename Item>
@@ -59,7 +60,7 @@ private:
     return *current_;
   }
 
-  auto preincrement_impl() const -> const vector_iterator<Item>& {
+  auto preincrement_impl() const -> const vector_iterator<Item> & {
     ++current_;
     return *this;
   }
@@ -73,6 +74,16 @@ private:
     return static_cast<size_type>(end_ - begin_);
   }
 
+  template<typename Callable>
+  [[nodiscard]] auto map_impl(Callable &&callable) const -> map_iterator<vector_iterator<Item>, Callable> {
+    return { *this, std::forward<Callable>(callable) };
+  }
+
+  template<typename Callable>
+  [[nodiscard]] auto filter_impl(Callable &&callable) const -> filter_iterator<vector_iterator<Item>, Callable> {
+    return { *this, std::forward<Callable>(callable) };
+  }
+
   [[nodiscard]] constexpr auto operator[](size_type pos) noexcept -> reference {
     return begin_[pos];
   }
@@ -82,7 +93,7 @@ private:
   }
 
   [[nodiscard]] friend constexpr auto operator+=(const vector_iterator<Item> &lhs, size_type n)
-  -> const vector_iterator<Item> & {
+    -> const vector_iterator<Item> & {
     lhs.current_ += n;
     return lhs;
   }
@@ -95,8 +106,7 @@ private:
     return rhs += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator-=(const vector_iterator<Item> &lhs, size_type n)
-  -> vector_iterator<Item> & {
+  [[nodiscard]] friend constexpr auto operator-=(const vector_iterator<Item> &lhs, size_type n) -> vector_iterator<Item> & {
     return lhs += -n;
   }
 
@@ -105,34 +115,37 @@ private:
   }
 
   [[nodiscard]] friend constexpr auto operator-(const vector_iterator<Item> &lhs, const vector_iterator<Item> &rhs)
-  -> difference_type {
+    -> difference_type {
     return std::distance(rhs.current_, lhs.current_);
   }
 
-  [[nodiscard]] friend constexpr auto operator==(const vector_iterator<Item> &lhs,
-                                                 const vector_iterator<Item> &rhs) noexcept -> bool {
+  [[nodiscard]] friend constexpr auto operator==(const vector_iterator<Item> &lhs, const vector_iterator<Item> &rhs) noexcept
+    -> bool {
     return lhs.current_ == rhs.current_;
   }
 
-  [[nodiscard]] friend constexpr auto operator!=(const vector_iterator<Item> &lhs,
-                                                 const vector_iterator<Item> &rhs) noexcept -> bool {
+  [[nodiscard]] friend constexpr auto operator!=(const vector_iterator<Item> &lhs, const vector_iterator<Item> &rhs) noexcept
+    -> bool {
     return !(lhs == rhs);
   }
 
-  [[nodiscard]] friend constexpr auto operator<(const vector_iterator<Item> &lhs,
-                                                const vector_iterator<Item> &rhs) noexcept -> bool {
+  [[nodiscard]] friend constexpr auto operator<(const vector_iterator<Item> &lhs, const vector_iterator<Item> &rhs) noexcept
+    -> bool {
     return rhs - lhs > 0;
   }
 
-  [[nodiscard]] friend constexpr auto operator<=(const vector_iterator<Item> &lhs, const vector_iterator<Item> &rhs) noexcept -> bool {
+  [[nodiscard]] friend constexpr auto operator<=(const vector_iterator<Item> &lhs, const vector_iterator<Item> &rhs) noexcept
+    -> bool {
     return !(rhs < lhs);
   }
 
-  [[nodiscard]] friend constexpr auto operator>(const vector_iterator<Item> &lhs, const vector_iterator<Item> &rhs) noexcept -> bool {
+  [[nodiscard]] friend constexpr auto operator>(const vector_iterator<Item> &lhs, const vector_iterator<Item> &rhs) noexcept
+    -> bool {
     return rhs < lhs;
   }
 
-  [[nodiscard]] friend constexpr auto operator>=(const vector_iterator<Item> &lhs, const vector_iterator<Item> &rhs) noexcept -> bool {
+  [[nodiscard]] friend constexpr auto operator>=(const vector_iterator<Item> &lhs, const vector_iterator<Item> &rhs) noexcept
+    -> bool {
     return !(lhs < rhs);
   }
 
