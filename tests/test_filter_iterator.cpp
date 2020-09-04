@@ -6,11 +6,14 @@
 #define TEST_TAG "[filter_iterator]"
 
 TEST_CASE(TEST_TAG "map collect", TEST_TAG) {
-  ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
+  ftl::vector<int> vec = { 1, 2, 3, 4, 5, 6, 12};
 
-  auto mapped_vec = vec.iter().filter([](const auto &x) { return x % 2 == 0; }).collect<std::vector<int>>();
+  auto mapped_vec = vec.iter()
+                      .filter([](const auto &x) { return x % 2 == 0; })
+                      .filter([](const auto &x) { return x % 3 == 0; })
+                      .collect<std::vector<int>>();
 
-  REQUIRE(mapped_vec == ftl::vector<int>{ 2, 4 });
+  REQUIRE(mapped_vec == ftl::vector<int>{ 6, 12 });
 }
 
 //TEST_CASE(TEST_TAG "map collect const", TEST_TAG) {
