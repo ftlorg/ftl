@@ -1,6 +1,7 @@
 #pragma once
 #include <iterator>
 #include "iterator_interface.hpp"
+#include <ftl/filter_iterator.hpp>
 
 namespace ftl {
 
@@ -80,6 +81,10 @@ private:
     return { *this, std::forward<Callable>(callable) };
   }
 
+  template<typename Callable>
+  [[nodiscard]] auto filter_impl(Callable &&callable) const -> filter_iterator<vector_const_iterator<Item>, Callable> {
+    return { *this, std::forward<Callable>(callable) };
+  }
 
   [[nodiscard]] friend constexpr auto operator==(const vector_const_iterator<Item> &lhs,
     const vector_const_iterator<Item> &rhs) noexcept -> bool {

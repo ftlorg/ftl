@@ -21,8 +21,7 @@ public:
   using size_type = typename Iter::size_type;
 
   filter_iterator(Iter iterator, Callable callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
-    while (iterator_ != iterator_.cend() && !callable_(*iterator_)) { ++iterator_;
-    }
+    while (iterator_ != iterator_.cend() && !callable_(*iterator_)) { ++iterator_; }
   }
 
 private:
@@ -40,7 +39,14 @@ private:
   }
 
   template<typename NewCallable>
-  [[nodiscard]] auto filter_impl(NewCallable &&callable) const -> filter_iterator<filter_iterator<Iter, Callable>, NewCallable> {
+  [[nodiscard]] auto filter_impl(NewCallable &&callable) const
+    -> filter_iterator<filter_iterator<Iter, Callable>, NewCallable> {
+    return { *this, std::forward<NewCallable>(callable) };
+  }
+
+  template<typename NewCallable>
+  [[nodiscard]] auto map_impl(NewCallable &&callable) const
+    -> map_iterator<filter_iterator<Iter, Callable>, NewCallable> {
     return { *this, std::forward<NewCallable>(callable) };
   }
 
@@ -64,7 +70,7 @@ private:
     return *iterator_;
   }
 
-  auto preincrement_impl() const -> const filter_iterator<Iter, Callable>& {
+  auto preincrement_impl() const -> const filter_iterator<Iter, Callable> & {
     while (++iterator_ != iterator_.cend() && !callable_(*iterator_)) {}
     return *this;
   }

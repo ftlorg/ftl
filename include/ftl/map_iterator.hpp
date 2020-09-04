@@ -1,5 +1,6 @@
 #pragma once
 
+#include <type_traits>
 #include <ftl/iterator_interface.hpp>
 
 namespace ftl {
@@ -48,6 +49,12 @@ private:
     return { *this, std::forward<NewCallable>(callable) };
   }
 
+  template<typename NewCallable>
+  [[nodiscard]] auto filter_impl(NewCallable &&callable) const
+    -> filter_iterator<map_iterator<Iter, Callable>, NewCallable> {
+    return { *this, std::forward<NewCallable>(callable) };
+  }
+
   [[nodiscard]] constexpr auto deref_impl() -> value_type {
     return callable_(*iterator_);
   }
@@ -68,7 +75,7 @@ private:
     return { iterator_.cend(), callable_ };
   }
 
-  [[nodiscard]] constexpr auto const_deref_impl() const -> value_type {
+  [[nodiscard]] constexpr auto const_deref_impl() const -> typename std::invoke_result<Callable, value_type>::type {
     return callable_(*iterator_);
   }
 

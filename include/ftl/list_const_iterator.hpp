@@ -55,6 +55,11 @@ private:
     return { *this, std::forward<Callable>(callable) };
   }
 
+  template<typename Callable>
+  [[nodiscard]] auto filter_impl(Callable &&callable) const -> filter_iterator<list_const_iterator<Item>, Callable> {
+    return { *this, std::forward<Callable>(callable) };
+  }
+
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
     return static_cast<size_type>(std::distance(begin_, end_));
   }

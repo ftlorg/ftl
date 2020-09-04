@@ -49,6 +49,11 @@ private:
     return { *this, std::forward<NewCallable>(callable) };
   }
 
+  template<typename NewCallable>
+  [[nodiscard]] auto filter_impl(NewCallable &&callable) const -> filter_iterator<inspect_iterator<Iter, Callable>, NewCallable> {
+    return { *this, std::forward<NewCallable>(callable) };
+  }
+
   [[nodiscard]] constexpr auto begin_impl() const noexcept -> inspect_iterator<Iter, Callable> {
     return { iterator_.cbegin(), callable_ };
   }
@@ -70,7 +75,7 @@ private:
     return *iterator_;
   }
 
-  [[nodiscard]] constexpr auto const_deref_impl() const -> decltype(std::declval<const Iter&>().operator*()) {
+  [[nodiscard]] constexpr auto const_deref_impl() const -> decltype(std::declval<const Iter &>().operator*()) {
     callable_(*static_cast<const Iter &>(iterator_));
     return *static_cast<const Iter &>(iterator_);
   }
