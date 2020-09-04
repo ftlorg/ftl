@@ -39,7 +39,7 @@ TEST_CASE(TEST_TAG "const filter collect to empty", TEST_TAG) {
 }
 
 
-TEST_CASE(TEST_TAG "collect after map", TEST_TAG) {
+TEST_CASE(TEST_TAG "filter after map", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
 
@@ -48,7 +48,7 @@ TEST_CASE(TEST_TAG "collect after map", TEST_TAG) {
                       .filter([](const auto &x) { return x % 2 == 0; })
                       .collect<std::vector<int>>();
 
-  REQUIRE(mapped_arr == std::vector<int>{ 4, 16 });
+  REQUIRE(mapped_arr == std::vector<int>{ 4, 16, 15 });
 }
 
 TEST_CASE(TEST_TAG "filter const ftl::list", TEST_TAG) {

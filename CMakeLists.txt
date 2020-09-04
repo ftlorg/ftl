@@ -69,6 +69,7 @@ add_subdirectory(src)
 
 if(ENABLE_TESTING)
   enable_testing()
+  set(CTEST_OUTPUT_ON_FAILURE ON)
   add_subdirectory(tests)
 endif()
 
