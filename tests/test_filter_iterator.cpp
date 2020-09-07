@@ -48,7 +48,7 @@ TEST_CASE(TEST_TAG "filter after map", TEST_TAG) {
                       .filter([](const auto &x) { return x % 2 == 0; })
                       .collect<std::vector<int>>();
 
-  REQUIRE(mapped_arr == std::vector<int>{ 4, 16, 15 });
+  REQUIRE(mapped_arr == std::vector<int>{ 4, 16 });
 }
 
 TEST_CASE(TEST_TAG "filter const ftl::list", TEST_TAG) {
