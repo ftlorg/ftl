@@ -45,8 +45,20 @@ template<typename Key, typename T, typename Compare, typename Allocator>
 
 }// namespace ftl
 
+template<typename Iter, typename Key, typename T>
+struct ftl::from_iterator_trait<ftl::enumerate_iterator<Iter>, ftl::map<Key, T>> {
+  [[nodiscard]] constexpr static auto from_iter(const ftl::enumerate_iterator<Iter> &iter) -> ftl::map<Key, T> {
+    ftl::map<typename ftl::enumerate_iterator<Iter>::size_type, typename ftl::enumerate_iterator<Iter>::value_type> result{};
+
+    for (auto &&item : iter) { result.emplace(std::get<0>(item), std::get<1>(item)); }
+
+    return result;
+  }
+};
+
 template<typename Key, typename T, typename Compare, typename Allocator>
-struct ftl::into_iterator_trait<ftl::map<Key, T, Compare, Allocator>, typename ftl::map<Key, T, Compare, Allocator>::ftl_iterator> {
+struct ftl::into_iterator_trait<ftl::map<Key, T, Compare, Allocator>,
+  typename ftl::map<Key, T, Compare, Allocator>::ftl_iterator> {
   using iterator = typename ftl::map<Key, T, Compare, Allocator>::ftl_iterator;
 
   [[nodiscard]] static auto into_iter(ftl::map<Key, T, Compare, Allocator> &map) -> iterator {
@@ -55,7 +67,8 @@ struct ftl::into_iterator_trait<ftl::map<Key, T, Compare, Allocator>, typename f
 };
 
 template<typename Key, typename T, typename Compare, typename Allocator>
-struct ftl::into_iterator_trait<ftl::map<Key, T, Compare, Allocator>, typename ftl::map<Key, T, Compare, Allocator>::ftl_const_iterator> {
+struct ftl::into_iterator_trait<ftl::map<Key, T, Compare, Allocator>,
+  typename ftl::map<Key, T, Compare, Allocator>::ftl_const_iterator> {
   using const_iterator = typename ftl::map<Key, T, Compare, Allocator>::ftl_const_iterator;
 
   [[nodiscard]] static auto into_iter(const ftl::map<Key, T, Compare, Allocator> &map) -> const_iterator {
