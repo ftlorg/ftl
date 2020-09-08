@@ -10,7 +10,6 @@ namespace ftl {
 
 template<typename Item>
 class list_iterator final : public iterator_interface<list_iterator<Item>, Item, std::size_t> {
-
   friend iterator_interface<list_iterator<Item>, Item, std::size_t>;
 
 public:
