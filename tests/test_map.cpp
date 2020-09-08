@@ -325,14 +325,14 @@ TEST_CASE(TEST_TAG "try_emplace_hint", TEST_TAG) {
   REQUIRE(map1["blue"] == 3);
 }
 
-TEST_CASE(TEST_TAG "erase by iterator", TEST_TAG) {
+TEST_CASE(TEST_TAG "erase by iter", TEST_TAG) {
   ftl::map<std::string, int> map1 = {
     { "red", 1 },
     { "green", 2 },
     { "blue", 3 },
   };
 
-  auto it = std::begin(map1);
+  auto it = map1.find("blue");
   map1.erase(it);
 
   REQUIRE(map1.size() == 2);
@@ -364,4 +364,159 @@ TEST_CASE(TEST_TAG "erase range", TEST_TAG) {
   map1.erase(std::begin(map1), std::end(map1));
 
   REQUIRE_FALSE(!map1.empty());
+}
+
+TEST_CASE(TEST_TAG "swap", TEST_TAG) {
+  ftl::map<std::string, int> map1 = {
+    { "red", 1 },
+    { "green", 2 },
+    { "blue", 3 },
+  };
+
+  REQUIRE(map1.size() == 3);
+  REQUIRE(map1["red"] == 1);
+  REQUIRE(map1["green"] == 2);
+  REQUIRE(map1["blue"] == 3);
+
+  ftl::map<std::string, int> map2 = {
+    { "orange", 4 },
+    { "purple", 5 },
+  };
+
+  REQUIRE(map2.size() == 2);
+  REQUIRE(map2["orange"] == 4);
+  REQUIRE(map2["purple"] == 5);
+
+  map1.swap(map2);
+
+  REQUIRE(map1.size() == 2);
+  REQUIRE(map1["orange"] == 4);
+  REQUIRE(map1["purple"] == 5);
+
+  REQUIRE(map2.size() == 3);
+  REQUIRE(map2["red"] == 1);
+  REQUIRE(map2["green"] == 2);
+  REQUIRE(map2["blue"] == 3);
+}
+
+TEST_CASE(TEST_TAG "extract by iter", TEST_TAG) {
+  ftl::map<std::string, int> map1 = {
+    { "red", 1 },
+    { "green", 2 },
+    { "blue", 3 },
+  };
+
+  auto it = map1.find("red");
+  auto handle = map1.extract(it);
+
+  REQUIRE(handle.key() == "red");
+  REQUIRE(handle.mapped() == 1);
+
+  REQUIRE(map1.size() == 2);
+  REQUIRE(map1["green"] == 2);
+  REQUIRE(map1["blue"] == 3);
+}
+
+TEST_CASE(TEST_TAG "extract by key", TEST_TAG) {
+  ftl::map<std::string, int> map1 = {
+    { "red", 1 },
+    { "green", 2 },
+    { "blue", 3 },
+  };
+
+  auto handle = map1.extract("red");
+
+  REQUIRE(handle.key() == "red");
+  REQUIRE(handle.mapped() == 1);
+
+  REQUIRE(map1.size() == 2);
+  REQUIRE(map1["green"] == 2);
+  REQUIRE(map1["blue"] == 3);
+}
+
+TEST_CASE(TEST_TAG "merge", TEST_TAG) {
+  ftl::map<int, std::string> ma{ { 1, "apple" }, { 5, "pear" }, { 10, "banana" } };
+  ftl::map<int, std::string> mb{ { 2, "zorro" }, { 4, "batman" }, { 5, "X" }, { 8, "alpaca" } };
+  ftl::map<int, std::string> u;
+  u.merge(ma);
+  REQUIRE(u.size() == 3);
+
+  u.merge(mb);
+  REQUIRE(u.size() == 6);
+
+  REQUIRE(mb.at(5) == "X");
+}
+
+TEST_CASE(TEST_TAG "count", TEST_TAG) {
+  ftl::map<std::string, int> map1 = {
+    { "red", 1 },
+    { "green", 2 },
+    { "blue", 3 },
+  };
+
+  REQUIRE(map1.count("red") == 1);
+  REQUIRE(map1.count("orange") == 0);
+}
+
+TEST_CASE(TEST_TAG "find", TEST_TAG) {
+  ftl::map<std::string, int> map1 = {
+    { "red", 1 },
+    { "green", 2 },
+    { "blue", 3 },
+  };
+
+  auto found_it = map1.find("red");
+
+  REQUIRE(found_it != std::end(map1));
+  REQUIRE(found_it->first == "red");
+  REQUIRE(found_it->second == 1);
+
+  auto not_found_it = map1.find("orange");
+  REQUIRE(not_found_it == std::end(map1));
+}
+
+TEST_CASE(TEST_TAG "equal_range", TEST_TAG) {
+  ftl::map<int, std::string> map1 = {
+    { 1, "red" },
+    { 2, "green" },
+    { 3, "blue" },
+  };
+
+  auto [lower_bound, upper_bound] = map1.equal_range(2);
+
+  REQUIRE(lower_bound != std::end(map1));
+  REQUIRE(lower_bound->first == 2);
+  REQUIRE(lower_bound->second == "green");
+
+  REQUIRE(upper_bound != std::end(map1));
+  REQUIRE(upper_bound->first == 3);
+  REQUIRE(upper_bound->second == "blue");
+}
+
+TEST_CASE(TEST_TAG "lower_bound", TEST_TAG) {
+  ftl::map<int, std::string> map1 = {
+    { 1, "red" },
+    { 2, "green" },
+    { 3, "blue" },
+  };
+
+  auto lower_bound = map1.lower_bound(2);
+
+  REQUIRE(lower_bound != std::end(map1));
+  REQUIRE(lower_bound->first == 2);
+  REQUIRE(lower_bound->second == "green");
+}
+
+TEST_CASE(TEST_TAG "upper_bound", TEST_TAG) {
+  ftl::map<int, std::string> map1 = {
+    { 1, "red" },
+    { 2, "green" },
+    { 3, "blue" },
+  };
+
+  auto lower_bound = map1.upper_bound(2);
+
+  REQUIRE(lower_bound != std::end(map1));
+  REQUIRE(lower_bound->first == 3);
+  REQUIRE(lower_bound->second == "blue");
 }
