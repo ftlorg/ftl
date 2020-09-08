@@ -10,11 +10,7 @@ TEST_CASE(TEST_TAG "default ctor", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "input iterator ctor", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   ftl::map<std::string, int> map2 = { std::begin(map1), std::end(map1) };
 
@@ -25,11 +21,7 @@ TEST_CASE(TEST_TAG "input iterator ctor", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "copy ctor", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
   ftl::map<std::string, int> map2 = map1;
 
   REQUIRE(map1.size() == map2.size());
@@ -39,11 +31,7 @@ TEST_CASE(TEST_TAG "copy ctor", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "move ctor", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
   ftl::map<std::string, int> map2 = std::move(map1);
 
   REQUIRE(map2.size() == 3);
@@ -53,11 +41,7 @@ TEST_CASE(TEST_TAG "move ctor", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "initializer list ctor", TEST_TAG) {
-  ftl::map<std::string, int> map = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   REQUIRE(map.size() == 3);
   REQUIRE(map["red"] == 1);
@@ -66,11 +50,7 @@ TEST_CASE(TEST_TAG "initializer list ctor", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "operator=", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
   ftl::map<std::string, int> map2;
   map2 = map1;
 
@@ -81,11 +61,7 @@ TEST_CASE(TEST_TAG "operator=", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "move operator=", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
   ftl::map<std::string, int> map2;
   map2 = std::move(map1);
 
@@ -96,11 +72,7 @@ TEST_CASE(TEST_TAG "move operator=", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "at", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   REQUIRE(map1.at("red") == 1);
   REQUIRE(map1.at("green") == 2);
@@ -109,11 +81,7 @@ TEST_CASE(TEST_TAG "at", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "operator[]", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   REQUIRE(map1["red"] == 1);
   REQUIRE(map1["green"] == 2);
@@ -121,111 +89,67 @@ TEST_CASE(TEST_TAG "operator[]", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "begin", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   REQUIRE(map1.begin()->first == "blue");
 }
 
 TEST_CASE(TEST_TAG "begin const", TEST_TAG) {
-  const ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  const ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   REQUIRE(map1.begin()->first == "blue");
 }
 
 TEST_CASE(TEST_TAG "cbegin const", TEST_TAG) {
-  const ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  const ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   REQUIRE(map1.cbegin()->first == "blue");
 }
 
 TEST_CASE(TEST_TAG "rbegin", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   REQUIRE(map1.rbegin()->first == "red");
 }
 
 TEST_CASE(TEST_TAG "rbegin const", TEST_TAG) {
-  const ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  const ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   REQUIRE(map1.rbegin()->first == "red");
 }
 
 TEST_CASE(TEST_TAG "crbegin const", TEST_TAG) {
-  const ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  const ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   REQUIRE(map1.crbegin()->first == "red");
 }
 
 TEST_CASE(TEST_TAG "empty", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   REQUIRE_FALSE(map1.empty());
 }
 
 TEST_CASE(TEST_TAG "empty const", TEST_TAG) {
-  const ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  const ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   REQUIRE_FALSE(map1.empty());
 }
 
 TEST_CASE(TEST_TAG "size", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   REQUIRE(map1.size() == 3);
 }
 
 TEST_CASE(TEST_TAG "size const", TEST_TAG) {
-  const ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  const ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   REQUIRE(map1.size() == 3);
 }
 
 TEST_CASE(TEST_TAG "clear", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   map1.clear();
 
@@ -233,11 +157,7 @@ TEST_CASE(TEST_TAG "clear", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "insert", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   REQUIRE(map1.size() == 3);
   REQUIRE(map1["red"] == 1);
@@ -251,11 +171,7 @@ TEST_CASE(TEST_TAG "insert", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "insert_or_assign", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   REQUIRE(map1.size() == 3);
   REQUIRE(map1["red"] == 1);
@@ -326,11 +242,7 @@ TEST_CASE(TEST_TAG "try_emplace_hint", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "erase by iter", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   auto it = map1.find("blue");
   map1.erase(it);
@@ -341,11 +253,7 @@ TEST_CASE(TEST_TAG "erase by iter", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "erase with key", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   map1.erase("blue");
 
@@ -355,11 +263,7 @@ TEST_CASE(TEST_TAG "erase with key", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "erase range", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   map1.erase(std::begin(map1), std::end(map1));
 
@@ -367,21 +271,14 @@ TEST_CASE(TEST_TAG "erase range", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "swap", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   REQUIRE(map1.size() == 3);
   REQUIRE(map1["red"] == 1);
   REQUIRE(map1["green"] == 2);
   REQUIRE(map1["blue"] == 3);
 
-  ftl::map<std::string, int> map2 = {
-    { "orange", 4 },
-    { "purple", 5 },
-  };
+  ftl::map<std::string, int> map2 = { { "orange", 4 }, { "purple", 5 } };
 
   REQUIRE(map2.size() == 2);
   REQUIRE(map2["orange"] == 4);
@@ -400,11 +297,7 @@ TEST_CASE(TEST_TAG "swap", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "extract by iter", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   auto it = map1.find("red");
   auto handle = map1.extract(it);
@@ -418,11 +311,7 @@ TEST_CASE(TEST_TAG "extract by iter", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "extract by key", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   auto handle = map1.extract("red");
 
@@ -448,22 +337,14 @@ TEST_CASE(TEST_TAG "merge", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "count", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   REQUIRE(map1.count("red") == 1);
   REQUIRE(map1.count("orange") == 0);
 }
 
 TEST_CASE(TEST_TAG "find", TEST_TAG) {
-  ftl::map<std::string, int> map1 = {
-    { "red", 1 },
-    { "green", 2 },
-    { "blue", 3 },
-  };
+  ftl::map<std::string, int> map1 = { { "red", 1 }, { "green", 2 }, { "blue", 3 } };
 
   auto found_it = map1.find("red");
 
@@ -476,11 +357,7 @@ TEST_CASE(TEST_TAG "find", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "equal_range", TEST_TAG) {
-  ftl::map<int, std::string> map1 = {
-    { 1, "red" },
-    { 2, "green" },
-    { 3, "blue" },
-  };
+  ftl::map<int, std::string> map1 = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
 
   auto [lower_bound, upper_bound] = map1.equal_range(2);
 
@@ -494,11 +371,7 @@ TEST_CASE(TEST_TAG "equal_range", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "lower_bound", TEST_TAG) {
-  ftl::map<int, std::string> map1 = {
-    { 1, "red" },
-    { 2, "green" },
-    { 3, "blue" },
-  };
+  ftl::map<int, std::string> map1 = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
 
   auto lower_bound = map1.lower_bound(2);
 
@@ -508,11 +381,7 @@ TEST_CASE(TEST_TAG "lower_bound", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "upper_bound", TEST_TAG) {
-  ftl::map<int, std::string> map1 = {
-    { 1, "red" },
-    { 2, "green" },
-    { 3, "blue" },
-  };
+  ftl::map<int, std::string> map1 = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
 
   auto lower_bound = map1.upper_bound(2);
 
