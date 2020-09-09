@@ -153,5 +153,5 @@ struct std::iterator_traits<ftl::filter_iterator<Iter, Callable>> {
   using value_type = typename ftl::filter_iterator<Iter, Callable>::value_type;
   using pointer = typename ftl::filter_iterator<Iter, Callable>::pointer;
   using reference = typename ftl::filter_iterator<Iter, Callable>::reference;
-  using iterator_category = typename std::bidirectional_iterator_tag;
+  using iterator_category = std::bidirectional_iterator_tag;
 };
