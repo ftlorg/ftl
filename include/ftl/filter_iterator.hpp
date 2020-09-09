@@ -30,15 +30,15 @@ private:
     return from_iterator_trait<filter_iterator<Iter, Callable>, Collection>::from_iter(*this);
   }
 
-  [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    std::size_t count = 0;
-    auto iter = iterator_.begin();
-    while (iter != iterator_.end()) {
-      if (callable_(*iter)) { count++; }
-      iter++;
-    }
-    return count;
-  }
+  //[[nodiscard]] constexpr auto count_impl() const -> size_type {
+  //  std::size_t count = 0;
+  //  auto iter = iterator_.begin();
+  //  while (iter != iterator_.end()) {
+  //    if (callable_(*iter)) { count++; }
+  //    iter++;
+  //  }
+  //  return count;
+  //}
 
   [[nodiscard]] auto enumerate_impl() const -> enumerate_iterator<filter_iterator<Iter, Callable>> {
     return { *this };
@@ -153,5 +153,5 @@ struct std::iterator_traits<ftl::filter_iterator<Iter, Callable>> {
   using value_type = typename ftl::filter_iterator<Iter, Callable>::value_type;
   using pointer = typename ftl::filter_iterator<Iter, Callable>::pointer;
   using reference = typename ftl::filter_iterator<Iter, Callable>::reference;
-  using iterator_category = typename ftl::filter_iterator<Iter, Callable>::iterator_category;
+  using iterator_category = typename std::bidirectional_iterator_tag;
 };

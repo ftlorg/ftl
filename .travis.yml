@@ -54,6 +54,6 @@ script:
   - cd build
   - cmake -D ENABLE_COVERAGE:BOOL=TRUE ../
   - cmake --build . -- -j2
-  - ctest -j2 --output-on-failure --extra-verbose --debug --progress
+  - ctest -j2 --output-on-failure --progress
 
 
