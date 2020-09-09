@@ -33,8 +33,9 @@ private:
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
     std::size_t count = 0;
     auto iter = iterator_.begin();
-    while (iter++ != iterator_.end()) { 
-        if (callable_(*iter)) { count++; }
+    while (iter != iterator_.end()) {
+      if (callable_(*iter)) { count++; }
+      iter++;
     }
     return count;
   }
@@ -50,8 +51,7 @@ private:
   }
 
   template<typename NewCallable>
-  [[nodiscard]] auto map_impl(NewCallable &&callable) const
-    -> map_iterator<filter_iterator<Iter, Callable>, NewCallable> {
+  [[nodiscard]] auto map_impl(NewCallable &&callable) const -> map_iterator<filter_iterator<Iter, Callable>, NewCallable> {
     return { *this, std::forward<NewCallable>(callable) };
   }
 
