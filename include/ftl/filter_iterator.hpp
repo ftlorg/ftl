@@ -35,7 +35,7 @@ private:
   }
 
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    return this->cend() - this->cbegin();
+    return static_cast<size_type>(this->cend() - this->cbegin());
   }
 
   template<typename NewCallable>
@@ -99,8 +99,8 @@ private:
     return lhs.iterator_ -= n;
   }
 
-  [[nodiscard]] friend auto operator-(const filter_iterator<Iter, Callable> &lhs,
-    const filter_iterator<Iter, Callable> &rhs) -> size_type {
+  [[nodiscard]] friend auto operator-(const filter_iterator<Iter, Callable> &lhs, const filter_iterator<Iter, Callable> &rhs)
+    -> difference_type {
     auto copy_lhs = lhs.iterator_;
     auto copy_rhs = rhs.iterator_;
     std::size_t count = 0;
