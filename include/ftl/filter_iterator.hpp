@@ -103,7 +103,7 @@ private:
     -> difference_type {
     auto copy_lhs = lhs.iterator_;
     auto copy_rhs = rhs.iterator_;
-    std::size_t count = 0;
+    difference_type count = 0;
     while (copy_rhs != copy_lhs) {
       if (lhs.callable_(*copy_rhs)) { count++; }
       ++copy_rhs;
