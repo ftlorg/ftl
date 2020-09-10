@@ -30,18 +30,12 @@ private:
     return from_iterator_trait<filter_iterator<Iter, Callable>, Collection>::from_iter(*this);
   }
 
-  //[[nodiscard]] constexpr auto count_impl() const -> size_type {
-  //  std::size_t count = 0;
-  //  auto iter = iterator_.begin();
-  //  while (iter != iterator_.end()) {
-  //    if (callable_(*iter)) { count++; }
-  //    iter++;
-  //  }
-  //  return count;
-  //}
-
   [[nodiscard]] auto enumerate_impl() const -> enumerate_iterator<filter_iterator<Iter, Callable>> {
     return { *this };
+  }
+
+  [[nodiscard]] constexpr auto count_impl() const -> size_type {
+    return this->cend() - this->cbegin();
   }
 
   template<typename NewCallable>
@@ -107,7 +101,14 @@ private:
 
   [[nodiscard]] friend constexpr auto operator-(const filter_iterator<Iter, Callable> &lhs,
     const filter_iterator<Iter, Callable> &rhs) -> difference_type {
-    return lhs.iterator_ - rhs.iterator_;
+    auto copy_lhs = lhs.iterator_;
+    auto copy_rhs = rhs.iterator_;
+    std::size_t count = 0;
+    while (copy_rhs != copy_lhs) {
+      if (lhs.callable_(*copy_rhs)) { count++; }
+      ++copy_rhs;
+    }
+    return count;
   }
 
   [[nodiscard]] friend constexpr auto operator==(const filter_iterator<Iter, Callable> &lhs,

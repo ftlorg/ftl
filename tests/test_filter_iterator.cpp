@@ -110,6 +110,15 @@ TEST_CASE(TEST_TAG "chain enumerate and filter", TEST_TAG) {
   REQUIRE(mapped_arr == ftl::vector<int>{ 4, 5 });
 }
 
+TEST_CASE(TEST_TAG "count", TEST_TAG) {
+  ftl::vector<int> arr = { 1, 2, 3, 4, 5 };
+
+  auto iter = arr.iter().filter([](const auto &x) { return x % 2 == 1; });
+
+  REQUIRE(iter.count() == 3);
+}
+
+
 // TEST_CASE(TEST_TAG "chain map const", TEST_TAG) {
 //  constexpr std::size_t size = 5;
 //  const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
