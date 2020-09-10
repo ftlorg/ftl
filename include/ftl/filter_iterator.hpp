@@ -99,7 +99,7 @@ private:
     return lhs.iterator_ -= n;
   }
 
-  [[nodiscard]] friend constexpr auto operator-(const filter_iterator<Iter, Callable> &lhs,
+  [[nodiscard]] friend auto operator-(const filter_iterator<Iter, Callable> &lhs,
     const filter_iterator<Iter, Callable> &rhs) -> size_type {
     auto copy_lhs = lhs.iterator_;
     auto copy_rhs = rhs.iterator_;
