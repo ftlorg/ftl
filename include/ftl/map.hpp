@@ -48,7 +48,7 @@ template<typename Key, typename T, typename Compare, typename Allocator>
 template<typename Iter, typename Key, typename T>
 struct ftl::from_iterator_trait<ftl::enumerate_iterator<Iter>, ftl::map<Key, T>> {
   [[nodiscard]] constexpr static auto from_iter(const ftl::enumerate_iterator<Iter> &iter) -> ftl::map<Key, T> {
-    ftl::map<typename ftl::enumerate_iterator<Iter>::size_type, typename ftl::enumerate_iterator<Iter>::value_type> result{};
+    ftl::map<Key, T> result{};
 
     for (auto &&item : iter) { result.emplace(std::get<0>(item), std::get<1>(item)); }
 

@@ -23,7 +23,7 @@ public:
   using inherited_iterator_category = typename Iter::iterator_category;
   using iterator_category = inherited_iterator_category;
   using size_type = typename Iter::size_type;
-  using value_type = std::tuple<size_type, decltype(std::declval<Iter>().operator*())>;
+  using value_type = typename Iter::value_type;
 
   enumerate_iterator(Iter iterator) : iterator_{ std::move(iterator) }, index_{ 0 } {
   }

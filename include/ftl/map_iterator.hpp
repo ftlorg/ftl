@@ -56,7 +56,11 @@ private:
     return { *this, std::forward<NewCallable>(callable) };
   }
 
-  [[nodiscard]] constexpr auto deref_impl() -> typename std::invoke_result<Callable, value_type>::type {
+  [[nodiscard]] constexpr auto deref_impl() -> typename std::invoke_result_t<Callable, decltype(std::declval<Iter>().operator*())> {
+    return callable_(*iterator_);
+  }
+
+  [[nodiscard]] constexpr auto const_deref_impl() const -> typename std::invoke_result_t<Callable, decltype(std::declval<Iter>().operator*())> {
     return callable_(*iterator_);
   }
 
@@ -74,10 +78,6 @@ private:
 
   [[nodiscard]] constexpr auto cend_impl() const noexcept -> map_iterator<Iter, Callable> {
     return { iterator_.cend(), callable_ };
-  }
-
-  [[nodiscard]] constexpr auto const_deref_impl() const -> typename std::invoke_result<Callable, value_type>::type {
-    return callable_(*iterator_);
   }
 
   auto preincrement_impl() const -> const map_iterator<Iter, Callable> & {
