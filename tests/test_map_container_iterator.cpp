@@ -156,10 +156,10 @@ TEST_CASE(TEST_TAG "enumerate collect const", TEST_TAG) {
 
   for (const auto &e : map.iter().enumerate()) { INFO(std::get<0>(e)); }
 
-  auto mapped_map = map.iter().enumerate().collect<ftl::map<std::size_t, std::pair<const int, std::string>>>();
+  auto mapped_map = map.iter().enumerate().collect<ftl::map<std::size_t, std::tuple<const int, std::string>>>();
 
   REQUIRE(mapped_map
-          == ftl::map<std::size_t, std::pair<const int, std::string>>{
+          == ftl::map<std::size_t, std::tuple<const int, std::string>>{
             { 0, { 1, "red" } },
             { 1, { 2, "green" } },
             { 2, { 3, "blue" } },
@@ -196,10 +196,10 @@ TEST_CASE(TEST_TAG "map enumerate collect const", TEST_TAG) {
                         return std::pair<const int, std::string>{ entry.first, entry.second + "abc" };
                       })
                       .enumerate()
-                      .collect<ftl::map<std::size_t, std::pair<const int, std::string>>>();
+                      .collect<ftl::map<std::size_t, std::tuple<const int, std::string>>>();
 
   REQUIRE(mapped_map
-          == ftl::map<std::size_t, std::pair<const int, std::string>>{
+          == ftl::map<std::size_t, std::tuple<const int, std::string>>{
             { 0, { 1, "redabc" } },
             { 1, { 2, "greenabc" } },
             { 2, { 3, "blueabc" } },

@@ -1,9 +1,10 @@
 #pragma once
 
+#include <ftl/from_iterator_trait.hpp>
 #include <memory>
+#include <cassert>
 #include <tuple>
 #include <optional>
-#include <type_traits>
 
 namespace ftl {
 
@@ -13,8 +14,8 @@ class iterator_interface;
 template<typename Iter, typename Callable>
 class map_iterator;
 
-template<typename Iter>
-class filter_iterator : public iterator_interface<filter_iterator<Iter>, Iter, std::size_t> {};
+template<typename Iter, typename Callable>
+class filter_iterator;
 
 template<typename Iter>
 class flatten_iterator : public iterator_interface<flatten_iterator<Iter>, Iter, std::size_t> {};
@@ -101,7 +102,9 @@ public:
    * @param predicate
    */
   template<typename Predicate>
-  [[nodiscard]] auto filter(Predicate &&predicate) const -> filter_iterator<Derived>;
+  [[nodiscard]] auto filter(Predicate &&predicate) const -> filter_iterator<Derived, Predicate> {
+    return static_cast<const Derived &>(*this).filter_impl(std::forward<Predicate>(predicate));
+  }
 
   /**
    * Searches for an element of an iterator that satisfies a predicate.
@@ -229,6 +232,13 @@ public:
   }
 
   /**
+   * Advances the iterator.
+   */
+  auto operator++(int) const -> decltype(auto) {
+    return static_cast<const Derived &>(*this).postincrement_impl();
+  }
+
+  /**
    * Decreases the iterator.
    */
   auto operator--() const -> void {
@@ -348,8 +358,9 @@ public:
    * @param predicate
    */
   template<typename Predicate>
-  [[nodiscard]] auto filter(Predicate &&predicate) const -> filter_iterator<Derived>;
-
+  [[nodiscard]] auto filter(Predicate &&predicate) const -> filter_iterator<Derived, Predicate> {
+    return static_cast<const Derived &>(*this).filter_impl(std::forward<Predicate>(predicate));
+  }
   /**
    * Searches for an element of an iterator that satisfies a predicate.
    *
@@ -466,6 +477,13 @@ public:
    */
   auto operator++() const -> decltype(auto) {
     return static_cast<const Derived &>(*this).preincrement_impl();
+  }
+
+  /**
+   * Advances the iterator.
+   */
+  auto operator++(int) const -> decltype(auto) {
+    return static_cast<const Derived &>(*this).postincrement_impl();
   }
 
   /**

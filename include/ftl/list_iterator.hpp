@@ -52,7 +52,12 @@ private:
   }
 
   template<typename Callable>
-  [[nodiscard]] auto map_impl(Callable &&callable) -> map_iterator<list_iterator<Item>, Callable> {
+  [[nodiscard]] auto map_impl(Callable &&callable) const -> map_iterator<list_iterator<Item>, Callable> {
+    return { *this, std::forward<Callable>(callable) };
+  }
+
+  template<typename Callable>
+  [[nodiscard]] auto filter_impl(Callable &&callable) const -> filter_iterator<list_iterator<Item>, Callable> {
     return { *this, std::forward<Callable>(callable) };
   }
 

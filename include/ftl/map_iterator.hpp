@@ -1,14 +1,15 @@
 #pragma once
 
+#include <type_traits>
 #include <ftl/iterator_interface.hpp>
 
 namespace ftl {
 
 template<typename Iter, typename Callable>
-class map_iterator final
-  : public iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type> {
+class map_iterator
+  : public const_iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type> {
 
-  friend iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
+  friend const_iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
 
 public:
   using difference_type = typename Iter::difference_type;
@@ -17,11 +18,11 @@ public:
   using reference = typename Iter::reference;
   using const_pointer = typename Iter::const_pointer;
   using const_reference = typename Iter::const_reference;
-  using iterator_category = typename Iter::iterator_category;
+  using inherited_iterator_category = typename Iter::iterator_category;
+  using iterator_category = inherited_iterator_category;
   using size_type = typename Iter::size_type;
 
-  map_iterator(Iter iterator, Callable callable)
-    : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
+  map_iterator(Iter iterator, Callable callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
   }
 
 private:
@@ -40,13 +41,27 @@ private:
 
   template<typename NewCallable>
   [[nodiscard]] auto inspect_impl(NewCallable &&callable) const
-  -> inspect_iterator<map_iterator<Iter, Callable>, NewCallable> {
+    -> inspect_iterator<map_iterator<Iter, Callable>, NewCallable> {
     return { *this, std::forward<NewCallable>(callable) };
   }
 
   template<typename NewCallable>
   [[nodiscard]] auto map_impl(NewCallable &&callable) const -> map_iterator<map_iterator<Iter, Callable>, NewCallable> {
     return { *this, std::forward<NewCallable>(callable) };
+  }
+
+  template<typename NewCallable>
+  [[nodiscard]] auto filter_impl(NewCallable &&callable) const
+    -> filter_iterator<map_iterator<Iter, Callable>, NewCallable> {
+    return { *this, std::forward<NewCallable>(callable) };
+  }
+
+  [[nodiscard]] constexpr auto deref_impl() -> typename std::invoke_result_t<Callable, decltype(std::declval<Iter>().operator*())> {
+    return callable_(*iterator_);
+  }
+
+  [[nodiscard]] constexpr auto const_deref_impl() const -> typename std::invoke_result_t<Callable, decltype(std::declval<Iter>().operator*())> {
+    return callable_(*iterator_);
   }
 
   [[nodiscard]] constexpr auto begin_impl() const noexcept -> map_iterator<Iter, Callable> {
@@ -65,47 +80,34 @@ private:
     return { iterator_.cend(), callable_ };
   }
 
-  [[nodiscard]] constexpr auto deref_impl() -> value_type {
-    return callable_(*iterator_);
-  }
-
-  [[nodiscard]] constexpr auto const_deref_impl() const -> value_type {
-    return callable_(*iterator_);
-  }
-
-  auto preincrement_impl() const -> const map_iterator<Iter, Callable>& {
+  auto preincrement_impl() const -> const map_iterator<Iter, Callable> & {
     ++iterator_;
 
     return *this;
   }
 
-  [[nodiscard]] friend constexpr auto operator+=(const map_iterator<Iter, Callable> &lhs,
-    size_type n)
-  -> map_iterator<Iter, Callable>& {
+  [[nodiscard]] friend constexpr auto operator+=(const map_iterator<Iter, Callable> &lhs, size_type n)
+    -> map_iterator<Iter, Callable> & {
     return lhs.iterator_ += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator+(const map_iterator<Iter, Callable> &lhs,
-    size_type n)
-  -> map_iterator<Iter, Callable> {
+  [[nodiscard]] friend constexpr auto operator+(const map_iterator<Iter, Callable> &lhs, size_type n)
+    -> map_iterator<Iter, Callable> {
     return lhs.iterator_ += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator+(size_type n,
-    const map_iterator<Iter, Callable> &rhs)
-  -> map_iterator<Iter, Callable> {
+  [[nodiscard]] friend constexpr auto operator+(size_type n, const map_iterator<Iter, Callable> &rhs)
+    -> map_iterator<Iter, Callable> {
     return rhs.iterator_ += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator-=(const map_iterator<Iter, Callable> &lhs,
-    size_type n)
-  -> map_iterator<Iter, Callable>& {
+  [[nodiscard]] friend constexpr auto operator-=(const map_iterator<Iter, Callable> &lhs, size_type n)
+    -> map_iterator<Iter, Callable> & {
     return lhs.iterator_ += -n;
   }
 
-  [[nodiscard]] friend constexpr auto operator-(const map_iterator<Iter, Callable> &lhs,
-    size_type n)
-  -> map_iterator<Iter, Callable> {
+  [[nodiscard]] friend constexpr auto operator-(const map_iterator<Iter, Callable> &lhs, size_type n)
+    -> map_iterator<Iter, Callable> {
     return lhs.iterator_ -= n;
   }
 

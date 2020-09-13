@@ -59,6 +59,11 @@ private:
     return { *this, std::forward<Callable>(callable) };
   }
 
+  template<typename Callable>
+  [[nodiscard]] auto filter_impl(Callable &&callable) const -> filter_iterator<array_const_iterator<Item, N>, Callable> {
+    return { *this, std::forward<Callable>(callable) };
+  }
+
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
     // TODO: Use std::distance once we make this iterator compatible with STL
     return static_cast<size_type>(end_ - begin_);
@@ -84,7 +89,7 @@ private:
     return begin_[position_];
   }
 
-  auto preincrement_impl() const -> const array_const_iterator<Item, N>& {
+  auto preincrement_impl() const -> const array_const_iterator<Item, N> & {
     position_++;
 
     return *this;

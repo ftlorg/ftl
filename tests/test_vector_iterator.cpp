@@ -71,7 +71,7 @@ TEST_CASE(TEST_TAG "collect to std::vector", TEST_TAG) {
 
 TEST_CASE(TEST_TAG "collect const to std::vector", TEST_TAG) {
   constexpr std::size_t size = 5;
-  const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
 
   auto mapped_arr = arr.iter().collect<ftl::vector<int>>();
 
@@ -88,7 +88,7 @@ TEST_CASE(TEST_TAG "collect to std::list", TEST_TAG) {
 
 TEST_CASE(TEST_TAG "collect const to std::list", TEST_TAG) {
   constexpr std::size_t size = 5;
-  const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
 
   auto mapped_arr = arr.iter().collect<std::list<int>>();
 

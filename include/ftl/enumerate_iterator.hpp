@@ -16,13 +16,14 @@ class enumerate_iterator final
 
 public:
   using difference_type = typename Iter::difference_type;
-  using value_type = typename Iter::value_type;
   using pointer = typename Iter::pointer;
   using reference = typename Iter::reference;
   using const_pointer = typename Iter::const_pointer;
   using const_reference = typename Iter::const_reference;
-  using iterator_category = typename Iter::iterator_category;
+  using inherited_iterator_category = typename Iter::iterator_category;
+  using iterator_category = inherited_iterator_category;
   using size_type = typename Iter::size_type;
+  using value_type = typename Iter::value_type;
 
   enumerate_iterator(Iter iterator) : iterator_{ std::move(iterator) }, index_{ 0 } {
   }
@@ -48,6 +49,11 @@ private:
 
   template<typename NewCallable>
   [[nodiscard]] auto map_impl(NewCallable &&callable) const -> map_iterator<enumerate_iterator<Iter>, NewCallable> {
+    return { *this, std::forward<NewCallable>(callable) };
+  }
+
+  template<typename NewCallable>
+  [[nodiscard]] auto filter_impl(NewCallable &&callable) const -> filter_iterator<enumerate_iterator<Iter>, NewCallable> {
     return { *this, std::forward<NewCallable>(callable) };
   }
 

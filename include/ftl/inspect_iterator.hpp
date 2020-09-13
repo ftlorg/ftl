@@ -18,7 +18,8 @@ public:
   using reference = typename Iter::reference;
   using const_pointer = typename Iter::const_pointer;
   using const_reference = typename Iter::const_reference;
-  using iterator_category = typename Iter::iterator_category;
+  using inherited_iterator_category = typename Iter::iterator_category;
+  using iterator_category = inherited_iterator_category;
   using size_type = typename Iter::size_type;
 
   inspect_iterator(Iter iterator, Callable callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
@@ -49,6 +50,11 @@ private:
     return { *this, std::forward<NewCallable>(callable) };
   }
 
+  template<typename NewCallable>
+  [[nodiscard]] auto filter_impl(NewCallable &&callable) const -> filter_iterator<inspect_iterator<Iter, Callable>, NewCallable> {
+    return { *this, std::forward<NewCallable>(callable) };
+  }
+
   [[nodiscard]] constexpr auto begin_impl() const noexcept -> inspect_iterator<Iter, Callable> {
     return { iterator_.cbegin(), callable_ };
   }
@@ -70,7 +76,7 @@ private:
     return *iterator_;
   }
 
-  [[nodiscard]] constexpr auto const_deref_impl() const -> decltype(std::declval<const Iter&>().operator*()) {
+  [[nodiscard]] constexpr auto const_deref_impl() const -> decltype(std::declval<const Iter &>().operator*()) {
     callable_(*static_cast<const Iter &>(iterator_));
     return *static_cast<const Iter &>(iterator_);
   }

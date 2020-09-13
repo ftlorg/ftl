@@ -1,6 +1,7 @@
 #pragma once
 #include <iterator>
 #include "iterator_interface.hpp"
+#include <ftl/filter_iterator.hpp>
 
 namespace ftl {
 
@@ -61,7 +62,7 @@ private:
     return *current_;
   }
 
-  auto preincrement_impl() const -> const vector_const_iterator<Item>& {
+  auto preincrement_impl() const -> const vector_const_iterator<Item> & {
     ++current_;
     return *this;
   }
@@ -73,6 +74,16 @@ private:
 
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
     return static_cast<size_type>(end_ - begin_);
+  }
+
+  template<typename Callable>
+  [[nodiscard]] auto map_impl(Callable &&callable) const -> map_iterator<vector_const_iterator<Item>, Callable> {
+    return { *this, std::forward<Callable>(callable) };
+  }
+
+  template<typename Callable>
+  [[nodiscard]] auto filter_impl(Callable &&callable) const -> filter_iterator<vector_const_iterator<Item>, Callable> {
+    return { *this, std::forward<Callable>(callable) };
   }
 
   [[nodiscard]] friend constexpr auto operator==(const vector_const_iterator<Item> &lhs,

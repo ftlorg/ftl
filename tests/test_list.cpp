@@ -409,4 +409,3 @@ TEST_CASE(TEST_TAG "to_list", TEST_TAG) {
 
   REQUIRE(ftl_list == ftl::list<int>{ 1, 2, 3, 4, 5 });
 }
-
