@@ -56,7 +56,7 @@ private:
     return { *this, std::forward<NewCallable>(callable) };
   }
 
-  [[nodiscard]] constexpr auto deref_impl() -> value_type {
+  [[nodiscard]] constexpr auto deref_impl() -> typename std::invoke_result<Callable, value_type>::type {
     return callable_(*iterator_);
   }
 

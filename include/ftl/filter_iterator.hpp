@@ -5,7 +5,7 @@
 namespace ftl {
 
 template<typename Iter, typename Callable>
-class filter_iterator
+class filter_iterator final
   : public const_iterator_interface<filter_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type> {
 
   friend const_iterator_interface<filter_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;

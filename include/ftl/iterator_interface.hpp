@@ -102,7 +102,7 @@ public:
    * @param predicate
    */
   template<typename Predicate>
-  [[nodiscard]] auto filter(Predicate &&predicate) const -> filter_iterator<Derived, Predicate>{
+  [[nodiscard]] auto filter(Predicate &&predicate) const -> filter_iterator<Derived, Predicate> {
     return static_cast<const Derived &>(*this).filter_impl(std::forward<Predicate>(predicate));
   }
 
@@ -229,6 +229,13 @@ public:
    */
   auto operator++() -> decltype(auto) {
     return static_cast<Derived &>(*this).preincrement_impl();
+  }
+
+  /**
+   * Advances the iterator.
+   */
+  auto operator++(int) const -> decltype(auto) {
+    return static_cast<const Derived &>(*this).postincrement_impl();
   }
 
   /**
@@ -472,7 +479,7 @@ public:
     return static_cast<const Derived &>(*this).preincrement_impl();
   }
 
-    /**
+  /**
    * Advances the iterator.
    */
   auto operator++(int) const -> decltype(auto) {
