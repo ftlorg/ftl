@@ -109,13 +109,3 @@ TEST_CASE(TEST_TAG "chain enumerate and filter", TEST_TAG) {
 
   REQUIRE(mapped_arr == ftl::vector<int>{ 4, 5 });
 }
-
-TEST_CASE(TEST_TAG "next", TEST_TAG) {
-  ftl::vector<int> vec = { 1, 2, 3, 4, 5, 6, 12, 18, 24 };
-
-  auto f_impl = vec.iter().filter([](const auto &x) { return x % 2 == 0; }).filter([](const auto &x) { return x % 3 == 0; });
-
-  REQUIRE(*f_impl == 6);
-  REQUIRE(*f_impl.next() == 6);
-}
-
