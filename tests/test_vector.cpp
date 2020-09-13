@@ -150,7 +150,7 @@ TEST_CASE(TEST_TAG "assign initializer_list", TEST_TAG) {
 
 TEST_CASE(TEST_TAG "assign iterators", TEST_TAG) {
   ftl::vector<int> vec1;
-  ftl::array<int, 5> arr = { 1, 2, 3, 4, 5 };
+  ftl::array<int, 5> arr = { { 1, 2, 3, 4, 5 } };
   vec1.assign(arr.begin(), arr.end());
   REQUIRE(vec1 == ftl::vector<int>{ 1, 2, 3, 4, 5 });
 }

@@ -41,7 +41,7 @@ TEST_CASE(TEST_TAG "const filter collect to empty", TEST_TAG) {
 
 TEST_CASE(TEST_TAG "filter after map", TEST_TAG) {
   constexpr std::size_t size = 5;
-  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
 
   auto mapped_arr = arr.iter()
                       .map([](const auto &x) { return x * x; })
@@ -69,7 +69,7 @@ TEST_CASE(TEST_TAG "filter ftl::list", TEST_TAG) {
 
 TEST_CASE(TEST_TAG "filter const ftl::array", TEST_TAG) {
   constexpr std::size_t size = 5;
-  const ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
 
   auto mapped_arr = arr.iter().filter([](const auto &x) { return x > 3; }).collect<std::list<int>>();
 
@@ -78,7 +78,7 @@ TEST_CASE(TEST_TAG "filter const ftl::array", TEST_TAG) {
 
 TEST_CASE(TEST_TAG "filter ftl::array", TEST_TAG) {
   constexpr std::size_t size = 5;
-  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
 
   auto mapped_arr = arr.iter().filter([](const auto &x) { return x > 3; }).collect<std::list<int>>();
 
@@ -87,7 +87,7 @@ TEST_CASE(TEST_TAG "filter ftl::array", TEST_TAG) {
 
 TEST_CASE(TEST_TAG "chain inspect and filter", TEST_TAG) {
   constexpr std::size_t size = 5;
-  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
 
   auto mapped_arr = arr.iter()
                       .inspect([](const auto &x) { INFO("Inspecting x = " << x) })
@@ -99,7 +99,7 @@ TEST_CASE(TEST_TAG "chain inspect and filter", TEST_TAG) {
 
 TEST_CASE(TEST_TAG "chain enumerate and filter", TEST_TAG) {
   constexpr std::size_t size = 5;
-  ftl::array<int, size> arr = { 1, 2, 3, 4, 5 };
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
 
   auto mapped_arr = arr.iter()
                       .enumerate()
