@@ -20,7 +20,8 @@ public:
   using reference = typename Iter::reference;
   using const_pointer = typename Iter::const_pointer;
   using const_reference = typename Iter::const_reference;
-  using iterator_category = typename Iter::iterator_category;
+  using inherited_iterator_category = typename Iter::iterator_category;
+  using iterator_category = typename inherited_iterator_category;
   using size_type = typename Iter::size_type;
   using value_type = std::tuple<size_type, decltype(std::declval<Iter>().operator*())>;
 
