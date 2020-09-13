@@ -11,136 +11,30 @@
 namespace ftl {
 
 template<typename T, std::size_t N>
-class array {
-  static_assert(N > 0, "N must be larger than 0!");
-
+class array : public std::array<T, N> {
 public:
-  using value_type = T;
-  using size_type = std::size_t;
-  using difference_type = std::ptrdiff_t;
-  using pointer = value_type *;
-  using reference = value_type &;
-  using const_pointer = const value_type *;
-  using const_reference = const value_type &;
-  using iterator = array_iterator<T, N>;
-  using const_iterator = array_const_iterator<T, N>;
+  using value_type = typename std::array<T, N>::value_type;
+  using size_type = typename std::array<T, N>::size_type;
+  using difference_type = typename std::array<T, N>::difference_type;
+  using pointer = typename std::array<T, N>::pointer;
+  using reference = typename std::array<T, N>::reference;
+  using const_pointer = typename std::array<T, N>::const_pointer;
+  using const_reference = typename std::array<T, N>::const_reference;
+  using ftl_iterator = array_iterator<T, N>;
+  using ftl_const_iterator = array_const_iterator<T, N>;
+  using iterator = typename std::array<T, N>::iterator;
+  using const_iterator = typename std::array<T, N>::const_iterator;
+  using reverse_iterator = typename std::array<T, N>::reverse_iterator;
+  using const_reverse_iterator = typename std::array<T, N>::const_reverse_iterator;
 
-  [[nodiscard]] constexpr auto operator[](size_type pos) noexcept -> reference {
-    return data_[pos];
+  [[nodiscard]] auto iter() noexcept -> ftl_iterator {
+    return into_iterator_trait<array<T, N>, ftl_iterator>::into_iter(*this);
   }
 
-  [[nodiscard]] constexpr auto operator[](size_type pos) const noexcept -> const_reference {
-    return data_[pos];
+  [[nodiscard]] auto iter() const noexcept -> ftl_const_iterator {
+    return into_iterator_trait<array<T, N>, ftl_const_iterator>::into_iter(*this);
   }
-
-  [[nodiscard]] constexpr auto front() noexcept -> reference {
-    return data_[0];
-  }
-
-  [[nodiscard]] constexpr auto front() const noexcept -> const_reference {
-    return data_[0];
-  }
-
-  [[nodiscard]] constexpr auto back() noexcept -> reference {
-    return data_[N - 1];
-  }
-
-  [[nodiscard]] constexpr auto back() const noexcept -> const_reference {
-    return data_[N - 1];
-  }
-
-  [[nodiscard]] constexpr auto data() noexcept -> pointer {
-    return data_;
-  }
-
-  [[nodiscard]] constexpr auto data() const noexcept -> const_pointer {
-    return data_;
-  }
-
-  [[nodiscard]] constexpr auto iter() noexcept -> iterator {
-    return into_iterator_trait<array<T, N>, iterator>::into_iter(*this);
-  }
-
-  [[nodiscard]] constexpr auto iter() const noexcept -> const_iterator {
-    return into_iterator_trait<array<T, N>, const_iterator>::into_iter(*this);
-  }
-
-  [[nodiscard]] constexpr auto begin() noexcept -> iterator {
-    return iter().begin();
-  }
-
-  [[nodiscard]] constexpr auto begin() const noexcept -> const_iterator {
-    return cbegin();
-  }
-
-  [[nodiscard]] constexpr auto cbegin() const noexcept -> const_iterator {
-    return iter().cbegin();
-  }
-
-  [[nodiscard]] constexpr auto end() noexcept -> iterator {
-    return iter().end();
-  }
-
-  [[nodiscard]] constexpr auto end() const noexcept -> const_iterator {
-    return cend();
-  }
-
-  [[nodiscard]] constexpr auto cend() const noexcept -> const_iterator {
-    return iter().cend();
-  }
-
-  [[nodiscard]] constexpr auto size() const noexcept -> size_type {
-    return N;
-  }
-
-  [[nodiscard]] constexpr auto max_size() const noexcept -> size_type {
-    return N;
-  }
-
-  [[nodiscard]] constexpr auto empty() const noexcept -> bool {
-    return false;
-  }
-
-  constexpr auto fill(const T &value) -> void {
-    std::fill_n(data_, N, value);
-  }
-
-  constexpr auto swap(ftl::array<T, N> &other) noexcept -> void {
-    std::swap_ranges(data(), data() + size(), other.data());
-  }
-
-  T data_[N];
 };
-
-template<typename T, std::size_t N>
-[[nodiscard]] constexpr auto operator==(const array<T, N> &lhs, const array<T, N> &rhs) noexcept -> bool {
-  return std::equal(lhs.data(), lhs.data() + lhs.size(), rhs.data());
-}
-
-template<typename T, std::size_t N>
-[[nodiscard]] constexpr auto operator!=(const array<T, N> &lhs, const array<T, N> &rhs) noexcept -> bool {
-  return !(lhs == rhs);
-}
-
-template<typename T, std::size_t N>
-[[nodiscard]] constexpr auto operator<(const array<T, N> &lhs, const array<T, N> &rhs) noexcept -> bool {
-  return std::lexicographical_compare(lhs.data(), lhs.data() + lhs.size(), rhs.data(), rhs.data() + rhs.size());
-}
-
-template<typename T, std::size_t N>
-[[nodiscard]] constexpr auto operator<=(const array<T, N> &lhs, const array<T, N> &rhs) noexcept -> bool {
-  return !(rhs < lhs);
-}
-
-template<typename T, std::size_t N>
-[[nodiscard]] constexpr auto operator>(const array<T, N> &lhs, const array<T, N> &rhs) noexcept -> bool {
-  return rhs < lhs;
-}
-
-template<typename T, std::size_t N>
-[[nodiscard]] constexpr auto operator>=(const array<T, N> &lhs, const array<T, N> &rhs) noexcept -> bool {
-  return !(lhs < rhs);
-}
 
 template<typename T, std::size_t N>
 [[nodiscard]] constexpr auto to_array(const std::array<T, N> &arr) -> array<T, N> {
@@ -196,7 +90,7 @@ struct ftl::from_iterator_trait<ftl::map_iterator<Iter, Callable>, ftl::array<It
 template<typename Iter, typename Item, std::size_t N>
 struct ftl::from_iterator_trait<ftl::enumerate_iterator<Iter>, ftl::array<std::tuple<std::size_t, Item>, N>> {
   [[nodiscard]] constexpr static auto from_iter(const enumerate_iterator<Iter> &iter)
-    -> array<std::tuple<std::size_t, Item>, N> {
+  -> array<std::tuple<std::size_t, Item>, N> {
     array<std::tuple<std::size_t, Item>, N> result{};
     std::size_t i = 0;
     for (auto &&item : iter) {
@@ -223,8 +117,8 @@ struct ftl::from_iterator_trait<ftl::inspect_iterator<Iter, Callable>, ftl::arra
 };
 
 template<typename T, std::size_t N>
-struct ftl::into_iterator_trait<ftl::array<T, N>, typename ftl::array<T, N>::iterator> {
-  using iterator = typename ftl::array<T, N>::iterator;
+struct ftl::into_iterator_trait<ftl::array<T, N>, typename ftl::array<T, N>::ftl_iterator> {
+  using iterator = typename ftl::array<T, N>::ftl_iterator;
 
   [[nodiscard]] constexpr static auto into_iter(ftl::array<T, N> &arr) -> iterator {
     return iterator{ arr.data(), arr.data() + arr.size() };
@@ -232,8 +126,8 @@ struct ftl::into_iterator_trait<ftl::array<T, N>, typename ftl::array<T, N>::ite
 };
 
 template<typename T, std::size_t N>
-struct ftl::into_iterator_trait<ftl::array<T, N>, typename ftl::array<T, N>::const_iterator> {
-  using const_iterator = typename ftl::array<T, N>::const_iterator;
+struct ftl::into_iterator_trait<ftl::array<T, N>, typename ftl::array<T, N>::ftl_const_iterator> {
+  using const_iterator = typename ftl::array<T, N>::ftl_const_iterator;
 
   [[nodiscard]] constexpr static auto into_iter(const ftl::array<T, N> &arr) -> const_iterator {
     return const_iterator{ arr.data(), arr.data() + arr.size() };
