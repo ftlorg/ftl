@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "vector_iterator.hpp"
-#include "vector_const_iterator.hpp"
+#include "vector_container_iterator.hpp"
+#include "vector_container_const_iterator.hpp"
 
 namespace ftl {
 template<typename T, typename Allocator = std::allocator<T>>
@@ -16,8 +16,8 @@ public:
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
   using allocator_type = Allocator;
-  using iterator = ftl::vector_iterator<T>;
-  using const_iterator = ftl::vector_const_iterator<T>;
+  using iterator = ftl::vector_container_iterator<T>;
+  using const_iterator = ftl::vector_container_const_iterator<T>;
 
   vector() = default;
 
@@ -52,7 +52,7 @@ template<typename T, typename Allocator = std::allocator<T>>
 }// namespace ftl
 
 template<typename Item, typename Allocator>
-struct ftl::into_iterator_trait<ftl::vector<Item, Allocator>, ftl::vector_iterator<Item>> {
+struct ftl::into_iterator_trait<ftl::vector<Item, Allocator>, ftl::vector_container_iterator<Item>> {
   using iterator = typename ftl::vector<Item, Allocator>::iterator;
   [[nodiscard]] constexpr static auto into_iter(ftl::vector<Item, Allocator> &vec) {
     return iterator{ vec.begin(), vec.end() };
@@ -60,7 +60,7 @@ struct ftl::into_iterator_trait<ftl::vector<Item, Allocator>, ftl::vector_iterat
 };
 
 template<typename Item, typename Allocator>
-struct ftl::into_iterator_trait<ftl::vector<Item, Allocator>, ftl::vector_const_iterator<Item>> {
+struct ftl::into_iterator_trait<ftl::vector<Item, Allocator>, ftl::vector_container_const_iterator<Item>> {
   using const_iterator = typename ftl::vector<Item, Allocator>::const_iterator;
   [[nodiscard]] constexpr static auto into_iter(const ftl::vector<Item, Allocator> &vec) {
     return const_iterator{ vec.begin(), vec.end() };
