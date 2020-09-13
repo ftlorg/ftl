@@ -5,36 +5,6 @@
 
 #define TEST_TAG "[list_container_iterator]"
 
-TEST_CASE(TEST_TAG "next", TEST_TAG) {
-  ftl::list<int> list = { 1, 2, 3, 4, 5 };
-
-  auto iter = list.iter();
-  REQUIRE(2 == *iter.next());
-}
-
-TEST_CASE(TEST_TAG "next const", TEST_TAG) {
-  const ftl::list<int> list = { 1, 2, 3, 4, 5 };
-
-  auto iter = list.iter();
-  REQUIRE(2 == *iter.next());
-}
-
-TEST_CASE(TEST_TAG "next nullopt", TEST_TAG) {
-  ftl::list<int> list = { 1, 2 };
-
-  auto iter = list.iter();
-  REQUIRE(2 == *iter.next());
-  REQUIRE(iter.next().has_value() == false);
-}
-
-TEST_CASE(TEST_TAG "next const nullopt", TEST_TAG) {
-  const ftl::list<int> list = { 1, 2 };
-
-  auto iter = list.iter();
-  REQUIRE(2 == *iter.next());
-  REQUIRE(iter.next().has_value() == false);
-}
-
 TEST_CASE(TEST_TAG "collect to std::vector", TEST_TAG) {
   ftl::list<int> list = { 1, 2, 3, 4, 5 };
 

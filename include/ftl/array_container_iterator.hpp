@@ -32,14 +32,6 @@ public:
   constexpr auto operator=(const array_container_iterator &) -> array_container_iterator & = default;
 
 private:
-  [[nodiscard]] auto next_impl() -> std::optional<value_type> {
-    ++position_;
-
-    if (begin_ + position_ != end_) { return { begin_[position_] }; }
-
-    return std::nullopt;
-  }
-
   template<typename Collection>
   [[nodiscard]] auto collect_impl() -> Collection {
     return from_iterator_trait<array_container_iterator<Item, N>, Collection>::from_iter(*this);

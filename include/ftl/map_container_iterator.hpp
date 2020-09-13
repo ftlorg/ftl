@@ -32,12 +32,6 @@ public:
   }
 
 private:
-  [[nodiscard]] auto next_impl() -> std::optional<value_type> {
-    if (++current_ != end_) { return { *current_ }; }
-
-    return std::nullopt;
-  }
-
   template<typename Collection>
   [[nodiscard]] auto collect_impl() -> Collection {
     return from_iterator_trait<map_container_iterator<Key, T>, Collection>::from_iter(*this);

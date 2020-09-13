@@ -204,13 +204,6 @@ public:
   [[nodiscard]] auto take(size_type n) const -> take_iterator<Derived>;
 
   /**
-   * Advances the iterator and returns the next value.
-   */
-  [[nodiscard]] auto next() -> std::optional<value_type> {
-    return static_cast<Derived &>(*this).next_impl();
-  }
-
-  /**
    * Returns currently pointed-to value.
    */
   [[nodiscard]] auto operator*() -> decltype(auto) {
@@ -457,13 +450,6 @@ public:
    * Creates an iterator that yields its first n elements.
    */
   [[nodiscard]] auto take(size_type n) const -> take_iterator<Derived>;
-
-  /**
-   * Advances the iterator and returns the next value.
-   */
-  [[nodiscard]] auto next() const -> std::optional<value_type> {
-    return static_cast<const Derived &>(*this).next_impl();
-  }
 
   /**
    * Returns currently pointed-to value.

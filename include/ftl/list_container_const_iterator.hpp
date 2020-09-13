@@ -30,12 +30,6 @@ public:
   }
 
 private:
-  [[nodiscard]] auto next_impl() const -> std::optional<value_type> {
-    if (++current_ != end_) { return { *current_ }; }
-
-    return std::nullopt;
-  }
-
   template<typename Collection>
   [[nodiscard]] auto collect_impl() const -> Collection {
     return from_iterator_trait<list_container_const_iterator<Item>, Collection>::from_iter(*this);
