@@ -17,7 +17,8 @@ public:
   using reference = typename Iter::reference;
   using const_pointer = typename Iter::const_pointer;
   using const_reference = typename Iter::const_reference;
-  using iterator_category = typename Iter::iterator_category;
+  using iterator_category = std::forward_iterator_tag;
+  using inherited_iterator_category = typename Iter::iterator_category;
   using size_type = typename Iter::size_type;
 
   filter_iterator(Iter iterator, Callable callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
@@ -32,10 +33,6 @@ private:
 
   [[nodiscard]] auto enumerate_impl() const -> enumerate_iterator<filter_iterator<Iter, Callable>> {
     return { *this };
-  }
-
-  [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    return static_cast<size_type>(this->cend() - this->cbegin());
   }
 
   template<typename NewCallable>
@@ -74,41 +71,9 @@ private:
     return *this;
   }
 
-  [[nodiscard]] friend constexpr auto operator+=(const filter_iterator<Iter, Callable> &lhs, size_type n)
-    -> filter_iterator<Iter, Callable> & {
-    return lhs.iterator_ += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator+(const filter_iterator<Iter, Callable> &lhs, size_type n)
-    -> filter_iterator<Iter, Callable> {
-    return lhs.iterator_ += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator+(size_type n, const filter_iterator<Iter, Callable> &rhs)
-    -> filter_iterator<Iter, Callable> {
-    return rhs.iterator_ += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-=(const filter_iterator<Iter, Callable> &lhs, size_type n)
-    -> filter_iterator<Iter, Callable> & {
-    return lhs.iterator_ += -n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-(const filter_iterator<Iter, Callable> &lhs, size_type n)
-    -> filter_iterator<Iter, Callable> {
-    return lhs.iterator_ -= n;
-  }
-
-  [[nodiscard]] friend auto operator-(const filter_iterator<Iter, Callable> &lhs, const filter_iterator<Iter, Callable> &rhs)
-    -> difference_type {
-    auto copy_lhs = lhs.iterator_;
-    auto copy_rhs = rhs.iterator_;
-    difference_type count = 0;
-    while (copy_rhs != copy_lhs) {
-      if (lhs.callable_(*copy_rhs)) { count++; }
-      ++copy_rhs;
-    }
-    return count;
+  auto postincrement_impl() const -> const filter_iterator<Iter, Callable> & {
+    while (iterator_ != iterator_.cend() && !callable_(*iterator_)) { iterator_++; }
+    return *this;
   }
 
   [[nodiscard]] friend constexpr auto operator==(const filter_iterator<Iter, Callable> &lhs,
@@ -119,26 +84,6 @@ private:
   [[nodiscard]] friend constexpr auto operator!=(const filter_iterator<Iter, Callable> &lhs,
     const filter_iterator<Iter, Callable> &rhs) noexcept -> bool {
     return lhs.iterator_ != rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator<(const filter_iterator<Iter, Callable> &lhs,
-    const filter_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return rhs.iterator_ - lhs.iterator_ > 0;
-  }
-
-  [[nodiscard]] friend constexpr auto operator<=(const filter_iterator<Iter, Callable> &lhs,
-    const filter_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return !(rhs.iterator_ < lhs.iterator_);
-  }
-
-  [[nodiscard]] friend constexpr auto operator>(const filter_iterator<Iter, Callable> &lhs,
-    const filter_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return rhs.iterator_ < lhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator>=(const filter_iterator<Iter, Callable> &lhs,
-    const filter_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return !(lhs.iterator_ < rhs.iterator_);
   }
 
 private:
