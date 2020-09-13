@@ -5,40 +5,6 @@
 
 #define TEST_TAG "[array_container_iterator]"
 
-TEST_CASE(TEST_TAG "next", TEST_TAG) {
-  constexpr std::size_t size = 5;
-  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
-
-  auto iter = arr.iter();
-  REQUIRE(arr[1] == *iter.next());
-}
-
-TEST_CASE(TEST_TAG "next const", TEST_TAG) {
-  constexpr std::size_t size = 5;
-  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
-
-  auto iter = arr.iter();
-  REQUIRE(arr[1] == *iter.next());
-}
-
-TEST_CASE(TEST_TAG "next nullopt", TEST_TAG) {
-  constexpr std::size_t size = 2;
-  ftl::array<int, size> arr = { { 1, 2 } };
-
-  auto iter = arr.iter();
-  REQUIRE(arr[1] == *iter.next());
-  REQUIRE(iter.next().has_value() == false);
-}
-
-TEST_CASE(TEST_TAG "next const nullopt", TEST_TAG) {
-  constexpr std::size_t size = 2;
-  const ftl::array<int, size> arr = { { 1, 2 } };
-
-  auto iter = arr.iter();
-  REQUIRE(arr[1] == *iter.next());
-  REQUIRE(iter.next().has_value() == false);
-}
-
 TEST_CASE(TEST_TAG "collect", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };

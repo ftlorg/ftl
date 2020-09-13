@@ -6,42 +6,6 @@
 
 #define TEST_TAG "[map_container_iterator]"
 
-TEST_CASE(TEST_TAG "next", TEST_TAG) {
-  ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
-
-  auto iter = map.iter();
-  std::pair<const int, std::string> p{ 2, "green" };
-  REQUIRE(p == *iter.next());
-}
-
-TEST_CASE(TEST_TAG "next const", TEST_TAG) {
-  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
-
-  auto iter = map.iter();
-  std::pair<const int, std::string> p{ 2, "green" };
-  REQUIRE(p == *iter.next());
-}
-
-TEST_CASE(TEST_TAG "next nullopt", TEST_TAG) {
-  ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" } };
-
-  auto iter = map.iter();
-  std::pair<const int, std::string> p{ 2, "green" };
-
-  REQUIRE(p == *iter.next());
-  REQUIRE(iter.next().has_value() == false);
-}
-
-TEST_CASE(TEST_TAG "next const nullopt", TEST_TAG) {
-  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" } };
-
-  auto iter = map.iter();
-  std::pair<const int, std::string> p{ 2, "green" };
-
-  REQUIRE(p == *iter.next());
-  REQUIRE(iter.next().has_value() == false);
-}
-
 TEST_CASE(TEST_TAG "collect to std::vector", TEST_TAG) {
   ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
 
