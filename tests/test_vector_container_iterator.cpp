@@ -3,7 +3,7 @@
 #include <vector>
 #include <list>
 
-#define TEST_TAG "[vector_iterator]"
+#define TEST_TAG "[vector_container_iterator]"
 
 TEST_CASE(TEST_TAG "next", TEST_TAG) {
   ftl::vector<int> vec = { 1, 2, 3, 4, 5 };

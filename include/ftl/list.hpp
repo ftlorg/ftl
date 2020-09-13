@@ -2,8 +2,8 @@
 
 #include <list>
 
-#include <ftl/list_iterator.hpp>
-#include <ftl/list_const_iterator.hpp>
+#include <ftl/list_container_iterator.hpp>
+#include <ftl/list_container_const_iterator.hpp>
 #include <ftl/into_iterator_trait.hpp>
 
 namespace ftl {
@@ -19,8 +19,8 @@ public:
   using reference = typename std::list<T, Allocator>::reference;
   using const_pointer = typename std::list<T, Allocator>::const_pointer;
   using const_reference = typename std::list<T, Allocator>::const_reference;
-  using ftl_iterator = list_iterator<T>;
-  using ftl_const_iterator = list_const_iterator<T>;
+  using ftl_iterator = list_container_iterator<T>;
+  using ftl_const_iterator = list_container_const_iterator<T>;
   using iterator = typename std::list<T, Allocator>::iterator;
   using const_iterator = typename std::list<T, Allocator>::const_iterator;
   using reverse_iterator = typename std::list<T, Allocator>::reverse_iterator;

@@ -3,7 +3,7 @@
 #include <vector>
 #include <list>
 
-#define TEST_TAG "[array_iterator]"
+#define TEST_TAG "[array_container_iterator]"
 
 TEST_CASE(TEST_TAG "next", TEST_TAG) {
   constexpr std::size_t size = 5;

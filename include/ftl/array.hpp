@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <array>
 
-#include <ftl/array_iterator.hpp>
-#include <ftl/array_const_iterator.hpp>
+#include <ftl/array_container_iterator.hpp>
+#include <ftl/array_container_const_iterator.hpp>
 #include <ftl/from_iterator_trait.hpp>
 #include <ftl/into_iterator_trait.hpp>
 
@@ -20,8 +20,8 @@ public:
   using reference = typename std::array<T, N>::reference;
   using const_pointer = typename std::array<T, N>::const_pointer;
   using const_reference = typename std::array<T, N>::const_reference;
-  using ftl_iterator = array_iterator<T, N>;
-  using ftl_const_iterator = array_const_iterator<T, N>;
+  using ftl_iterator = array_container_iterator<T, N>;
+  using ftl_const_iterator = array_container_const_iterator<T, N>;
   using iterator = typename std::array<T, N>::iterator;
   using const_iterator = typename std::array<T, N>::const_iterator;
   using reverse_iterator = typename std::array<T, N>::reverse_iterator;
@@ -46,8 +46,8 @@ template<typename T, std::size_t N>
 }// namespace ftl
 
 template<typename Item, std::size_t N>
-struct ftl::from_iterator_trait<ftl::array_iterator<Item, N>, ftl::array<Item, N>> {
-  [[nodiscard]] constexpr static auto from_iter(array_iterator<Item, N> &iter) {
+struct ftl::from_iterator_trait<ftl::array_container_iterator<Item, N>, ftl::array<Item, N>> {
+  [[nodiscard]] constexpr static auto from_iter(array_container_iterator<Item, N> &iter) {
     array<Item, N> result{};
     std::size_t i = 0;
     for (auto &&item : iter) {
@@ -60,8 +60,8 @@ struct ftl::from_iterator_trait<ftl::array_iterator<Item, N>, ftl::array<Item, N
 };
 
 template<typename Item, std::size_t N>
-struct ftl::from_iterator_trait<ftl::array_const_iterator<Item, N>, ftl::array<Item, N>> {
-  [[nodiscard]] constexpr static auto from_iter(const array_const_iterator<Item, N> &iter) {
+struct ftl::from_iterator_trait<ftl::array_container_const_iterator<Item, N>, ftl::array<Item, N>> {
+  [[nodiscard]] constexpr static auto from_iter(const array_container_const_iterator<Item, N> &iter) {
     array<Item, N> result{};
     std::size_t i = 0;
     for (auto &&item : iter) {
