@@ -19,7 +19,7 @@ public:
   using const_pointer = typename Iter::const_pointer;
   using const_reference = typename Iter::const_reference;
   using inherited_iterator_category = typename Iter::iterator_category;
-  using iterator_category = typename inherited_iterator_category;
+  using iterator_category = inherited_iterator_category;
   using size_type = typename Iter::size_type;
 
   map_iterator(Iter iterator, Callable callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {

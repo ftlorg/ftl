@@ -20,7 +20,7 @@ public:
   using const_reference = typename Iter::const_reference;
   using iterator_category = typename Iter::iterator_category;
   using inherited_iterator_category = typename Iter::iterator_category;
-  using iterator_category = typename inherited_iterator_category;
+  using iterator_category = inherited_iterator_category;
   using size_type = typename Iter::size_type;
 
   inspect_iterator(Iter iterator, Callable callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
