@@ -6,11 +6,25 @@ namespace ftl {
 
 template<typename Iter, typename IterCategory = void>
 struct iterator_member_provider {
-  [[nodiscard]] virtual auto operator*() -> decltype(auto) = 0;// Implementation specific
+  using value_type = typename Iter::value_type;
+  using pointer = typename Iter::pointer;
+  using reference = typename Iter::reference;
+  using const_pointer = typename Iter::const_pointer;
+  using const_reference = typename Iter::const_reference;
+  using size_type = typename Iter::size_type;
+  using difference_type = typename Iter::difference_type;
 
-  [[nodiscard]] virtual auto operator*() const -> decltype(auto) = 0;// Implementation specific
+  [[nodiscard]] auto operator*() -> decltype(auto) {
+    return static_cast<const Iter &>(*this).deref_impl();
+  }
 
-  virtual auto operator++() -> Iter & = 0;// Implementation specific
+  [[nodiscard]] auto operator*() const -> decltype(auto) {
+    return static_cast<const Iter &>(*this).const_deref_impl();
+  }
+
+  auto operator++() const -> Iter & {
+    return static_cast<const Iter &>(*this).preincrement_impl();
+  }
 
   auto operator++(int) -> Iter {
     auto tmp = *static_cast<Iter &>(*this);
@@ -41,10 +55,10 @@ template<typename Iter>
 struct iterator_member_provider<Iter, std::output_iterator_tag> : iterator_member_provider<Iter> {};
 
 template<typename Iter>
-struct iterator_member_provider<Iter, std::forward_iterator_tag> : iterator_member_provider<Iter> {};
+struct iterator_member_provider<Iter, std::forward_iterator_tag> : iterator_member_provider<Iter, std::input_iterator_tag> {};
 
 template<typename Iter>
-struct iterator_member_provider<Iter, std::bidirectional_iterator_tag> : iterator_member_provider<Iter> {
+struct iterator_member_provider<Iter, std::bidirectional_iterator_tag> : iterator_member_provider<Iter, std::forward_iterator_tag> {
   virtual auto operator--() -> Iter & = 0;// Implementation specific
 
   auto operator--(int) -> Iter {
@@ -58,6 +72,11 @@ struct iterator_member_provider<Iter, std::bidirectional_iterator_tag> : iterato
 
 template<typename Iter>
 struct iterator_member_provider<Iter, std::random_access_iterator_tag> : iterator_member_provider<Iter> {
+  using reference = typename Iter::reference;
+  using const_reference = typename Iter::const_reference;
+  using size_type = typename Iter::size_type;
+  using difference_type = typename Iter::difference_type;
+
   [[nodiscard]] constexpr auto operator[](size_type pos) noexcept -> reference {
     return static_cast<Iter &>(*this).begin_[pos];
   }

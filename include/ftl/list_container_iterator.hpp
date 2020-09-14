@@ -12,7 +12,6 @@ class list_container_iterator final : public iterator_interface<list_container_i
   friend iterator_interface<list_container_iterator<Item>, Item, std::size_t>;
 
 public:
-  using difference_type = std::ptrdiff_t;
   using value_type = std::remove_cv_t<Item>;
   using pointer = value_type *;
   using reference = value_type &;
@@ -21,11 +20,15 @@ public:
   using iterator_category = std::bidirectional_iterator_tag;
   using size_type = std::size_t;
   using std_list_container_iterator = typename std::list<value_type>::iterator;
+  using difference_type = typename std_list_container_iterator::difference_type;
 
-  list_container_iterator(std_list_container_iterator begin, std_list_container_iterator end) : current_{ begin }, begin_{ begin }, end_{ end } {
+  list_container_iterator(std_list_container_iterator begin, std_list_container_iterator end)
+    : current_{ begin }, begin_{ begin }, end_{ end } {
   }
 
-  list_container_iterator(std_list_container_iterator current, std_list_container_iterator begin, std_list_container_iterator end)
+  list_container_iterator(std_list_container_iterator current,
+    std_list_container_iterator begin,
+    std_list_container_iterator end)
     : current_{ current }, begin_{ begin }, end_{ end } {
   }
 
@@ -40,7 +43,8 @@ private:
   }
 
   template<typename NewCallable>
-  [[nodiscard]] auto inspect_impl(NewCallable &&callable) const -> inspect_iterator<list_container_iterator<Item>, NewCallable> {
+  [[nodiscard]] auto inspect_impl(NewCallable &&callable) const
+    -> inspect_iterator<list_container_iterator<Item>, NewCallable> {
     return { *this, std::forward<NewCallable>(callable) };
   }
 
@@ -88,13 +92,13 @@ private:
     return *this;
   }
 
-  [[nodiscard]] friend constexpr auto operator==(const list_container_iterator<Item> &lhs, const list_container_iterator<Item> &rhs) noexcept
-    -> bool {
+  [[nodiscard]] friend constexpr auto operator==(const list_container_iterator<Item> &lhs,
+    const list_container_iterator<Item> &rhs) noexcept -> bool {
     return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.current_ == rhs.current_;
   }
 
-  [[nodiscard]] friend constexpr auto operator!=(const list_container_iterator<Item> &lhs, const list_container_iterator<Item> &rhs) noexcept
-    -> bool {
+  [[nodiscard]] friend constexpr auto operator!=(const list_container_iterator<Item> &lhs,
+    const list_container_iterator<Item> &rhs) noexcept -> bool {
     return !(lhs == rhs);
   }
 

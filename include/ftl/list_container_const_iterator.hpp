@@ -12,7 +12,6 @@ class list_container_const_iterator final : public const_iterator_interface<list
   friend const_iterator_interface<list_container_const_iterator<Item>, Item, std::size_t>;
 
 public:
-  using difference_type = std::ptrdiff_t;
   using value_type = std::remove_cv_t<Item>;
   using pointer = value_type *;
   using reference = value_type &;
@@ -21,6 +20,7 @@ public:
   using iterator_category = std::bidirectional_iterator_tag;
   using size_type = std::size_t;
   using std_list_iterator = typename std::list<value_type>::const_iterator;
+  using difference_type = typename std_list_iterator::difference_type;
 
   list_container_const_iterator(std_list_iterator begin, std_list_iterator end) : current_{ begin }, begin_{ begin }, end_{ end } {
   }
