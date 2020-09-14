@@ -10,9 +10,9 @@ namespace ftl {
 
 template<typename Iter>
 class enumerate_iterator final
-  : public iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type> {
+  : public iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type, typename Iter::iterator_category> {
 
-  friend iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type>;
+  friend iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type, typename Iter::iterator_category>;
 
 public:
   using difference_type = typename Iter::difference_type;

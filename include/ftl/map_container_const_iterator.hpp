@@ -2,14 +2,18 @@
 
 #include <ftl/map.hpp>
 #include <ftl/iterator_interface.hpp>
+#include <iterator>
 
 namespace ftl {
 
 template<typename Key, typename T, typename Item = std::pair<const Key, T>>
 class map_container_const_iterator final
-  : public const_iterator_interface<map_container_const_iterator<Key, T>, Item, std::size_t> {
+  : public const_iterator_interface<map_container_const_iterator<Key, T>,
+      Item,
+      std::size_t,
+      std::bidirectional_iterator_tag> {
 
-  friend const_iterator_interface<map_container_const_iterator<Key, T>, Item, std::size_t>;
+  friend const_iterator_interface<map_container_const_iterator<Key, T>, Item, std::size_t, std::bidirectional_iterator_tag>;
 
 public:
   using difference_type = typename std::map<Key, T>::difference_type;

@@ -7,9 +7,9 @@ namespace ftl {
 
 template<typename Iter, typename Callable>
 class inspect_iterator final
-  : public iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type> {
+  : public iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type, typename Iter::iterator_category> {
 
-  friend iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
+  friend iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type, typename Iter::iterator_category>;
 
 public:
   using difference_type = typename Iter::difference_type;

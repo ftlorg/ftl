@@ -7,9 +7,9 @@ namespace ftl {
 
 template<typename Iter, typename Callable>
 class map_iterator
-  : public const_iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type> {
+  : public const_iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type, typename Iter::iterator_category> {
 
-  friend const_iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
+  friend const_iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type, typename Iter::iterator_category>;
 
 public:
   using difference_type = typename Iter::difference_type;

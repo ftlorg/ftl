@@ -6,9 +6,9 @@
 namespace ftl {
 
 template<typename Key, typename T, typename Item = std::pair<const Key, T>>
-class map_container_iterator final : public iterator_interface<map_container_iterator<Key, T>, Item, std::size_t> {
+class map_container_iterator final : public iterator_interface<map_container_iterator<Key, T>, Item, std::size_t, std::bidirectional_iterator_tag> {
 
-  friend iterator_interface<map_container_iterator<Key, T>, Item, std::size_t>;
+  friend iterator_interface<map_container_iterator<Key, T>, Item, std::size_t, std::bidirectional_iterator_tag>;
 
 public:
   using difference_type = typename std::map<Key, T>::difference_type;

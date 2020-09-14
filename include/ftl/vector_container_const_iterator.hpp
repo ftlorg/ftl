@@ -8,9 +8,9 @@ namespace ftl {
 
 template<typename Item>
 class vector_container_const_iterator final
-  : public const_iterator_interface<vector_container_const_iterator<Item>, Item, std::size_t> {
+  : public const_iterator_interface<vector_container_const_iterator<Item>, Item, std::size_t, std::random_access_iterator_tag> {
 
-  friend const_iterator_interface<vector_container_const_iterator<Item>, Item, std::size_t>;
+  friend const_iterator_interface<vector_container_const_iterator<Item>, Item, std::size_t, std::random_access_iterator_tag>;
 
 public:
   using difference_type = std::ptrdiff_t;

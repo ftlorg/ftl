@@ -8,8 +8,8 @@
 namespace ftl {
 
 template<typename Item>
-class list_container_iterator final : public iterator_interface<list_container_iterator<Item>, Item, std::size_t> {
-  friend iterator_interface<list_container_iterator<Item>, Item, std::size_t>;
+class list_container_iterator final : public iterator_interface<list_container_iterator<Item>, Item, std::size_t, std::bidirectional_iterator_tag> {
+  friend iterator_interface<list_container_iterator<Item>, Item, std::size_t, std::bidirectional_iterator_tag>;
 
 public:
   using value_type = std::remove_cv_t<Item>;
