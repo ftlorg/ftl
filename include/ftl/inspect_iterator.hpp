@@ -1,15 +1,18 @@
 #pragma once
 
 #include <ftl/iterator_interface.hpp>
+#include <ftl/iterator_member_provider.hpp>
 #include <ftl/from_iterator_trait.hpp>
 
 namespace ftl {
 
 template<typename Iter, typename Callable>
 class inspect_iterator final
-  : public iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type, typename Iter::iterator_category> {
+  : public const_iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>
+  , public iterator_member_provider<inspect_iterator<Iter, Callable>, typename Iter::iterator_category> {
 
-  friend iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type, typename Iter::iterator_category>;
+  friend const_iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
+  friend const_iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
 
 public:
   using difference_type = typename Iter::difference_type;
@@ -25,7 +28,7 @@ public:
   inspect_iterator(Iter iterator, Callable callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
   }
 
-private:
+//private:
   template<typename Collection>
   [[nodiscard]] auto collect_impl() const -> Collection {
     return from_iterator_trait<inspect_iterator<Iter, Callable>, Collection>::from_iter(*this);
@@ -51,7 +54,8 @@ private:
   }
 
   template<typename NewCallable>
-  [[nodiscard]] auto filter_impl(NewCallable &&callable) const -> filter_iterator<inspect_iterator<Iter, Callable>, NewCallable> {
+  [[nodiscard]] auto filter_impl(NewCallable &&callable) const
+    -> filter_iterator<inspect_iterator<Iter, Callable>, NewCallable> {
     return { *this, std::forward<NewCallable>(callable) };
   }
 
@@ -72,7 +76,7 @@ private:
   }
 
   [[nodiscard]] constexpr auto deref_impl() -> decltype(std::declval<Iter>().operator*()) {
-    callable_(*static_cast<const Iter &>(iterator_));
+    callable_(*static_cast<Iter &>(iterator_));
     return *iterator_;
   }
 
@@ -87,67 +91,6 @@ private:
     return *this;
   }
 
-  [[nodiscard]] friend constexpr auto operator+=(const inspect_iterator<Iter, Callable> &lhs, size_type n)
-    -> inspect_iterator<Iter, Callable> & {
-    return lhs.iterator_ += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator+(const inspect_iterator<Iter, Callable> &lhs, size_type n)
-    -> inspect_iterator<Iter, Callable> {
-    return lhs.iterator_ += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator+(size_type n, const inspect_iterator<Iter, Callable> &rhs)
-    -> inspect_iterator<Iter, Callable> {
-    return rhs.iterator_ += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-=(const inspect_iterator<Iter, Callable> &lhs, size_type n)
-    -> inspect_iterator<Iter, Callable> & {
-    return lhs.iterator_ += -n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-(const inspect_iterator<Iter, Callable> &lhs, size_type n)
-    -> inspect_iterator<Iter, Callable> {
-    return lhs.iterator_ -= n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-(const inspect_iterator<Iter, Callable> &lhs,
-    const inspect_iterator<Iter, Callable> &rhs) -> difference_type {
-    return lhs.iterator_ - rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator==(const inspect_iterator<Iter, Callable> &lhs,
-    const inspect_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return lhs.iterator_ == rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator!=(const inspect_iterator<Iter, Callable> &lhs,
-    const inspect_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return lhs.iterator_ != rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator<(const inspect_iterator<Iter, Callable> &lhs,
-    const inspect_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return rhs.iterator_ - lhs.iterator_ > 0;
-  }
-
-  [[nodiscard]] friend constexpr auto operator<=(const inspect_iterator<Iter, Callable> &lhs,
-    const inspect_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return !(rhs.iterator_ < lhs.iterator_);
-  }
-
-  [[nodiscard]] friend constexpr auto operator>(const inspect_iterator<Iter, Callable> &lhs,
-    const inspect_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return rhs.iterator_ < lhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator>=(const inspect_iterator<Iter, Callable> &lhs,
-    const inspect_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return !(lhs.iterator_ < rhs.iterator_);
-  }
-
-private:
   mutable Iter iterator_;
   Callable callable_;
 };

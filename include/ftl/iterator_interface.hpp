@@ -1,7 +1,6 @@
 #pragma once
 
 #include <ftl/from_iterator_trait.hpp>
-#include <ftl/iterator_member_provider.hpp>
 #include <memory>
 #include <cassert>
 #include <tuple>
@@ -9,7 +8,7 @@
 
 namespace ftl {
 
-template<typename Derived, typename Item, typename Size, typename IterCategory>
+template<typename Derived, typename Item, typename Size>
 class iterator_interface;
 
 template<typename Iter, typename Callable>
@@ -19,11 +18,7 @@ template<typename Iter, typename Callable>
 class filter_iterator;
 
 template<typename Iter>
-class flatten_iterator
-  : public iterator_interface<flatten_iterator<Iter>,
-      typename Iter::value_type,
-      std::size_t,
-      typename Iter::iterator_category> {};
+class flatten_iterator : public iterator_interface<flatten_iterator<Iter>, typename Iter::value_type, std::size_t> {};
 
 template<typename Iter>
 class enumerate_iterator;
@@ -32,19 +27,14 @@ template<typename Iter, typename Callable>
 class inspect_iterator;
 
 template<typename Iter>
-class take_iterator
-  : public iterator_interface<take_iterator<Iter>,
-      typename Iter::value_type,
-      std::size_t,
-      typename Iter::iterator_category> {};
+class take_iterator : public iterator_interface<take_iterator<Iter>, typename Iter::value_type, std::size_t> {};
 
 template<typename Iter>
-class rev_iterator
-  : public iterator_interface<rev_iterator<Iter>, typename Iter::value_type, std::size_t, typename Iter::iterator_category> {
-};
+class rev_iterator : public iterator_interface<rev_iterator<Iter>, typename Iter::value_type, std::size_t> {};
 
-template<typename Derived, typename Item, typename SizeType, typename IterCategory>
-class const_iterator_interface : public iterator_member_provider<Derived, IterCategory> {
+template<typename Derived, typename Item, typename SizeType>
+class const_iterator_interface {
+
 public:
   using size_type = SizeType;
   using value_type = std::remove_cv_t<Item>;
@@ -132,8 +122,8 @@ public:
   }
 };
 
-template<typename Derived, typename Item, typename SizeType, typename IterCategory>
-class iterator_interface : public const_iterator_interface<Derived, Item, SizeType, IterCategory> {
+template<typename Derived, typename Item, typename SizeType>
+class iterator_interface : public const_iterator_interface<Derived, Item, SizeType> {
 public:
   [[nodiscard]] constexpr auto begin() noexcept -> Derived {
     return static_cast<Derived &>(*this).begin_impl();

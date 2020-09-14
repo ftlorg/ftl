@@ -8,9 +8,13 @@
 namespace ftl {
 
 template<typename Item, std::size_t N>
-class array_container_iterator final : public iterator_interface<array_container_iterator<Item, N>, Item, std::size_t, std::random_access_iterator_tag> {
+class array_container_iterator final
+  : public iterator_interface<array_container_iterator<Item, N>, Item, std::size_t>
+  , public iterator_member_provider<array_container_iterator<Item, N>, std::random_access_iterator_tag> {
 
-  friend iterator_interface<array_container_iterator<Item, N>, Item, std::size_t, std::random_access_iterator_tag>;
+  friend iterator_interface<array_container_iterator<Item, N>, Item, std::size_t>;
+  friend const_iterator_interface<array_container_iterator<Item, N>, Item, std::size_t>;
+  friend iterator_member_provider<array_container_iterator<Item, N>, std::random_access_iterator_tag>;
 
 public:
   using difference_type = std::ptrdiff_t;
@@ -31,7 +35,7 @@ public:
 
   constexpr auto operator=(const array_container_iterator &) -> array_container_iterator & = default;
 
-private:
+//private:
   template<typename Collection>
   [[nodiscard]] auto collect_impl() -> Collection {
     return from_iterator_trait<array_container_iterator<Item, N>, Collection>::from_iter(*this);
@@ -42,7 +46,8 @@ private:
   }
 
   template<typename NewCallable>
-  [[nodiscard]] auto inspect_impl(NewCallable &&callable) const -> inspect_iterator<array_container_iterator<Item, N>, NewCallable> {
+  [[nodiscard]] auto inspect_impl(NewCallable &&callable) const
+    -> inspect_iterator<array_container_iterator<Item, N>, NewCallable> {
     return { *this, std::forward<NewCallable>(callable) };
   }
 
@@ -95,69 +100,6 @@ private:
     return *this;
   }
 
-  [[nodiscard]] constexpr auto operator[](size_type pos) noexcept -> reference {
-    return begin_[pos];
-  }
-
-  [[nodiscard]] constexpr auto operator[](size_type pos) const noexcept -> const_reference {
-    return begin_[pos];
-  }
-
-  friend constexpr auto operator+=(array_container_iterator<Item, N> &lhs, size_type n) -> array_container_iterator<Item, N> & {
-    lhs.position_ += n;
-    return lhs;
-  }
-
-  [[nodiscard]] friend constexpr auto operator+(const array_container_iterator<Item, N> &lhs, size_type n) -> array_container_iterator<Item, N> {
-    return lhs += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator+(size_type n, const array_container_iterator<Item, N> &rhs) -> array_container_iterator<Item, N> {
-    return rhs += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-=(const array_container_iterator<Item, N> &lhs, size_type n)
-    -> array_container_iterator<Item, N> & {
-    return lhs += -n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-(const array_container_iterator<Item, N> &lhs, size_type n) -> array_container_iterator<Item, N> {
-    return lhs -= n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-(const array_container_iterator<Item, N> &lhs, const array_container_iterator<Item, N> &rhs)
-    -> difference_type {
-    return std::distance(rhs.begin_ + rhs.position_, lhs.begin_ + lhs.position_);
-  }
-
-  [[nodiscard]] friend constexpr auto operator==(const array_container_iterator<Item, N> &lhs,
-    const array_container_iterator<Item, N> &rhs) noexcept -> bool {
-    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.position_ == rhs.position_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator!=(const array_container_iterator<Item, N> &lhs,
-    const array_container_iterator<Item, N> &rhs) noexcept -> bool {
-    return !(lhs == rhs);
-  }
-
-  [[nodiscard]] friend constexpr auto operator<(const array_container_iterator<Item, N> &lhs,
-    const array_container_iterator<Item, N> &rhs) noexcept -> bool {
-    return rhs - lhs > 0;
-  }
-
-  [[nodiscard]] friend constexpr auto operator<=(const array_container_iterator &lhs, const array_container_iterator &rhs) noexcept -> bool {
-    return !(rhs < lhs);
-  }
-
-  [[nodiscard]] friend constexpr auto operator>(const array_container_iterator &lhs, const array_container_iterator &rhs) noexcept -> bool {
-    return rhs < lhs;
-  }
-
-  [[nodiscard]] friend constexpr auto operator>=(const array_container_iterator &lhs, const array_container_iterator &rhs) noexcept -> bool {
-    return !(lhs < rhs);
-  }
-
-private:
   mutable size_type position_;
   pointer begin_;
   pointer end_;

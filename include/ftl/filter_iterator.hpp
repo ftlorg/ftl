@@ -6,9 +6,11 @@ namespace ftl {
 
 template<typename Iter, typename Callable>
 class filter_iterator final
-  : public const_iterator_interface<filter_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type, typename Iter::iterator_category> {
+  : public const_iterator_interface<filter_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>
+  , public iterator_member_provider<filter_iterator<Iter, Callable>, std::forward_iterator_tag> {
 
-  friend const_iterator_interface<filter_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type, typename Iter::iterator_category>;
+  friend const_iterator_interface<filter_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
+  friend iterator_member_provider<filter_iterator<Iter, Callable>, std::forward_iterator_tag>;
 
 public:
   using difference_type = typename Iter::difference_type;
@@ -25,7 +27,7 @@ public:
     while (iterator_ != iterator_.cend() && !callable_(*iterator_)) { ++iterator_; }
   }
 
-private:
+  // private:
   template<typename Collection>
   [[nodiscard]] auto collect_impl() const -> Collection {
     return from_iterator_trait<filter_iterator<Iter, Callable>, Collection>::from_iter(*this);
@@ -71,22 +73,6 @@ private:
     return *this;
   }
 
-  auto postincrement_impl() const -> const filter_iterator<Iter, Callable> & {
-    while (iterator_ != iterator_.cend() && !callable_(*iterator_)) { iterator_++; }
-    return *this;
-  }
-
-  [[nodiscard]] friend constexpr auto operator==(const filter_iterator<Iter, Callable> &lhs,
-    const filter_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return lhs.iterator_ == rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator!=(const filter_iterator<Iter, Callable> &lhs,
-    const filter_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return lhs.iterator_ != rhs.iterator_;
-  }
-
-private:
   mutable Iter iterator_;
   Callable callable_;
 };

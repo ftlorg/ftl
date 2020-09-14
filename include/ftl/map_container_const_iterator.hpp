@@ -1,7 +1,8 @@
 #pragma once
 
-#include <ftl/map.hpp>
 #include <ftl/iterator_interface.hpp>
+#include <ftl/iterator_member_provider.hpp>
+#include <ftl/map.hpp>
 #include <iterator>
 
 namespace ftl {
@@ -10,10 +11,11 @@ template<typename Key, typename T, typename Item = std::pair<const Key, T>>
 class map_container_const_iterator final
   : public const_iterator_interface<map_container_const_iterator<Key, T>,
       Item,
-      std::size_t,
-      std::bidirectional_iterator_tag> {
+      std::size_t> {
 
-  friend const_iterator_interface<map_container_const_iterator<Key, T>, Item, std::size_t, std::bidirectional_iterator_tag>;
+  friend iterator_interface<map_container_const_iterator<Key, T>, Item, std::size_t>;
+  friend const_iterator_interface<map_container_const_iterator<Key, T>, Item, std::size_t>;
+  friend iterator_member_provider<map_container_const_iterator<Key, T>, std::bidirectional_iterator_tag>;
 
 public:
   using difference_type = typename std::map<Key, T>::difference_type;
@@ -36,7 +38,7 @@ public:
     : current_{ current }, begin_{ begin }, end_{ end } {
   }
 
-private:
+// private:
   template<typename Collection>
   [[nodiscard]] auto collect_impl() const -> Collection {
     return from_iterator_trait<map_container_const_iterator<Key, T>, Collection>::from_iter(*this);
@@ -85,16 +87,6 @@ private:
     ++current_;
 
     return *this;
-  }
-
-  [[nodiscard]] friend constexpr auto operator==(const map_container_const_iterator<Key, T> &lhs,
-    const map_container_const_iterator<Key, T> &rhs) noexcept -> bool {
-    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.current_ == rhs.current_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator!=(const map_container_const_iterator<Key, T> &lhs,
-    const map_container_const_iterator<Key, T> &rhs) noexcept -> bool {
-    return !(lhs == rhs);
   }
 
   mutable std_map_container_const_iterator current_;

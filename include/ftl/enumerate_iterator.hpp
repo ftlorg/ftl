@@ -10,9 +10,10 @@ namespace ftl {
 
 template<typename Iter>
 class enumerate_iterator final
-  : public iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type, typename Iter::iterator_category> {
+  : public iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type> {
 
-  friend iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type, typename Iter::iterator_category>;
+  friend iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type>;
+  friend const_iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type>;
 
 public:
   using difference_type = typename Iter::difference_type;
@@ -28,7 +29,7 @@ public:
   enumerate_iterator(Iter iterator) : iterator_{ std::move(iterator) }, index_{ 0 } {
   }
 
-private:
+// private:
   template<typename Collection>
   [[nodiscard]] auto collect_impl() const -> Collection {
     return from_iterator_trait<enumerate_iterator<Iter>, Collection>::from_iter(*this);
@@ -90,67 +91,6 @@ private:
     return *this;
   }
 
-  [[nodiscard]] friend constexpr auto operator+=(const enumerate_iterator<Iter> &lhs, size_type n)
-    -> enumerate_iterator<Iter> & {
-    return lhs.iterator_ += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator+(const enumerate_iterator<Iter> &lhs, size_type n)
-    -> enumerate_iterator<Iter> {
-    return lhs.iterator_ += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator+(size_type n, const enumerate_iterator<Iter> &rhs)
-    -> enumerate_iterator<Iter> {
-    return rhs.iterator_ += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-=(const enumerate_iterator<Iter> &lhs, size_type n)
-    -> enumerate_iterator<Iter> & {
-    return lhs.iterator_ += -n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-(const enumerate_iterator<Iter> &lhs, size_type n)
-    -> enumerate_iterator<Iter> {
-    return lhs.iterator_ -= n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-(const enumerate_iterator<Iter> &lhs, const enumerate_iterator<Iter> &rhs)
-    -> difference_type {
-    return lhs.iterator_ - rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator==(const enumerate_iterator<Iter> &lhs,
-    const enumerate_iterator<Iter> &rhs) noexcept -> bool {
-    return lhs.iterator_ == rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator!=(const enumerate_iterator<Iter> &lhs,
-    const enumerate_iterator<Iter> &rhs) noexcept -> bool {
-    return lhs.iterator_ != rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator<(const enumerate_iterator<Iter> &lhs,
-    const enumerate_iterator<Iter> &rhs) noexcept -> bool {
-    return rhs.iterator_ - lhs.iterator_ > 0;
-  }
-
-  [[nodiscard]] friend constexpr auto operator<=(const enumerate_iterator<Iter> &lhs,
-    const enumerate_iterator<Iter> &rhs) noexcept -> bool {
-    return !(rhs.iterator_ < lhs.iterator_);
-  }
-
-  [[nodiscard]] friend constexpr auto operator>(const enumerate_iterator<Iter> &lhs,
-    const enumerate_iterator<Iter> &rhs) noexcept -> bool {
-    return rhs.iterator_ < lhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator>=(const enumerate_iterator<Iter> &lhs,
-    const enumerate_iterator<Iter> &rhs) noexcept -> bool {
-    return !(lhs.iterator_ < rhs.iterator_);
-  }
-
-private:
   mutable Iter iterator_;
   mutable size_type index_;
 };

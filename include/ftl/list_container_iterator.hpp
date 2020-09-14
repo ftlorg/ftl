@@ -1,15 +1,19 @@
 #pragma once
 
 #include <ftl/iterator_interface.hpp>
+#include <ftl/iterator_member_provider.hpp>
 #include <ftl/map_iterator.hpp>
-
 #include <list>
 
 namespace ftl {
 
 template<typename Item>
-class list_container_iterator final : public iterator_interface<list_container_iterator<Item>, Item, std::size_t, std::bidirectional_iterator_tag> {
-  friend iterator_interface<list_container_iterator<Item>, Item, std::size_t, std::bidirectional_iterator_tag>;
+class list_container_iterator final
+  : public iterator_interface<list_container_iterator<Item>, Item, std::size_t> {
+
+  friend iterator_interface<list_container_iterator<Item>, Item, std::size_t>;
+  friend const_iterator_interface<list_container_iterator<Item>, Item, std::size_t>;
+  friend iterator_member_provider<list_container_iterator<Item>, std::bidirectional_iterator_tag>;
 
 public:
   using value_type = std::remove_cv_t<Item>;
@@ -32,7 +36,7 @@ public:
     : current_{ current }, begin_{ begin }, end_{ end } {
   }
 
-private:
+// private:
   template<typename Collection>
   [[nodiscard]] auto collect_impl() -> Collection {
     return from_iterator_trait<list_container_iterator<Item>, Collection>::from_iter(*this);
@@ -90,16 +94,6 @@ private:
     ++current_;
 
     return *this;
-  }
-
-  [[nodiscard]] friend constexpr auto operator==(const list_container_iterator<Item> &lhs,
-    const list_container_iterator<Item> &rhs) noexcept -> bool {
-    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.current_ == rhs.current_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator!=(const list_container_iterator<Item> &lhs,
-    const list_container_iterator<Item> &rhs) noexcept -> bool {
-    return !(lhs == rhs);
   }
 
   mutable std_list_container_iterator current_;

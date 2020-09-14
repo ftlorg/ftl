@@ -94,6 +94,7 @@ TEST_CASE(TEST_TAG "begin", TEST_TAG) {
   ftl::vector<int> arr = { 1, 2, 3, 4, 5 };
 
   auto iter = arr.iter().begin();
+
   REQUIRE(arr[0] == *iter);
 
   ++iter;
