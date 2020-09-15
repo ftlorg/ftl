@@ -4,15 +4,16 @@
 
 namespace ftl {
 
-  // TODO: Think about std::enable_if and only one struct with all of the operators that are enabled/disabled via
-  //       the std::enable_if statement based on iterator_tag.
-  //       i.e.
-  //       [[nodiscard]] auto operator*() 
-  //          -> typename std::enable_if_t<is_contained<IterCategory, std::bidirectional_tag, std::random_access_tag>, decltype(auto)> {
-  //          return static_cast<Iter &>(*this).deref_impl();
-  //       }
-  // 
-  //      We would have to write the above is_contained meta-function to check if the IterCategory is the same as one of the provided tags.
+// TODO: Think about std::enable_if and only one struct with all of the operators that are enabled/disabled via
+//       the std::enable_if statement based on iterator_tag.
+//       i.e.
+//       [[nodiscard]] auto operator*()
+//          -> typename std::enable_if_t<is_contained<IterCategory, std::bidirectional_tag, std::random_access_tag>,
+//          decltype(auto)> { return static_cast<Iter &>(*this).deref_impl();
+//       }
+//
+//      We would have to write the above is_contained meta-function to check if the IterCategory is the same as one of the
+//      provided tags.
 
 template<typename Iter, typename IterCategory = void>
 struct iterator_member_provider {
@@ -29,11 +30,11 @@ struct iterator_member_provider {
   }
 
   auto operator++(int) -> Iter {
-    auto tmp = *static_cast<Iter &>(*this);
+    auto tmp = static_cast<Iter &>(*this);
 
     ++static_cast<Iter &>(*this);
 
-    return static_cast<Iter &>(*this);
+    return tmp;
   }
 };
 

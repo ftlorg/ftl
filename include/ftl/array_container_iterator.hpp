@@ -8,7 +8,9 @@
 namespace ftl {
 
 template<typename Item, std::size_t N>
-class array_container_iterator final : public iterator_interface<array_container_iterator<Item, N>, Item, std::size_t> {
+class array_container_iterator final : 
+    public iterator_interface<array_container_iterator<Item, N>, Item, std::size_t>,
+    public iterator_member_provider<array_container_iterator<Item, N>, std::random_access_iterator_tag> {
 
   friend iterator_interface<array_container_iterator<Item, N>, Item, std::size_t>;
   friend const_iterator_interface<array_container_iterator<Item, N>, Item, std::size_t>;
@@ -99,32 +101,8 @@ public:
     return lhs;
   }
 
-  [[nodiscard]] friend constexpr auto operator+(const array_container_iterator<Item, N> &lhs, size_type n)
-    -> array_container_iterator<Item, N> {
-    return lhs += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator+(size_type n, const array_container_iterator<Item, N> &rhs)
-    -> array_container_iterator<Item, N> {
-    return rhs += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-=(const array_container_iterator<Item, N> &lhs, size_type n)
-    -> array_container_iterator<Item, N> & {
-    return lhs += -n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-(const array_container_iterator<Item, N> &lhs, size_type n)
-    -> array_container_iterator<Item, N> {
-    return lhs -= n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-(const array_container_iterator<Item, N> &lhs,
-    const array_container_iterator<Item, N> &rhs) -> difference_type {
-    return std::distance(rhs.begin_ + rhs.position_, lhs.begin_ + lhs.position_);
-  }
-
-  [[nodiscard]] friend constexpr auto operator==(const array_container_iterator<Item, N> &lhs,
+  template<>
+  [[nodiscard]] constexpr auto operator==<array_container_iterator<Item, N>>(const array_container_iterator<Item, N> &lhs,
     const array_container_iterator<Item, N> &rhs) noexcept -> bool {
     return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.position_ == rhs.position_;
   }

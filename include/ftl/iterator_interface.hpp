@@ -119,22 +119,6 @@ public:
   [[nodiscard]] constexpr auto cend() const noexcept -> Derived {
     return static_cast<const Derived &>(*this).cend_impl();
   }
-
-  [[nodiscard]] auto operator*() const -> decltype(auto) {
-    return static_cast<const Derived &>(*this).const_deref_impl();
-  }
-
-  auto operator++() const -> decltype(auto) {
-    return static_cast<const Derived &>(*this).const_preincrement_impl();
-  }
-
-  auto operator++(int) const -> decltype(auto) {
-    auto tmp = static_cast<const Derived &>(*this);
-
-    ++static_cast<const Derived &>(*this);
-
-    return tmp;
-  }
 };
 
 template<typename Derived, typename Item, typename SizeType>
@@ -144,8 +128,6 @@ public:
 
   using const_iterator_interface<Derived, Item, SizeType>::begin;
   using const_iterator_interface<Derived, Item, SizeType>::end;
-  using const_iterator_interface<Derived, Item, SizeType>::operator++;
-  using const_iterator_interface<Derived, Item, SizeType>::operator*;
 
   [[nodiscard]] constexpr auto begin() noexcept -> Derived {
     return static_cast<Derived &>(*this).begin_impl();
@@ -153,22 +135,6 @@ public:
 
   [[nodiscard]] constexpr auto end() noexcept -> Derived {
     return static_cast<Derived &>(*this).end_impl();
-  }
-
-  [[nodiscard]] auto operator*() -> decltype(auto) {
-    return static_cast<Derived &>(*this).deref_impl();
-  }
-
-  auto operator++() -> decltype(auto) {
-    return static_cast<Derived &>(*this).preincrement_impl();
-  }
-
-  auto operator++(int) -> decltype(auto) {
-    auto tmp = static_cast<Derived &>(*this);
-
-    ++static_cast<Derived &>(*this);
-
-    return tmp;
   }
 };
 

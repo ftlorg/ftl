@@ -7,8 +7,9 @@
 namespace ftl {
 
 template<typename Iter, typename Callable>
-class map_iterator
-  : public const_iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type> {
+class map_iterator final
+  : public const_iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>
+  , public iterator_member_provider<map_iterator<Iter, Callable>, typename Iter::iterator_category> {
 
 public:
   using difference_type = typename Iter::difference_type;
@@ -50,72 +51,11 @@ public:
     return callable_(*iterator_);
   }
 
-  auto const_preincrement_impl() const -> const map_iterator<Iter, Callable> & {
-    ++iterator_;
-
+  [[nodiscard]] constexpr auto preincrement_impl() const -> map_iterator<Iter, Callable>& {
+    iterator_++;
     return *this;
   }
-
-  [[nodiscard]] friend constexpr auto operator+=(const map_iterator<Iter, Callable> &lhs, size_type n)
-    -> map_iterator<Iter, Callable> & {
-    return lhs.iterator_ += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator+(const map_iterator<Iter, Callable> &lhs, size_type n)
-    -> map_iterator<Iter, Callable> {
-    return lhs.iterator_ += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator+(size_type n, const map_iterator<Iter, Callable> &rhs)
-    -> map_iterator<Iter, Callable> {
-    return rhs.iterator_ += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-=(const map_iterator<Iter, Callable> &lhs, size_type n)
-    -> map_iterator<Iter, Callable> & {
-    return lhs.iterator_ += -n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-(const map_iterator<Iter, Callable> &lhs, size_type n)
-    -> map_iterator<Iter, Callable> {
-    return lhs.iterator_ -= n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-(const map_iterator<Iter, Callable> &lhs,
-    const map_iterator<Iter, Callable> &rhs) -> difference_type {
-    return lhs.iterator_ - rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator==(const map_iterator<Iter, Callable> &lhs,
-    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return lhs.iterator_ == rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator!=(const map_iterator<Iter, Callable> &lhs,
-    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return lhs.iterator_ != rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator<(const map_iterator<Iter, Callable> &lhs,
-    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return rhs.iterator_ - lhs.iterator_ > 0;
-  }
-
-  [[nodiscard]] friend constexpr auto operator<=(const map_iterator<Iter, Callable> &lhs,
-    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return !(rhs.iterator_ < lhs.iterator_);
-  }
-
-  [[nodiscard]] friend constexpr auto operator>(const map_iterator<Iter, Callable> &lhs,
-    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return rhs.iterator_ < lhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator>=(const map_iterator<Iter, Callable> &lhs,
-    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return !(lhs.iterator_ < rhs.iterator_);
-  }
-
+  
   mutable Iter iterator_;
   Callable callable_;
 };
