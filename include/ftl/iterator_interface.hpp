@@ -140,13 +140,6 @@ public:
 template<typename Derived, typename Item, typename SizeType>
 class iterator_interface : public const_iterator_interface<Derived, Item, SizeType> {
 public:
-  using size_type = SizeType;
-  using value_type = std::remove_cv_t<Item>;
-  using pointer = value_type *;
-  using reference = value_type &;
-  using const_pointer = const value_type *;
-  using const_reference = const value_type &;
-
   virtual ~iterator_interface() = default;
 
   using const_iterator_interface<Derived, Item, SizeType>::begin;
