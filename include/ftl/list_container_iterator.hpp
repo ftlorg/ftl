@@ -74,7 +74,7 @@ public:
     return *this;
   }
 
-  auto const_preincrement_impl() const -> list_container_iterator<Item> & {
+  auto const_preincrement_impl() const -> const list_container_iterator<Item> & {
     ++current_;
 
     return *this;

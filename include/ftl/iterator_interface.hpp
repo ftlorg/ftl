@@ -60,7 +60,7 @@ public:
   }
 
   [[nodiscard]] auto enumerate() const -> enumerate_iterator<Derived> {
-    return { static_cast<const Derived &>(this) };
+    return { static_cast<const Derived &>(*this) };
   }
 
   template<typename Predicate>
@@ -81,7 +81,7 @@ public:
 
   template<typename Callable>
   [[nodiscard]] auto inspect(Callable &&callable) const -> inspect_iterator<Derived, Callable> {
-    return { static_cast<const Derived &>(*this), std::forward<NewCallable>(callable) };
+    return { static_cast<const Derived &>(*this), std::forward<Callable>(callable) };
   }
 
   template<typename Callable>
@@ -165,7 +165,7 @@ public:
   }
 
   [[nodiscard]] auto enumerate() const -> enumerate_iterator<Derived> {
-    return { static_cast<const Derived &>(this) };
+    return { static_cast<const Derived &>(*this) };
   }
 
   template<typename Predicate>

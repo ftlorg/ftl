@@ -74,7 +74,7 @@ public:
     return *this;
   }
 
-  auto const_preincrement_impl() const -> array_container_iterator<Item, N> & {
+  auto const_preincrement_impl() const -> const array_container_iterator<Item, N> & {
     ++position_;
 
     return *this;

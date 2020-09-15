@@ -34,27 +34,7 @@ public:
     : current_{ current }, begin_{ begin }, end_{ end } {
   }
 
-// private:
-  template<typename Collection>
-  [[nodiscard]] auto collect_impl() -> Collection {
-    return from_iterator_trait<map_container_iterator<Key, T>, Collection>::from_iter(*this);
-  }
-
-  [[nodiscard]] auto enumerate_impl() const -> enumerate_iterator<map_container_iterator<Key, T>> {
-    return { *this };
-  }
-
-  template<typename NewCallable>
-  [[nodiscard]] auto inspect_impl(NewCallable &&callable) const
-    -> inspect_iterator<map_container_iterator<Key, T>, NewCallable> {
-    return { *this, std::forward<NewCallable>(callable) };
-  }
-
-  template<typename Callable>
-  [[nodiscard]] auto map_impl(Callable &&callable) -> map_iterator<map_container_iterator<Key, T>, Callable> {
-    return { *this, std::forward<Callable>(callable) };
-  }
-
+  // private:
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
     return static_cast<size_type>(std::distance(begin_, end_));
   }
@@ -63,12 +43,20 @@ public:
     return { begin_, begin_, end_ };
   }
 
+  [[nodiscard]] constexpr auto begin_impl() const noexcept -> map_container_iterator<Key, T> {
+    return cbegin_impl();
+  }
+
   [[nodiscard]] constexpr auto cbegin_impl() const noexcept -> map_container_iterator<Key, T> {
     return { begin_, begin_, end_ };
   }
 
   [[nodiscard]] constexpr auto end_impl() noexcept -> map_container_iterator<Key, T> {
     return { end_, begin_, end_ };
+  }
+
+  [[nodiscard]] constexpr auto end_impl() const noexcept -> map_container_iterator<Key, T> {
+    return cend_impl();
   }
 
   [[nodiscard]] constexpr auto cend_impl() const noexcept -> map_container_iterator<Key, T> {
@@ -87,6 +75,22 @@ public:
     ++current_;
 
     return *this;
+  }
+
+  auto const_preincrement_impl() const -> const map_container_iterator<Key, T> & {
+    ++current_;
+
+    return *this;
+  }
+
+  [[nodiscard]] friend constexpr auto operator==(const map_container_iterator<Key, T> &lhs,
+    const map_container_iterator<Key, T> &rhs) noexcept -> bool {
+    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.current_ == rhs.current_;
+  }
+
+  [[nodiscard]] friend constexpr auto operator!=(const map_container_iterator<Key, T> &lhs,
+    const map_container_iterator<Key, T> &rhs) noexcept -> bool {
+    return !(lhs == rhs);
   }
 
   mutable std_map_container_iterator current_;

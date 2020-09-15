@@ -9,9 +9,7 @@ namespace ftl {
 
 template<typename Key, typename T, typename Item = std::pair<const Key, T>>
 class map_container_const_iterator final
-  : public const_iterator_interface<map_container_const_iterator<Key, T>,
-      Item,
-      std::size_t> {
+  : public const_iterator_interface<map_container_const_iterator<Key, T>, Item, std::size_t> {
 
   friend iterator_interface<map_container_const_iterator<Key, T>, Item, std::size_t>;
   friend const_iterator_interface<map_container_const_iterator<Key, T>, Item, std::size_t>;
@@ -38,7 +36,7 @@ public:
     : current_{ current }, begin_{ begin }, end_{ end } {
   }
 
-// private:
+  // private:
   template<typename Collection>
   [[nodiscard]] auto collect_impl() const -> Collection {
     return from_iterator_trait<map_container_const_iterator<Key, T>, Collection>::from_iter(*this);
@@ -83,10 +81,20 @@ public:
     return *current_;
   }
 
-  auto preincrement_impl() const -> const map_container_const_iterator<Key, T> & {
+  auto const_preincrement_impl() const -> const map_container_const_iterator<Key, T> & {
     ++current_;
 
     return *this;
+  }
+
+  [[nodiscard]] friend constexpr auto operator==(const map_container_const_iterator<Key, T> &lhs,
+    const map_container_const_iterator<Key, T> &rhs) noexcept -> bool {
+    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.current_ == rhs.current_;
+  }
+
+  [[nodiscard]] friend constexpr auto operator!=(const map_container_const_iterator<Key, T> &lhs,
+    const map_container_const_iterator<Key, T> &rhs) noexcept -> bool {
+    return !(lhs == rhs);
   }
 
   mutable std_map_container_const_iterator current_;
