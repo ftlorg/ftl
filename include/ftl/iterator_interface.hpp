@@ -65,7 +65,7 @@ public:
 
   template<typename Predicate>
   [[nodiscard]] auto filter(Predicate &&predicate) const -> filter_iterator<Derived, Predicate> {
-    return { static_cast<const Derived &>(*this), std::forward<Callable>(callable) };
+    return { static_cast<const Derived &>(*this), std::forward<Predicate>(predicate) };
   }
 
   template<typename Predicate>
@@ -170,7 +170,7 @@ public:
 
   template<typename Predicate>
   [[nodiscard]] auto filter(Predicate &&predicate) const -> filter_iterator<Derived, Predicate> {
-    return { static_cast<const Derived &>(*this), std::forward<Callable>(callable) };
+    return { static_cast<const Derived &>(*this), std::forward<Predicate>(predicate) };
   }
 
   template<typename Predicate>
@@ -186,7 +186,7 @@ public:
 
   template<typename Callable>
   [[nodiscard]] auto inspect(Callable &&callable) const -> inspect_iterator<Derived, Callable> {
-    return { static_cast<const Derived &>(*this), std::forward<NewCallable>(callable) };
+    return { static_cast<const Derived &>(*this), std::forward<Callable>(callable) };
   }
 
   template<typename Callable>

@@ -6,12 +6,7 @@ namespace ftl {
 
 template<typename Iter, typename Callable>
 class filter_iterator final
-  : public const_iterator_interface<filter_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>
-  , public iterator_member_provider<filter_iterator<Iter, Callable>, std::forward_iterator_tag> {
-
-  friend const_iterator_interface<filter_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
-  friend iterator_member_provider<filter_iterator<Iter, Callable>, std::forward_iterator_tag>;
-
+  : public const_iterator_interface<filter_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type> {
 public:
   using difference_type = typename Iter::difference_type;
   using value_type = typename Iter::value_type;
@@ -68,9 +63,19 @@ public:
     return *iterator_;
   }
 
-  auto preincrement_impl() const -> const filter_iterator<Iter, Callable> & {
+  auto const_preincrement_impl() const -> const filter_iterator<Iter, Callable> & {
     while (++iterator_ != iterator_.cend() && !callable_(*iterator_)) {}
     return *this;
+  }
+
+  [[nodiscard]] friend constexpr auto operator==(const filter_iterator<Iter, Callable> &lhs,
+    const filter_iterator<Iter, Callable> &rhs) noexcept -> bool {
+    return lhs.iterator_ == rhs.iterator_;
+  }
+
+  [[nodiscard]] friend constexpr auto operator!=(const filter_iterator<Iter, Callable> &lhs,
+    const filter_iterator<Iter, Callable> &rhs) noexcept -> bool {
+    return lhs.iterator_ != rhs.iterator_;
   }
 
   mutable Iter iterator_;
