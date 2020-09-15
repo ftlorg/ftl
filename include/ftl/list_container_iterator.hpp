@@ -8,12 +8,7 @@
 namespace ftl {
 
 template<typename Item>
-class list_container_iterator final
-  : public iterator_interface<list_container_iterator<Item>, Item, std::size_t> {
-
-  friend iterator_interface<list_container_iterator<Item>, Item, std::size_t>;
-  friend const_iterator_interface<list_container_iterator<Item>, Item, std::size_t>;
-  friend iterator_member_provider<list_container_iterator<Item>, std::bidirectional_iterator_tag>;
+class list_container_iterator final : public iterator_interface<list_container_iterator<Item>, Item, std::size_t> {
 
 public:
   using value_type = std::remove_cv_t<Item>;
@@ -36,32 +31,7 @@ public:
     : current_{ current }, begin_{ begin }, end_{ end } {
   }
 
-// private:
-  template<typename Collection>
-  [[nodiscard]] auto collect_impl() -> Collection {
-    return from_iterator_trait<list_container_iterator<Item>, Collection>::from_iter(*this);
-  }
-
-  [[nodiscard]] auto enumerate_impl() const -> enumerate_iterator<list_container_iterator<Item>> {
-    return { *this };
-  }
-
-  template<typename NewCallable>
-  [[nodiscard]] auto inspect_impl(NewCallable &&callable) const
-    -> inspect_iterator<list_container_iterator<Item>, NewCallable> {
-    return { *this, std::forward<NewCallable>(callable) };
-  }
-
-  template<typename Callable>
-  [[nodiscard]] auto map_impl(Callable &&callable) const -> map_iterator<list_container_iterator<Item>, Callable> {
-    return { *this, std::forward<Callable>(callable) };
-  }
-
-  template<typename Callable>
-  [[nodiscard]] auto filter_impl(Callable &&callable) const -> filter_iterator<list_container_iterator<Item>, Callable> {
-    return { *this, std::forward<Callable>(callable) };
-  }
-
+  // private:
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
     return static_cast<size_type>(std::distance(begin_, end_));
   }
@@ -70,12 +40,20 @@ public:
     return { begin_, begin_, end_ };
   }
 
+  [[nodiscard]] constexpr auto begin_impl() const noexcept -> list_container_iterator<Item> {
+    return cbegin_impl();
+  }
+
   [[nodiscard]] constexpr auto cbegin_impl() const noexcept -> list_container_iterator<Item> {
     return { begin_, begin_, end_ };
   }
 
   [[nodiscard]] constexpr auto end_impl() noexcept -> list_container_iterator<Item> {
     return { end_, begin_, end_ };
+  }
+
+  [[nodiscard]] constexpr auto end_impl() const noexcept -> list_container_iterator<Item> {
+    return cend_impl();
   }
 
   [[nodiscard]] constexpr auto cend_impl() const noexcept -> list_container_iterator<Item> {
@@ -94,6 +72,22 @@ public:
     ++current_;
 
     return *this;
+  }
+
+  auto const_preincrement_impl() const -> list_container_iterator<Item> & {
+    ++current_;
+
+    return *this;
+  }
+
+  [[nodiscard]] friend constexpr auto operator==(const list_container_iterator<Item> &lhs,
+    const list_container_iterator<Item> &rhs) noexcept -> bool {
+    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.current_ == rhs.current_;
+  }
+
+  [[nodiscard]] friend constexpr auto operator!=(const list_container_iterator<Item> &lhs,
+    const list_container_iterator<Item> &rhs) noexcept -> bool {
+    return !(lhs == rhs);
   }
 
   mutable std_list_container_iterator current_;
