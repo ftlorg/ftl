@@ -20,8 +20,8 @@ add_executable(tests
   test_map.cpp
   test_map_container_iterator.cpp
   #test_map_iterator.cpp
-  #test_vector.cpp
-  #test_vector_container_iterator.cpp
+  test_vector.cpp
+  test_vector_container_iterator.cpp
   )
 
 target_link_libraries(tests PRIVATE project_warnings project_options ftl catch_main)
