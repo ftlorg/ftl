@@ -10,8 +10,8 @@ target_link_libraries(catch_main PUBLIC CONAN_PKG::catch2)
 target_link_libraries(catch_main PRIVATE project_options)
 
 add_executable(tests 
-  #test_array.cpp
-  #test_array_container_iterator.cpp
+  test_array.cpp
+  test_array_container_iterator.cpp
   #test_enumerate_iterator.cpp
   #test_filter_iterator.cpp
   #test_inspect_iterator.cpp
@@ -21,7 +21,8 @@ add_executable(tests
   #test_map_container_iterator.cpp
   #test_map_iterator.cpp
   #test_vector.cpp
-  test_vector_container_iterator.cpp)
+  #test_vector_container_iterator.cpp
+  )
 
 target_link_libraries(tests PRIVATE project_warnings project_options ftl catch_main)
 

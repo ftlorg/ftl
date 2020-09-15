@@ -8,10 +8,8 @@ namespace ftl {
 
 template<typename Iter, typename Callable>
 class inspect_iterator final
-  : public const_iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>
-  , public iterator_member_provider<inspect_iterator<Iter, Callable>, typename Iter::iterator_category> {
+  : public const_iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type> {
 
-  friend const_iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
   friend const_iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
 
 public:
@@ -28,7 +26,7 @@ public:
   inspect_iterator(Iter iterator, Callable callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
   }
 
-//private:
+  // private:
   template<typename Collection>
   [[nodiscard]] auto collect_impl() const -> Collection {
     return from_iterator_trait<inspect_iterator<Iter, Callable>, Collection>::from_iter(*this);

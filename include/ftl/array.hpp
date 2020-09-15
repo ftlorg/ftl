@@ -47,7 +47,7 @@ template<typename T, std::size_t N>
 
 template<typename Item, std::size_t N>
 struct ftl::from_iterator_trait<ftl::array_container_iterator<Item, N>, ftl::array<Item, N>> {
-  [[nodiscard]] constexpr static auto from_iter(array_container_iterator<Item, N> &iter) {
+  [[nodiscard]] constexpr static auto from_iter(const array_container_iterator<Item, N> &iter) {
     array<Item, N> result{};
     std::size_t i = 0;
     for (auto &&item : iter) {
