@@ -30,6 +30,29 @@ public:
     return from_iterator_trait<take_iterator<Iter>, Collection>::from_iter(*this);
   }
 
+  [[nodiscard]] constexpr auto count_impl() const -> size_type {
+    return iterator_.count();
+  }
+
+  [[nodiscard]] auto enumerate_impl() const -> enumerate_iterator<take_iterator<Iter>> {
+    return { *this };
+  }
+
+  template<typename NewCallable>
+  [[nodiscard]] auto inspect_impl(NewCallable &&callable) const -> inspect_iterator<take_iterator<Iter>, NewCallable> {
+    return { *this, std::forward<NewCallable>(callable) };
+  }
+
+  template<typename NewCallable>
+  [[nodiscard]] auto map_impl(NewCallable &&callable) const -> map_iterator<take_iterator<Iter>, NewCallable> {
+    return { *this, std::forward<NewCallable>(callable) };
+  }
+
+  template<typename NewCallable>
+  [[nodiscard]] auto filter_impl(NewCallable &&callable) const -> filter_iterator<take_iterator<Iter>, NewCallable> {
+    return { *this, std::forward<NewCallable>(callable) };
+  }
+
   [[nodiscard]] constexpr auto begin_impl() const noexcept -> take_iterator<Iter> {
     return { iterator_.cbegin(), n_ };
   }
