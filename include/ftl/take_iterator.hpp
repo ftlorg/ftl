@@ -6,7 +6,8 @@
 namespace ftl {
 
 template<typename Iter>
-class take_iterator : const_iterator_interface<take_iterator<Iter>, typename Iter::value_type, typename Iter::size_type> {
+class take_iterator
+  : public const_iterator_interface<take_iterator<Iter>, typename Iter::value_type, typename Iter::size_type> {
 
   friend const_iterator_interface<take_iterator<Iter>, typename Iter::value_type, typename Iter::size_type>;
 
@@ -24,41 +25,57 @@ public:
   take_iterator(Iter iterator, size_type n) : iterator_{ std::move(iterator) }, n_{ n } {
   }
 
+  template<typename Collection>
+  [[nodiscard]] auto collect_impl() const -> Collection {
+    return from_iterator_trait<take_iterator<Iter>, Collection>::from_iter(*this);
+  }
+
   [[nodiscard]] constexpr auto begin_impl() const noexcept -> take_iterator<Iter> {
-    return { iterator_.cbegin(), callable_ };
+    return { iterator_.cbegin(), n_ };
   }
 
   [[nodiscard]] constexpr auto cbegin_impl() const noexcept -> take_iterator<Iter> {
-    return { iterator_.cbegin(), callable_ };
+    return { iterator_.cbegin(), n_ };
   }
 
   [[nodiscard]] constexpr auto end_impl() const noexcept -> take_iterator<Iter> {
-    return { iterator_.cend(), callable_ };
+    return { iterator_.cend(), n_ };
   }
 
   [[nodiscard]] constexpr auto cend_impl() const noexcept -> take_iterator<Iter> {
-    return { iterator_.cend(), callable_ };
+    return { iterator_.cend(), n_ };
   }
 
-  [[nodiscard]] constexpr auto const_deref_impl() const ->
-    typename std::invoke_result_t<Callable, decltype(std::declval<Iter>().operator*())> {
-    return callable_(*iterator_);
+  [[nodiscard]] constexpr auto const_deref_impl() const -> decltype(std::declval<const Iter &>().operator*()) {
+    return *iterator_;
   }
 
-  auto const_preincrement_impl() const -> const take_iterator<Iter> & {
-    if (counter_ < n_) {
+  // TODO: const_preincrement_impl after new interfaces are merged...
+  auto preincrement_impl() const -> const take_iterator<Iter> & {
+    if (counter_ < n_ - 1) {
       ++iterator_;
-      ++counter;
+      ++counter_;
     } else {
-      iterator_ = iterator_.end();
+      while (++iterator_ != iterator_.end())
+        ;
     }
 
     return *this;
   }
 
-  Iter iterator_;
-  size_type n_ = 0;
-  size_type counter_ = 0;
+  [[nodiscard]] friend constexpr auto operator==(const take_iterator<Iter> &lhs, const take_iterator<Iter> &rhs) noexcept
+    -> bool {
+    return lhs.iterator_ == rhs.iterator_;
+  }
+
+  [[nodiscard]] friend constexpr auto operator!=(const take_iterator<Iter> &lhs, const take_iterator<Iter> &rhs) noexcept
+    -> bool {
+    return lhs.iterator_ != rhs.iterator_;
+  }
+
+  mutable Iter iterator_;
+  const size_type n_ = 0;
+  mutable size_type counter_ = 0;
 };
 
 }// namespace ftl

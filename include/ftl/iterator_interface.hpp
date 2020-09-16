@@ -27,7 +27,7 @@ template<typename Iter, typename Callable>
 class inspect_iterator;
 
 template<typename Iter>
-class take_iterator : public iterator_interface<take_iterator<Iter>, Iter, std::size_t> {};
+class take_iterator;
 
 template<typename Iter>
 class rev_iterator : public iterator_interface<rev_iterator<Iter>, Iter, std::size_t> {};
@@ -201,7 +201,9 @@ public:
   /**
    * Creates an iterator that yields its first n elements.
    */
-  [[nodiscard]] auto take(size_type n) const -> take_iterator<Derived>;
+  [[nodiscard]] auto take(size_type n) const -> take_iterator<Derived> {
+    return { static_cast<const Derived &>(*this), n };
+  }
 
   /**
    * Returns currently pointed-to value.
@@ -449,7 +451,9 @@ public:
   /**
    * Creates an iterator that yields its first n elements.
    */
-  [[nodiscard]] auto take(size_type n) const -> take_iterator<Derived>;
+  [[nodiscard]] auto take(size_type n) const -> take_iterator<Derived> {
+    return { static_cast<const Derived &>(*this), n };
+  }
 
   /**
    * Returns currently pointed-to value.
