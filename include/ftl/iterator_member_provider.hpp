@@ -17,10 +17,6 @@ namespace ftl {
 
 template<typename Iter, typename IterCategory = void>
 struct iterator_member_provider {
-  [[nodiscard]] auto operator*() -> decltype(auto) {
-    return static_cast<Iter &>(*this).deref_impl();
-  }
-
   [[nodiscard]] auto operator*() const -> decltype(auto) {
     return static_cast<const Iter &>(*this).const_deref_impl();
   }
@@ -91,7 +87,7 @@ struct iterator_member_provider<Iter, std::random_access_iterator_tag>
   }
 
   [[nodiscard]] friend constexpr auto operator+=(const Iter &lhs, size_type n) -> const Iter & {
-    lhs.current_ += n;
+    lhs.iterator_ += n;
     return lhs;
   }
 

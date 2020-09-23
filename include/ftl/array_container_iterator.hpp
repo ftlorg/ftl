@@ -23,13 +23,15 @@ public:
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
   using iterator_category = std::random_access_iterator_tag;
+  using std_array_container_iterator = typename std::array<value_type, N>::iterator;
   using size_type = std::size_t;
 
-  constexpr array_container_iterator(pointer const begin, pointer const end) : position_{ 0 }, begin_{ begin }, end_{ end } {
+  constexpr array_container_iterator(pointer const begin, pointer const end)
+    : current_{ begin }, begin_{ begin }, end_{ end } {
   }
 
-  constexpr array_container_iterator(size_type position, pointer const begin, pointer const end)
-    : position_{ position }, begin_{ begin }, end_{ end } {
+  constexpr array_container_iterator(pointer const current, pointer const begin, pointer const end)
+    : current_{ current }, begin_{ begin }, end_{ end } {
   }
 
   // private:
@@ -63,11 +65,11 @@ public:
   }
 
   [[nodiscard]] constexpr auto deref_impl() -> reference {
-    return begin_[position_];
+    return *current_;
   }
 
   [[nodiscard]] constexpr auto const_deref_impl() const -> const_reference {
-    return begin_[position_];
+    return *current_;
   }
 
   auto preincrement_impl() -> array_container_iterator<Item, N> & {
@@ -82,11 +84,6 @@ public:
     return *this;
   }
 
-  // auto predecrement_impl() const -> const array_container_iterator<Item, N> & {
-  //  --position_;
-  //  return *this;
-  //}
-
   [[nodiscard]] constexpr auto operator[](size_type pos) noexcept -> reference {
     return begin_[pos];
   }
@@ -95,46 +92,14 @@ public:
     return begin_[pos];
   }
 
-  friend constexpr auto operator+=(array_container_iterator<Item, N> &lhs, size_type n)
-    -> array_container_iterator<Item, N> & {
-    lhs.position_ += n;
-    return lhs;
-  }
-
-  template<>
-  [[nodiscard]] constexpr auto operator==<array_container_iterator<Item, N>>(const array_container_iterator<Item, N> &lhs,
+  [[nodiscard]] constexpr friend auto operator==(const array_container_iterator<Item, N> &lhs,
     const array_container_iterator<Item, N> &rhs) noexcept -> bool {
-    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.position_ == rhs.position_;
+    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.current_ == rhs.current_;
   }
 
-  [[nodiscard]] friend constexpr auto operator!=(const array_container_iterator<Item, N> &lhs,
-    const array_container_iterator<Item, N> &rhs) noexcept -> bool {
-    return !(lhs == rhs);
-  }
-
-  [[nodiscard]] friend constexpr auto operator<(const array_container_iterator<Item, N> &lhs,
-    const array_container_iterator<Item, N> &rhs) noexcept -> bool {
-    return rhs - lhs > 0;
-  }
-
-  [[nodiscard]] friend constexpr auto operator<=(const array_container_iterator &lhs,
-    const array_container_iterator &rhs) noexcept -> bool {
-    return !(rhs < lhs);
-  }
-
-  [[nodiscard]] friend constexpr auto operator>(const array_container_iterator &lhs,
-    const array_container_iterator &rhs) noexcept -> bool {
-    return rhs < lhs;
-  }
-
-  [[nodiscard]] friend constexpr auto operator>=(const array_container_iterator &lhs,
-    const array_container_iterator &rhs) noexcept -> bool {
-    return !(lhs < rhs);
-  }
-
-  mutable size_type position_;
-  pointer begin_;
-  pointer end_;
+  mutable std_array_container_iterator current_;
+  std_array_container_iterator begin_;
+  std_array_container_iterator end_;
 };
 
 }// namespace ftl
