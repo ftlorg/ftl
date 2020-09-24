@@ -4,13 +4,14 @@
 #include <ftl/enumerate_iterator.hpp>
 #include <ftl/map_iterator.hpp>
 #include <ftl/inspect_iterator.hpp>
+#include <ftl/container_iterator_member_provider.hpp>
 
 namespace ftl {
 
 template<typename Item, std::size_t N>
 class array_container_iterator final : 
     public iterator_interface<array_container_iterator<Item, N>, Item, std::size_t>,
-    public iterator_member_provider<array_container_iterator<Item, N>, std::random_access_iterator_tag> {
+    public container_iterator_member_provider<array_container_iterator<Item, N>, std::random_access_iterator_tag> {
 
   friend iterator_interface<array_container_iterator<Item, N>, Item, std::size_t>;
   friend const_iterator_interface<array_container_iterator<Item, N>, Item, std::size_t>;
@@ -82,19 +83,6 @@ public:
     ++current_;
 
     return *current_;
-  }
-
-  [[nodiscard]] constexpr auto operator[](size_type pos) noexcept -> reference {
-    return begin_[pos];
-  }
-
-  [[nodiscard]] constexpr auto operator[](size_type pos) const noexcept -> const_reference {
-    return begin_[pos];
-  }
-
-  [[nodiscard]] constexpr friend auto operator==(const array_container_iterator<Item, N> &lhs,
-    const array_container_iterator<Item, N> &rhs) noexcept -> bool {
-    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.current_ == rhs.current_;
   }
 
   mutable std_array_container_iterator current_;

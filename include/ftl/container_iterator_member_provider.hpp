@@ -36,13 +36,13 @@ struct container_iterator_member_provider<Iter, std::input_iterator_tag> : publi
     return !(lhs == rhs);
   }
 
-  constexpr auto operator->() const -> typename Iter::const_reference {
-    return *static_cast<Iter &>(*this).current_;
-  }
-
-  constexpr auto operator->() -> typename Iter::reference {
-    return *static_cast<Iter &>(*this).current_;
-  }
+//  constexpr auto operator->() const -> typename Iter::const_reference {
+//    return *static_cast<Iter &>(*this).current_;
+//  }
+//
+//  constexpr auto operator->() -> typename Iter::reference {
+//    return *static_cast<Iter &>(*this).current_;
+//  }
 };
 
 template<typename Iter>
@@ -129,18 +129,18 @@ struct container_iterator_member_provider<Iter, std::random_access_iterator_tag>
     return rhs - lhs > 0;
   }
 
-  [[nodiscard]] friend constexpr auto operator<=(const array_container_const_iterator &lhs, const array_container_const_iterator &rhs) noexcept
+  [[nodiscard]] friend constexpr auto operator<=(const Iter &lhs, const Iter &rhs) noexcept
   -> bool {
     return !(rhs < lhs);
   }
 
 
-  [[nodiscard]] friend constexpr auto operator>(const array_container_const_iterator &lhs, const array_container_const_iterator &rhs) noexcept
+  [[nodiscard]] friend constexpr auto operator>(const Iter &lhs, const Iter &rhs) noexcept
   -> bool {
     return rhs < lhs;
   }
 
-  [[nodiscard]] friend constexpr auto operator>=(const array_container_const_iterator &lhs, const array_container_const_iterator &rhs) noexcept
+  [[nodiscard]] friend constexpr auto operator>=(const Iter &lhs, const Iter &rhs) noexcept
   -> bool {
     return !(lhs < rhs);
   }
