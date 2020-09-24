@@ -73,15 +73,15 @@ public:
   }
 
   auto preincrement_impl() -> array_container_iterator<Item, N> & {
-    ++position_;
+    ++current_;
 
-    return *this;
+    return *current_;
   }
 
   auto const_preincrement_impl() const -> const array_container_iterator<Item, N> & {
-    ++position_;
+    ++current_;
 
-    return *this;
+    return *current_;
   }
 
   [[nodiscard]] constexpr auto operator[](size_type pos) noexcept -> reference {
