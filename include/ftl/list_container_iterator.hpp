@@ -3,6 +3,7 @@
 #include <ftl/iterator_interface.hpp>
 #include <ftl/iterator_member_provider.hpp>
 #include <ftl/map_iterator.hpp>
+#include <ftl/iterator_interface.hpp>
 #include <list>
 
 namespace ftl {
@@ -11,15 +12,15 @@ template<typename Item>
 class list_container_iterator final : public iterator_interface<list_container_iterator<Item>, Item, std::size_t> {
 
 public:
-  using value_type = std::remove_cv_t<Item>;
-  using pointer = value_type *;
-  using reference = value_type &;
-  using const_pointer = const value_type *;
-  using const_reference = const value_type &;
-  using iterator_category = std::bidirectional_iterator_tag;
-  using size_type = std::size_t;
-  using std_list_container_iterator = typename std::list<value_type>::iterator;
-  using difference_type = typename std_list_container_iterator::difference_type;
+  using difference_type = typename std::iterator_traits<ftl::list_container_iterator<Item>>::difference_type;
+  using value_type = typename std::iterator_traits<ftl::list_container_iterator<Item>>::value_type;
+  using pointer = typename std::iterator_traits<ftl::list_container_iterator<Item>>::pointer;
+  using reference = typename std::iterator_traits<ftl::list_container_iterator<Item>>::reference;
+  using const_pointer = typename std::iterator_traits<ftl::list_container_iterator<Item>>::const_pointer;
+  using const_reference = typename std::iterator_traits<ftl::list_container_iterator<Item>>::const_reference;
+  using iterator_category = typename std::iterator_traits<ftl::list_container_iterator<Item>>::iterator_category;
+  using size_type = typename std::iterator_traits<ftl::list_container_iterator<Item>>::size_type;
+  using std_list_container_iterator = typename std::iterator_traits<ftl::list_container_iterator<Item>>::std_list_container_iterator;
 
   list_container_iterator(std_list_container_iterator begin, std_list_container_iterator end)
     : current_{ begin }, begin_{ begin }, end_{ end } {
@@ -96,12 +97,3 @@ public:
 };
 
 }// namespace ftl
-
-template<typename Item>
-struct std::iterator_traits<ftl::list_container_iterator<Item>> {
-  using difference_type = typename ftl::list_container_iterator<Item>::difference_type;
-  using value_type = typename ftl::list_container_iterator<Item>::value_type;
-  using pointer = typename ftl::list_container_iterator<Item>::pointer;
-  using reference = typename ftl::list_container_iterator<Item>::reference;
-  using iterator_category = typename ftl::list_container_iterator<Item>::iterator_category;
-};

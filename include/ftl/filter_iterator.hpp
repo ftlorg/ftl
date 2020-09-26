@@ -8,15 +8,15 @@ template<typename Iter, typename Callable>
 class filter_iterator final
   : public const_iterator_interface<filter_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type> {
 public:
-  using difference_type = typename Iter::difference_type;
-  using value_type = typename Iter::value_type;
-  using pointer = typename Iter::pointer;
-  using reference = typename Iter::reference;
-  using const_pointer = typename Iter::const_pointer;
-  using const_reference = typename Iter::const_reference;
-  using iterator_category = std::forward_iterator_tag;
-  using inherited_iterator_category = typename Iter::iterator_category;
-  using size_type = typename Iter::size_type;
+  using difference_type = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::difference_type;
+  using value_type = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::value_type;
+  using pointer = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::pointer;
+  using reference = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::reference;
+  using const_pointer = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::const_pointer;
+  using const_reference = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::const_reference;
+  using iterator_category = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::iterator_category;
+  using inherited_iterator_category = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::iterator_category;
+  using size_type = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::size_type;
 
   filter_iterator(Iter iterator, Callable callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
     while (iterator_ != iterator_.cend() && !callable_(*iterator_)) { ++iterator_; }
@@ -83,12 +83,3 @@ public:
 };
 
 }// namespace ftl
-
-template<typename Iter, typename Callable>
-struct std::iterator_traits<ftl::filter_iterator<Iter, Callable>> {
-  using difference_type = typename ftl::filter_iterator<Iter, Callable>::difference_type;
-  using value_type = typename ftl::filter_iterator<Iter, Callable>::value_type;
-  using pointer = typename ftl::filter_iterator<Iter, Callable>::pointer;
-  using reference = typename ftl::filter_iterator<Iter, Callable>::reference;
-  using iterator_category = typename ftl::filter_iterator<Iter, Callable>::iterator_category;
-};

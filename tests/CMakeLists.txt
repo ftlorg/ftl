@@ -11,7 +11,7 @@ target_link_libraries(catch_main PRIVATE project_options)
 
 add_executable(tests 
   test_array.cpp
-  #test_array_container_iterator.cpp
+  test_array_container_iterator.cpp
   #test_enumerate_iterator.cpp
   #test_filter_iterator.cpp
   #test_inspect_iterator.cpp

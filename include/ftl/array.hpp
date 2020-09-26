@@ -121,7 +121,7 @@ struct ftl::into_iterator_trait<ftl::array<T, N>, typename ftl::array<T, N>::ftl
   using iterator = typename ftl::array<T, N>::ftl_iterator;
 
   [[nodiscard]] constexpr static auto into_iter(ftl::array<T, N> &arr) -> iterator {
-    return iterator{ arr.data(), arr.data() + arr.size() };
+    return iterator{ arr.begin(), arr.end() };
   }
 };
 
@@ -130,6 +130,6 @@ struct ftl::into_iterator_trait<ftl::array<T, N>, typename ftl::array<T, N>::ftl
   using const_iterator = typename ftl::array<T, N>::ftl_const_iterator;
 
   [[nodiscard]] constexpr static auto into_iter(const ftl::array<T, N> &arr) -> const_iterator {
-    return const_iterator{ arr.data(), arr.data() + arr.size() };
+    return const_iterator{ arr.begin(), arr.end() };
   }
 };

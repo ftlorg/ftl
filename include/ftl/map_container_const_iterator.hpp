@@ -2,6 +2,7 @@
 
 #include <ftl/iterator_interface.hpp>
 #include <ftl/iterator_member_provider.hpp>
+#include <ftl/iterator_traits.hpp>
 #include <ftl/map.hpp>
 #include <iterator>
 
@@ -16,15 +17,15 @@ class map_container_const_iterator final
   friend iterator_member_provider<map_container_const_iterator<Key, T>, std::bidirectional_iterator_tag>;
 
 public:
-  using difference_type = typename std::map<Key, T>::difference_type;
-  using value_type = typename std::map<Key, T>::value_type;
-  using pointer = value_type *;
-  using reference = value_type &;
-  using const_pointer = const value_type *;
-  using const_reference = const value_type &;
-  using iterator_category = std::bidirectional_iterator_tag;
-  using size_type = std::size_t;
-  using std_map_container_const_iterator = typename std::map<Key, T>::const_iterator;
+  using difference_type = typename std::iterator_traits<ftl::map_container_const_iterator<Key, T, Item>>::difference_type;
+  using value_type = typename std::iterator_traits<ftl::map_container_const_iterator<Key, T, Item>>::value_type;
+  using pointer = typename std::iterator_traits<ftl::map_container_const_iterator<Key, T, Item>>::pointer;
+  using reference = typename std::iterator_traits<ftl::map_container_const_iterator<Key, T, Item>>::reference;
+  using const_pointer = typename std::iterator_traits<ftl::map_container_const_iterator<Key, T, Item>>::const_pointer;
+  using const_reference = typename std::iterator_traits<ftl::map_container_const_iterator<Key, T, Item>>::const_reference;
+  using iterator_category = typename std::iterator_traits<ftl::map_container_const_iterator<Key, T, Item>>::iterator_category;
+  using size_type = typename std::iterator_traits<ftl::map_container_const_iterator<Key, T, Item>>::size_type;
+  using std_map_container_const_iterator = typename std::iterator_traits<ftl::map_container_const_iterator<Key, T, Item>>::std_map_container_const_iterator;
 
   map_container_const_iterator(std_map_container_const_iterator begin, std_map_container_const_iterator end)
     : current_{ begin }, begin_{ begin }, end_{ end } {

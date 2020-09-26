@@ -1,5 +1,6 @@
 #pragma once
 #include <iterator>
+#include <ftl/iterator_traits.hpp>
 
 namespace ftl {
 
@@ -13,8 +14,9 @@ struct container_iterator_member_provider {
     return *static_cast<Iter &>(*this).current_;
   }
 
-  auto operator++() const -> Iter & {
-    return ++static_cast<const Iter &>(*this).current_;
+  auto operator++() const -> const Iter & {
+    ++static_cast<const Iter &>(*this).current_;
+    return static_cast<const Iter &>(*this);
   }
 
   auto operator++(int) -> Iter {
@@ -36,11 +38,11 @@ struct container_iterator_member_provider<Iter, std::input_iterator_tag> : publi
     return !(lhs == rhs);
   }
 
-//  constexpr auto operator->() const -> typename Iter::const_reference {
+//  constexpr auto operator->() const -> typename std::iterator_traits<Iter>::const_reference {
 //    return *static_cast<Iter &>(*this).current_;
 //  }
 //
-//  constexpr auto operator->() -> typename Iter::reference {
+//  constexpr auto operator->() -> typename std::iterator_traits<Iter>::reference {
 //    return *static_cast<Iter &>(*this).current_;
 //  }
 };
@@ -55,11 +57,11 @@ struct container_iterator_member_provider<Iter, std::output_iterator_tag> : publ
     return !(lhs == rhs);
   }
 
-  constexpr auto operator->() const -> typename Iter::const_reference {
+  constexpr auto operator->() const -> typename std::iterator_traits<Iter>::const_reference {
     return *static_cast<Iter &>(*this).current_;
   }
 
-  constexpr auto operator->() -> typename Iter::reference {
+  constexpr auto operator->() -> typename std::iterator_traits<Iter>::reference {
     return *static_cast<Iter &>(*this).current_;
   }
 };
@@ -85,42 +87,42 @@ struct container_iterator_member_provider<Iter, std::bidirectional_iterator_tag>
 
 template <typename Iter>
 struct container_iterator_member_provider<Iter, std::random_access_iterator_tag> : public container_iterator_member_provider<Iter, std::bidirectional_iterator_tag> {
-  [[nodiscard]] constexpr auto operator[](typename Iter::size_type pos) noexcept -> typename Iter::reference {
+  [[nodiscard]] constexpr auto operator[](typename std::iterator_traits<Iter>::size_type pos) noexcept -> typename std::iterator_traits<Iter>::reference {
     return static_cast<Iter&>(*this).begin_[pos];
   }
 
-  [[nodiscard]] constexpr auto operator[](typename Iter::size_type pos) const noexcept -> typename Iter::const_reference {
+  [[nodiscard]] constexpr auto operator[](typename std::iterator_traits<Iter>::size_type pos) const noexcept -> typename std::iterator_traits<Iter>::const_reference {
     return static_cast<Iter&>(*this).begin_[pos];
   }
 
-  [[nodiscard]] friend constexpr auto operator+=(const Iter &lhs, typename Iter::size_type n)
+  friend constexpr auto operator+=(Iter &lhs, typename std::iterator_traits<Iter>::size_type n)
   -> Iter & {
     lhs.current_ += n;
     return lhs;
   }
 
-  [[nodiscard]] friend constexpr auto operator+(const Iter &lhs, typename Iter::size_type n)
+  [[nodiscard]] friend constexpr auto operator+(const Iter &lhs, typename std::iterator_traits<Iter>::size_type n)
   -> Iter {
     return lhs += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator+(typename Iter::size_type n, const Iter &rhs)
+  [[nodiscard]] friend constexpr auto operator+(typename std::iterator_traits<Iter>::size_type n, const Iter &rhs)
   -> Iter {
     return rhs += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator-=(const Iter &lhs, typename Iter::size_type n)
+  friend constexpr auto operator-=(const Iter &lhs, typename std::iterator_traits<Iter>::size_type n)
   -> Iter & {
     return lhs += -n;
   }
 
-  [[nodiscard]] friend constexpr auto operator-(const Iter &lhs, typename Iter::size_type n)
+  [[nodiscard]] friend constexpr auto operator-(const Iter &lhs, typename std::iterator_traits<Iter>::size_type n)
   -> Iter {
     return lhs -= n;
   }
 
   [[nodiscard]] friend constexpr auto operator-(const Iter &lhs,
-                                                const Iter &rhs) -> typename Iter::difference_type {
+                                                const Iter &rhs) -> typename std::iterator_traits<Iter>::difference_type {
     return std::distance(rhs.current_, lhs.current_);
   }
 

@@ -15,21 +15,23 @@ class list_container_const_iterator final
   friend iterator_member_provider<list_container_const_iterator<Item>, std::bidirectional_iterator_tag>;
 
 public:
-  using value_type = std::remove_cv_t<Item>;
-  using pointer = value_type *;
-  using reference = value_type &;
-  using const_pointer = const value_type *;
-  using const_reference = const value_type &;
-  using iterator_category = std::bidirectional_iterator_tag;
-  using size_type = std::size_t;
-  using std_list_iterator = typename std::list<value_type>::const_iterator;
-  using difference_type = typename std_list_iterator::difference_type;
+  using difference_type = typename std::iterator_traits<ftl::list_container_iterator<Item>>::difference_type;
+  using value_type = typename std::iterator_traits<ftl::list_container_iterator<Item>>::value_type;
+  using pointer = typename std::iterator_traits<ftl::list_container_iterator<Item>>::pointer;
+  using reference = typename std::iterator_traits<ftl::list_container_iterator<Item>>::reference;
+  using const_pointer = typename std::iterator_traits<ftl::list_container_iterator<Item>>::const_pointer;
+  using const_reference = typename std::iterator_traits<ftl::list_container_iterator<Item>>::const_reference;
+  using iterator_category = typename std::iterator_traits<ftl::list_container_iterator<Item>>::iterator_category;
+  using size_type = typename std::iterator_traits<ftl::list_container_iterator<Item>>::size_type;
+  using std_list_container_const_iterator = typename std::iterator_traits<ftl::list_container_iterator<Item>>::std_list_container_const_iterator;
 
-  list_container_const_iterator(std_list_iterator begin, std_list_iterator end)
+  list_container_const_iterator(std_list_container_const_iterator begin, std_list_container_const_iterator end)
     : current_{ begin }, begin_{ begin }, end_{ end } {
   }
 
-  list_container_const_iterator(std_list_iterator current, std_list_iterator begin, std_list_iterator end)
+  list_container_const_iterator(std_list_container_const_iterator current,
+    std_list_container_const_iterator begin,
+    std_list_container_const_iterator end)
     : current_{ current }, begin_{ begin }, end_{ end } {
   }
 
@@ -74,18 +76,10 @@ public:
     return !(lhs == rhs);
   }
 
-  mutable std_list_iterator current_;
-  std_list_iterator begin_;
-  std_list_iterator end_;
+  mutable std_list_container_const_iterator current_;
+  std_list_container_const_iterator begin_;
+  std_list_container_const_iterator end_;
 };
 
 }// namespace ftl
 
-template<typename Item>
-struct std::iterator_traits<ftl::list_container_const_iterator<Item>> {
-  using difference_type = typename ftl::list_container_const_iterator<Item>::difference_type;
-  using value_type = typename ftl::list_container_const_iterator<Item>::value_type;
-  using pointer = typename ftl::list_container_const_iterator<Item>::pointer;
-  using reference = typename ftl::list_container_const_iterator<Item>::reference;
-  using iterator_category = typename ftl::list_container_const_iterator<Item>::iterator_category;
-};
