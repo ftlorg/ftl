@@ -63,7 +63,7 @@ public:
   }
 
   auto const_preincrement_impl() const -> const array_container_const_iterator<Item, N> & {
-    position_++;
+    current_++;
 
     return *this;
   }
