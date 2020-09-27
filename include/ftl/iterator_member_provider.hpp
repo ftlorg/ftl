@@ -1,19 +1,8 @@
 #pragma once
-
 #include <iterator>
+#include <ftl/iterator_traits.hpp>
 
 namespace ftl {
-
-// TODO: Think about std::enable_if and only one struct with all of the operators that are enabled/disabled via
-//       the std::enable_if statement based on iterator_tag.
-//       i.e.
-//       [[nodiscard]] auto operator*()
-//          -> typename std::enable_if_t<is_contained<IterCategory, std::bidirectional_tag, std::random_access_tag>,
-//          decltype(auto)> { return static_cast<Iter &>(*this).deref_impl();
-//       }
-//
-//      We would have to write the above is_contained meta-function to check if the IterCategory is the same as one of the
-//      provided tags.
 
 template<typename Iter, typename IterCategory = void>
 struct iterator_member_provider {
@@ -21,94 +10,114 @@ struct iterator_member_provider {
     return static_cast<const Iter &>(*this).const_deref_impl();
   }
 
-  auto operator++() const -> Iter & {
-    return static_cast<const Iter &>(*this).preincrement_impl();
+  //[[nodiscard]] auto operator*() -> decltype(auto) {
+  //  return static_cast<Iter &>(*this).deref_impl();
+  //}
+
+  auto operator++() -> decltype(auto) {
+    return static_cast<Iter &>(*this).preincrement_impl();
   }
 
-  auto operator++(int) -> Iter {
+  auto operator++(int) const -> decltype(auto) {
+    return static_cast<const Iter &>(*this).postincrement_impl();
+  }
+};
+
+template<typename Iter>
+struct iterator_member_provider<Iter, std::input_iterator_tag> : public iterator_member_provider<Iter> {
+  constexpr auto operator==(const Iter &rhs) const -> bool {
+    return static_cast<const Iter&>(*this).iterator_ == rhs.iterator_;
+  }
+
+  constexpr friend auto operator!=(const Iter &lhs, const Iter &rhs) {
+    return !(lhs == rhs);
+  }
+
+  //  constexpr auto operator->() const -> typename std::iterator_traits<Iter>::const_reference {
+  //    return *static_cast<Iter &>(*this).current_;
+  //  }
+  //
+  //  constexpr auto operator->() -> typename std::iterator_traits<Iter>::reference {
+  //    return *static_cast<Iter &>(*this).current_;
+  //  }
+};
+
+template<typename Iter>
+struct iterator_member_provider<Iter, std::output_iterator_tag> : public iterator_member_provider<Iter> {
+  constexpr friend auto operator==(const Iter &lhs, const Iter &rhs) {
+    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.current_ == rhs.current_;
+  }
+
+  constexpr friend auto operator!=(const Iter &lhs, const Iter &rhs) {
+    return !(lhs == rhs);
+  }
+
+  constexpr auto operator->() const -> typename std::iterator_traits<Iter>::const_reference {
+    return *static_cast<Iter &>(*this).current_;
+  }
+
+  constexpr auto operator->() -> typename std::iterator_traits<Iter>::reference {
+    return *static_cast<Iter &>(*this).current_;
+  }
+};
+
+template<typename Iter>
+struct iterator_member_provider<Iter, std::forward_iterator_tag>
+  : public iterator_member_provider<Iter, std::input_iterator_tag> {};
+
+template<typename Iter>
+struct iterator_member_provider<Iter, std::bidirectional_iterator_tag>
+  : public iterator_member_provider<Iter, std::forward_iterator_tag> {
+  auto operator--() const -> Iter & {
+    return --static_cast<const Iter &>(*this).current_;
+  }
+
+  auto operator--(int) -> Iter {
     auto tmp = static_cast<Iter &>(*this);
 
-    ++static_cast<Iter &>(*this);
+    --static_cast<Iter &>(*this);
 
     return tmp;
   }
 };
 
 template<typename Iter>
-struct iterator_member_provider<Iter, std::input_iterator_tag> : iterator_member_provider<Iter> {
-  [[nodiscard]] friend constexpr auto operator==(const Iter &lhs, const Iter &rhs) noexcept -> bool {
-    return lhs.iterator_ == rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator!=(const Iter &lhs, const Iter &rhs) noexcept -> bool {
-    return !(lhs == rhs);
-  }
-
-  [[nodiscard]] auto operator->() const -> decltype(auto) {
-    /// ???
-    throw int{ -1 };
-  }
-};
-
-template<typename Iter>
-struct iterator_member_provider<Iter, std::output_iterator_tag> : iterator_member_provider<Iter> {};
-
-template<typename Iter>
-struct iterator_member_provider<Iter, std::forward_iterator_tag>
-  : iterator_member_provider<Iter, std::input_iterator_tag> {};
-
-template<typename Iter>
-struct iterator_member_provider<Iter, std::bidirectional_iterator_tag>
-  : iterator_member_provider<Iter, std::forward_iterator_tag> {
-  auto operator--() const -> Iter & {
-    return static_cast<const Iter &>(*this).predecrement_impl();
-  }
-
-  auto operator--(int) -> Iter {
-    auto tmp = *static_cast<Iter &>(*this);
-
-    --static_cast<Iter &>(*this);
-
-    return static_cast<Iter &>(*this);
-  }
-};
-
-template<typename Iter>
 struct iterator_member_provider<Iter, std::random_access_iterator_tag>
-  : iterator_member_provider<Iter, std::bidirectional_iterator_tag> {
-  using size_type = std::size_t;
+  : public iterator_member_provider<Iter, std::bidirectional_iterator_tag> {
 
-  [[nodiscard]] constexpr auto operator[](size_type pos) noexcept -> decltype(auto) {
+  [[nodiscard]] constexpr auto operator[](typename std::iterator_traits<Iter>::size_type pos) noexcept ->
+    typename std::iterator_traits<Iter>::reference {
     return static_cast<Iter &>(*this).begin_[pos];
   }
 
-  [[nodiscard]] constexpr auto operator[](size_type pos) const noexcept -> decltype(auto) {
+  [[nodiscard]] constexpr auto operator[](typename std::iterator_traits<Iter>::size_type pos) const noexcept ->
+    typename std::iterator_traits<Iter>::const_reference {
     return static_cast<Iter &>(*this).begin_[pos];
   }
 
-  [[nodiscard]] friend constexpr auto operator+=(const Iter &lhs, size_type n) -> const Iter & {
-    lhs.iterator_ += n;
+  friend constexpr auto operator+=(Iter &lhs, typename std::iterator_traits<Iter>::size_type n) -> Iter & {
+    lhs.current_ += n;
     return lhs;
   }
 
-  [[nodiscard]] friend constexpr auto operator+(const Iter &lhs, size_type n) -> Iter {
+  [[nodiscard]] friend constexpr auto operator+(const Iter &lhs, typename std::iterator_traits<Iter>::size_type n) -> Iter {
     return lhs += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator+(size_type n, const Iter &rhs) -> Iter {
+  [[nodiscard]] friend constexpr auto operator+(typename std::iterator_traits<Iter>::size_type n, const Iter &rhs) -> Iter {
     return rhs += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator-=(const Iter &lhs, size_type n) -> Iter & {
+  friend constexpr auto operator-=(const Iter &lhs, typename std::iterator_traits<Iter>::size_type n) -> Iter & {
     return lhs += -n;
   }
 
-  [[nodiscard]] friend constexpr auto operator-(const Iter &lhs, size_type n) -> Iter {
+  [[nodiscard]] friend constexpr auto operator-(const Iter &lhs, typename std::iterator_traits<Iter>::size_type n) -> Iter {
     return lhs -= n;
   }
 
-  [[nodiscard]] friend constexpr auto operator-(const Iter &lhs, const Iter &rhs) -> decltype(auto) {
-    return std::distance(rhs.current_, lhs.current_);
+  [[nodiscard]] constexpr auto operator-(const Iter &rhs) const -> typename std::iterator_traits<Iter>::difference_type {
+    return std::distance(rhs.current_, static_cast<const Iter &>(*this).current_);
   }
 
   [[nodiscard]] friend constexpr auto operator<(const Iter &lhs, const Iter &rhs) noexcept -> bool {
@@ -119,6 +128,7 @@ struct iterator_member_provider<Iter, std::random_access_iterator_tag>
     return !(rhs < lhs);
   }
 
+
   [[nodiscard]] friend constexpr auto operator>(const Iter &lhs, const Iter &rhs) noexcept -> bool {
     return rhs < lhs;
   }
@@ -127,5 +137,6 @@ struct iterator_member_provider<Iter, std::random_access_iterator_tag>
     return !(lhs < rhs);
   }
 };
+
 
 }// namespace ftl

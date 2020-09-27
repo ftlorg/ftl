@@ -30,11 +30,12 @@ struct container_iterator_member_provider {
 
 template<typename Iter>
 struct container_iterator_member_provider<Iter, std::input_iterator_tag> : public container_iterator_member_provider<Iter> {
-  constexpr friend auto operator==(const Iter &lhs, const Iter &rhs) {
-    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.current_ == rhs.current_;
+  constexpr auto operator==(const Iter &rhs) const -> bool {
+    return static_cast<const Iter &>(*this).begin_ == rhs.begin_ && static_cast<const Iter &>(*this).end_ == rhs.end_
+           && static_cast<const Iter &>(*this).current_ == rhs.current_;
   }
 
-  constexpr friend auto operator!=(const Iter &lhs, const Iter &rhs) {
+  constexpr friend auto operator!=(const Iter &lhs, const Iter &rhs) -> bool {
     return !(lhs == rhs);
   }
 

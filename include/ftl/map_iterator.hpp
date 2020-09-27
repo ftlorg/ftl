@@ -52,7 +52,12 @@ public:
     return callable_(*iterator_);
   }
 
-  [[nodiscard]] constexpr auto preincrement_impl() const -> map_iterator<Iter, Callable>& {
+  [[nodiscard]] constexpr auto preincrement_impl() -> map_iterator<Iter, Callable>& {
+    iterator_++;
+    return *this;
+  }
+
+  [[nodiscard]] constexpr auto preincrement_impl() const -> const map_iterator<Iter, Callable> & {
     iterator_++;
     return *this;
   }
