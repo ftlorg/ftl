@@ -6,7 +6,7 @@
 #define TEST_TAG "[filter_iterator]"
 
 TEST_CASE(TEST_TAG "filter collect", TEST_TAG) {
-  ftl::vector<int> vec = { 1, 2, 3, 4, 5, 6, 12 };
+  ftl::vector<int> vec = { 1, 5, 6, 12 };
 
   auto f_vec = vec.iter()
                  .filter([](const auto &x) { return x % 2 == 0; })

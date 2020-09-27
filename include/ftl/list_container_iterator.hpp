@@ -9,7 +9,18 @@
 namespace ftl {
 
 template<typename Item>
-class list_container_iterator final : public iterator_interface<list_container_iterator<Item>, Item, std::size_t> {
+class list_container_iterator final
+  : public iterator_interface<list_container_iterator<Item>, Item, std::size_t>
+  , public container_iterator_member_provider<list_container_iterator<Item>,
+      typename std::iterator_traits<ftl::list_container_iterator<Item>>::iterator_category> {
+
+  friend container_iterator_member_provider<list_container_iterator<Item>, std::random_access_iterator_tag>;
+  friend container_iterator_member_provider<list_container_iterator<Item>, std::bidirectional_iterator_tag>;
+  friend container_iterator_member_provider<list_container_iterator<Item>, std::forward_iterator_tag>;
+  friend container_iterator_member_provider<list_container_iterator<Item>, std::input_iterator_tag>;
+  friend container_iterator_member_provider<list_container_iterator<Item>>;
+  friend const_iterator_interface<list_container_iterator<Item>, Item, std::size_t>;
+  friend iterator_interface<list_container_iterator<Item>, Item, std::size_t>;
 
 public:
   using difference_type = typename std::iterator_traits<ftl::list_container_iterator<Item>>::difference_type;
@@ -20,7 +31,8 @@ public:
   using const_reference = typename std::iterator_traits<ftl::list_container_iterator<Item>>::const_reference;
   using iterator_category = typename std::iterator_traits<ftl::list_container_iterator<Item>>::iterator_category;
   using size_type = typename std::iterator_traits<ftl::list_container_iterator<Item>>::size_type;
-  using std_list_container_iterator = typename std::iterator_traits<ftl::list_container_iterator<Item>>::std_list_container_iterator;
+  using std_list_container_iterator =
+    typename std::iterator_traits<ftl::list_container_iterator<Item>>::std_list_container_iterator;
 
   list_container_iterator(std_list_container_iterator begin, std_list_container_iterator end)
     : current_{ begin }, begin_{ begin }, end_{ end } {
@@ -32,7 +44,7 @@ public:
     : current_{ current }, begin_{ begin }, end_{ end } {
   }
 
-  // private:
+private:
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
     return static_cast<size_type>(std::distance(begin_, end_));
   }
@@ -79,16 +91,6 @@ public:
     ++current_;
 
     return *this;
-  }
-
-  [[nodiscard]] friend constexpr auto operator==(const list_container_iterator<Item> &lhs,
-    const list_container_iterator<Item> &rhs) noexcept -> bool {
-    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.current_ == rhs.current_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator!=(const list_container_iterator<Item> &lhs,
-    const list_container_iterator<Item> &rhs) noexcept -> bool {
-    return !(lhs == rhs);
   }
 
   mutable std_list_container_iterator current_;

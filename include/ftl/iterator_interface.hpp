@@ -75,7 +75,7 @@ public:
 
   template<typename Operator>
   [[nodiscard]] auto fold(value_type initial, Operator &&op) const -> value_type;
-  
+
   template<typename Callable>
   auto for_each(Callable &&callable) const -> void;
 

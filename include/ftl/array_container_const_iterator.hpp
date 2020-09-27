@@ -65,10 +65,6 @@ private:
     return { end_, begin_, end_ };
   }
 
-  [[nodiscard]] constexpr auto const_deref_impl() const -> const_reference {
-    return *current_;
-  }
-
   auto const_preincrement_impl() const -> const array_container_const_iterator<Item, N> & {
     current_++;
 

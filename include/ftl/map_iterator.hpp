@@ -12,6 +12,13 @@ class map_iterator final
   : public const_iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>
   , public iterator_member_provider<map_iterator<Iter, Callable>, typename Iter::iterator_category> {
 
+  friend iterator_member_provider<ftl::map_iterator<Iter, Callable>, std::random_access_iterator_tag>;
+  friend iterator_member_provider<ftl::map_iterator<Iter, Callable>, std::bidirectional_iterator_tag>;
+  friend iterator_member_provider<ftl::map_iterator<Iter, Callable>, std::forward_iterator_tag>;
+  friend iterator_member_provider<ftl::map_iterator<Iter, Callable>, std::input_iterator_tag>;
+  friend iterator_member_provider<ftl::map_iterator<Iter, Callable>>;
+  friend const_iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
+
 public:
   using difference_type = typename std::iterator_traits<ftl::map_iterator<Iter, Callable>>::difference_type;
   using value_type = typename std::iterator_traits<ftl::map_iterator<Iter, Callable>>::value_type;
@@ -26,7 +33,7 @@ public:
   map_iterator(Iter iterator, Callable callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
   }
 
-  // private:
+private:
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
     return iterator_.count();
   }
@@ -52,7 +59,7 @@ public:
     return callable_(*iterator_);
   }
 
-  [[nodiscard]] constexpr auto preincrement_impl() -> map_iterator<Iter, Callable>& {
+  [[nodiscard]] constexpr auto preincrement_impl() -> map_iterator<Iter, Callable> & {
     iterator_++;
     return *this;
   }
@@ -61,7 +68,13 @@ public:
     iterator_++;
     return *this;
   }
-  
+
+  [[nodiscard]] constexpr auto postincrement_impl() const -> map_iterator<Iter, Callable> {
+    auto result = this;
+    iterator_++;
+    return *result;
+  }
+
   mutable Iter iterator_;
   Callable callable_;
 };

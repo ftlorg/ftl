@@ -10,13 +10,18 @@ struct container_iterator_member_provider {
     return *static_cast<const Iter &>(*this).current_;
   }
 
-  [[nodiscard]] auto operator*() -> decltype(auto) {
+  [[nodiscard]] auto operator*() -> decltype(auto) { 
     return *static_cast<Iter &>(*this).current_;
   }
 
   auto operator++() const -> const Iter & {
     ++static_cast<const Iter &>(*this).current_;
     return static_cast<const Iter &>(*this);
+  }
+
+  auto operator++() -> Iter & {
+    ++static_cast<Iter &>(*this).current_;
+    return static_cast<Iter &>(*this);
   }
 
   auto operator++(int) -> Iter {

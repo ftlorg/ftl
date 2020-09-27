@@ -11,7 +11,18 @@ namespace ftl {
 
 template<typename Iter>
 class enumerate_iterator final
-  : public iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type> {
+  : public iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type>
+  , public iterator_member_provider<enumerate_iterator<Iter>,
+      typename std::iterator_traits<ftl::enumerate_iterator<Iter>>::iterator_category> {
+
+  friend iterator_member_provider<enumerate_iterator<Iter>, std::random_access_iterator_tag>;
+  friend iterator_member_provider<enumerate_iterator<Iter>, std::bidirectional_iterator_tag>;
+  friend iterator_member_provider<enumerate_iterator<Iter>, std::forward_iterator_tag>;
+  friend iterator_member_provider<enumerate_iterator<Iter>, std::input_iterator_tag>;
+  friend iterator_member_provider<enumerate_iterator<Iter>>;
+  friend iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type>;
+  friend const_iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type>;
+
 public:
   using difference_type = typename std::iterator_traits<ftl::enumerate_iterator<Iter>>::difference_type;
   using pointer = typename std::iterator_traits<ftl::enumerate_iterator<Iter>>::pointer;
@@ -26,7 +37,7 @@ public:
   enumerate_iterator(Iter iterator) : iterator_{ std::move(iterator) }, index_{ 0 } {
   }
 
-  // private:
+private:
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
     return iterator_.count();
   }
@@ -53,7 +64,7 @@ public:
   }
 
   [[nodiscard]] constexpr auto const_deref_impl() const
-    -> std::tuple<size_type, decltype(std::declval<Iter>().operator*())> {
+    -> std::tuple<size_type, decltype(std::declval<const Iter&>().operator*())> {
     return { index_, *iterator_ };
   }
 
@@ -62,66 +73,6 @@ public:
     ++index_;
 
     return *this;
-  }
-
-  [[nodiscard]] friend constexpr auto operator+=(const enumerate_iterator<Iter> &lhs, size_type n)
-    -> enumerate_iterator<Iter> & {
-    return lhs.iterator_ += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator+(const enumerate_iterator<Iter> &lhs, size_type n)
-    -> enumerate_iterator<Iter> {
-    return lhs.iterator_ += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator+(size_type n, const enumerate_iterator<Iter> &rhs)
-    -> enumerate_iterator<Iter> {
-    return rhs.iterator_ += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-=(const enumerate_iterator<Iter> &lhs, size_type n)
-    -> enumerate_iterator<Iter> & {
-    return lhs.iterator_ += -n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-(const enumerate_iterator<Iter> &lhs, size_type n)
-    -> enumerate_iterator<Iter> {
-    return lhs.iterator_ -= n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-(const enumerate_iterator<Iter> &lhs, const enumerate_iterator<Iter> &rhs)
-    -> difference_type {
-    return lhs.iterator_ - rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator==(const enumerate_iterator<Iter> &lhs,
-    const enumerate_iterator<Iter> &rhs) noexcept -> bool {
-    return lhs.iterator_ == rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator!=(const enumerate_iterator<Iter> &lhs,
-    const enumerate_iterator<Iter> &rhs) noexcept -> bool {
-    return lhs.iterator_ != rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator<(const enumerate_iterator<Iter> &lhs,
-    const enumerate_iterator<Iter> &rhs) noexcept -> bool {
-    return rhs.iterator_ - lhs.iterator_ > 0;
-  }
-
-  [[nodiscard]] friend constexpr auto operator<=(const enumerate_iterator<Iter> &lhs,
-    const enumerate_iterator<Iter> &rhs) noexcept -> bool {
-    return !(rhs.iterator_ < lhs.iterator_);
-  }
-
-  [[nodiscard]] friend constexpr auto operator>(const enumerate_iterator<Iter> &lhs,
-    const enumerate_iterator<Iter> &rhs) noexcept -> bool {
-    return rhs.iterator_ < lhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator>=(const enumerate_iterator<Iter> &lhs,
-    const enumerate_iterator<Iter> &rhs) noexcept -> bool {
-    return !(lhs.iterator_ < rhs.iterator_);
   }
 
   mutable Iter iterator_;

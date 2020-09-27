@@ -4,12 +4,23 @@
 #include <ftl/iterator_traits.hpp>
 #include <ftl/iterator_interface.hpp>
 #include <ftl/filter_iterator.hpp>
+#include <ftl/container_iterator_member_provider.hpp>
 
 namespace ftl {
 
 template<typename Item>
 class vector_container_const_iterator final
-  : public const_iterator_interface<vector_container_const_iterator<Item>, Item, std::size_t> {
+  : public const_iterator_interface<vector_container_const_iterator<Item>, Item, std::size_t>
+  , public container_iterator_member_provider<vector_container_const_iterator<Item>,
+      typename std::iterator_traits<ftl::vector_container_const_iterator<Item>>::iterator_category> {
+
+  friend container_iterator_member_provider<vector_container_const_iterator<Item>, std::random_access_iterator_tag>;
+  friend container_iterator_member_provider<vector_container_const_iterator<Item>, std::bidirectional_iterator_tag>;
+  friend container_iterator_member_provider<vector_container_const_iterator<Item>, std::forward_iterator_tag>;
+  friend container_iterator_member_provider<vector_container_const_iterator<Item>, std::input_iterator_tag>;
+  friend container_iterator_member_provider<vector_container_const_iterator<Item>>;
+  friend const_iterator_interface<vector_container_const_iterator<Item>, Item, std::size_t>;
+  friend iterator_interface<vector_container_const_iterator<Item>, Item, std::size_t>;
 
 public:
   using difference_type = typename std::iterator_traits<ftl::vector_container_const_iterator<Item>>::difference_type;
@@ -20,29 +31,31 @@ public:
   using const_reference = typename std::iterator_traits<ftl::vector_container_const_iterator<Item>>::const_reference;
   using iterator_category = typename std::iterator_traits<ftl::vector_container_const_iterator<Item>>::iterator_category;
   using size_type = typename std::iterator_traits<ftl::vector_container_const_iterator<Item>>::size_type;
-  using std_vector_container_iterator = typename std::iterator_traits<ftl::vector_container_const_iterator<Item>>::std_vector_container_iterator;
+  using std_vector_container_iterator =
+    typename std::iterator_traits<ftl::vector_container_const_iterator<Item>>::std_vector_container_iterator;
 
   constexpr vector_container_const_iterator() = default;
 
-  constexpr vector_container_const_iterator(std_vector_container_iterator begin, std_vector_container_iterator end)
-    : current_{ begin }, begin_{ std::move(begin) }, end_{ std::move(end) } {
+  constexpr vector_container_const_iterator(std_vector_container_iterator current, std_vector_container_iterator begin,
+    std_vector_container_iterator end)
+    : current_{ std::move(current) }, begin_{ std::move(begin) }, end_{ std::move(end) } {
   }
 
-  // private:
+private:
   [[nodiscard]] constexpr auto begin_impl() const noexcept -> vector_container_const_iterator<Item> {
-    return cbegin_impl();
+    return { begin_, begin_, end_ };
   }
 
   [[nodiscard]] constexpr auto cbegin_impl() const noexcept -> vector_container_const_iterator<Item> {
-    return { begin_, end_ };
+    return { begin_, begin_, end_ };
   }
 
   [[nodiscard]] constexpr auto end_impl() const noexcept -> vector_container_const_iterator<Item> {
-    return cend_impl();
+    return { end_, begin_, end_ };
   }
 
   [[nodiscard]] constexpr auto cend_impl() const noexcept -> vector_container_const_iterator<Item> {
-    return { end_, end_ };
+    return { end_, begin_, end_ };
   }
 
   [[nodiscard]] constexpr auto const_deref_impl() const -> const_reference {
@@ -61,75 +74,6 @@ public:
 
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
     return static_cast<size_type>(end_ - begin_);
-  }
-
-  [[nodiscard]] friend constexpr auto operator==(const vector_container_const_iterator<Item> &lhs,
-    const vector_container_const_iterator<Item> &rhs) noexcept -> bool {
-    return rhs.current_ == lhs.current_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator!=(const vector_container_const_iterator<Item> &lhs,
-    const vector_container_const_iterator<Item> &rhs) noexcept -> bool {
-    return !(lhs == rhs);
-  }
-
-  [[nodiscard]] constexpr auto operator[](size_type pos) noexcept -> reference {
-    return begin_[pos];
-  }
-
-  [[nodiscard]] constexpr auto operator[](size_type pos) const noexcept -> const_reference {
-    return begin_[pos];
-  }
-
-  [[nodiscard]] friend constexpr auto operator+=(const vector_container_const_iterator<Item> &lhs, size_type n)
-    -> const vector_container_const_iterator<Item> & {
-    lhs.current_ += n;
-    return lhs;
-  }
-
-  [[nodiscard]] friend constexpr auto operator+(const vector_container_const_iterator<Item> &lhs, size_type n)
-    -> vector_container_const_iterator<Item> {
-    return lhs += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator+(size_type n, const vector_container_const_iterator<Item> &rhs)
-    -> vector_container_const_iterator<Item> {
-    return rhs += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-=(const vector_container_const_iterator<Item> &lhs, size_type n)
-    -> vector_container_const_iterator<Item> & {
-    return lhs += -n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-(const vector_container_const_iterator<Item> &lhs, size_type n)
-    -> vector_container_const_iterator<Item> {
-    return lhs -= n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-(const vector_container_const_iterator<Item> &lhs,
-    const vector_container_const_iterator<Item> &rhs) -> difference_type {
-    return std::distance(rhs.current_, lhs.current_);
-  }
-
-  [[nodiscard]] friend constexpr auto operator<(const vector_container_const_iterator<Item> &lhs,
-    const vector_container_const_iterator<Item> &rhs) noexcept -> bool {
-    return rhs - lhs > 0;
-  }
-
-  [[nodiscard]] friend constexpr auto operator<=(const vector_container_const_iterator<Item> &lhs,
-    const vector_container_const_iterator<Item> &rhs) noexcept -> bool {
-    return !(rhs < lhs);
-  }
-
-  [[nodiscard]] friend constexpr auto operator>(const vector_container_const_iterator<Item> &lhs,
-    const vector_container_const_iterator<Item> &rhs) noexcept -> bool {
-    return rhs < lhs;
-  }
-
-  [[nodiscard]] friend constexpr auto operator>=(const vector_container_const_iterator<Item> &lhs,
-    const vector_container_const_iterator<Item> &rhs) noexcept -> bool {
-    return !(lhs < rhs);
   }
 
   mutable std_vector_container_iterator current_{};

@@ -55,14 +55,13 @@ template<typename Item, typename Allocator>
 struct ftl::into_iterator_trait<ftl::vector<Item, Allocator>, ftl::vector_container_iterator<Item>> {
   using iterator = typename ftl::vector<Item, Allocator>::iterator;
   [[nodiscard]] constexpr static auto into_iter(ftl::vector<Item, Allocator> &vec) {
-    return iterator{ vec.begin(), vec.end() };
+    return iterator{ vec.begin(), vec.begin(), vec.end() };
   }
 };
 
 template<typename Item, typename Allocator>
 struct ftl::into_iterator_trait<ftl::vector<Item, Allocator>, ftl::vector_container_const_iterator<Item>> {
   using const_iterator = typename ftl::vector<Item, Allocator>::const_iterator;
-  [[nodiscard]] constexpr static auto into_iter(const ftl::vector<Item, Allocator> &vec) {
-    return const_iterator{ vec.begin(), vec.end() };
+  [[nodiscard]] constexpr static auto into_iter(const ftl::vector<Item, Allocator> &vec) { return const_iterator{ vec.begin(), vec.begin(), vec.end() } ;
   }
 };

@@ -9,23 +9,24 @@
 namespace ftl {
 
 template<typename Item, std::size_t N>
-class array_container_iterator final : 
-    public iterator_interface<array_container_iterator<Item, N>, Item, std::size_t>,
-    public container_iterator_member_provider<array_container_iterator<Item, N>, std::random_access_iterator_tag> {
+class array_container_iterator final
+  : public iterator_interface<array_container_iterator<Item, N>, Item, std::size_t>
+  , public container_iterator_member_provider<array_container_iterator<Item, N>, std::random_access_iterator_tag> {
 
   friend iterator_interface<array_container_iterator<Item, N>, Item, std::size_t>;
   friend const_iterator_interface<array_container_iterator<Item, N>, Item, std::size_t>;
 
 public:
-  using difference_type = typename std::iterator_traits<ftl::array_container_const_iterator<Item, N>>::difference_type;
-  using value_type = typename std::iterator_traits<ftl::array_container_const_iterator<Item, N>>::value_type;
-  using pointer = typename std::iterator_traits<ftl::array_container_const_iterator<Item, N>>::pointer;
-  using reference = typename std::iterator_traits<ftl::array_container_const_iterator<Item, N>>::reference;
-  using const_pointer = typename std::iterator_traits<ftl::array_container_const_iterator<Item, N>>::const_pointer;
-  using const_reference = typename std::iterator_traits<ftl::array_container_const_iterator<Item, N>>::const_reference;
-  using iterator_category = typename std::iterator_traits<ftl::array_container_const_iterator<Item, N>>::iterator_category;
-  using size_type = typename std::iterator_traits<ftl::array_container_const_iterator<Item, N>>::size_type;
-  using std_array_container_iterator =  typename std::iterator_traits<ftl::array_container_const_iterator<Item, N>>::std_array_container_iterator;
+  using difference_type = typename std::iterator_traits<ftl::array_container_iterator<Item, N>>::difference_type;
+  using value_type = typename std::iterator_traits<ftl::array_container_iterator<Item, N>>::value_type;
+  using pointer = typename std::iterator_traits<ftl::array_container_iterator<Item, N>>::pointer;
+  using reference = typename std::iterator_traits<ftl::array_container_iterator<Item, N>>::reference;
+  using const_pointer = typename std::iterator_traits<ftl::array_container_iterator<Item, N>>::const_pointer;
+  using const_reference = typename std::iterator_traits<ftl::array_container_iterator<Item, N>>::const_reference;
+  using iterator_category = typename std::iterator_traits<ftl::array_container_iterator<Item, N>>::iterator_category;
+  using size_type = typename std::iterator_traits<ftl::array_container_iterator<Item, N>>::size_type;
+  using std_array_container_iterator =
+    typename std::iterator_traits<ftl::array_container_iterator<Item, N>>::std_array_container_iterator;
 
   constexpr array_container_iterator(std_array_container_iterator begin, std_array_container_iterator end)
     : current_{ begin }, begin_{ begin }, end_{ end } {
@@ -65,14 +66,6 @@ public:
 
   [[nodiscard]] constexpr auto cend_impl() const noexcept -> array_container_iterator<Item, N> {
     return { end_, begin_, end_ };
-  }
-
-  [[nodiscard]] constexpr auto deref_impl() -> reference {
-    return *current_;
-  }
-
-  [[nodiscard]] constexpr auto const_deref_impl() const -> const_reference {
-    return *current_;
   }
 
   auto preincrement_impl() -> array_container_iterator<Item, N> & {
