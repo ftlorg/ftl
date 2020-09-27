@@ -73,22 +73,6 @@ public:
     return static_cast<size_type>(std::distance(begin_, end_));
   }
 
-  [[nodiscard]] constexpr auto begin_impl() const noexcept -> map_container_const_iterator<Key, T> {
-    return { begin_, begin_, end_ };
-  }
-
-  [[nodiscard]] constexpr auto cbegin_impl() const noexcept -> map_container_const_iterator<Key, T> {
-    return { begin_, begin_, end_ };
-  }
-
-  [[nodiscard]] constexpr auto end_impl() const noexcept -> map_container_const_iterator<Key, T> {
-    return { end_, begin_, end_ };
-  }
-
-  [[nodiscard]] constexpr auto cend_impl() const noexcept -> map_container_const_iterator<Key, T> {
-    return { end_, begin_, end_ };
-  }
-
   auto const_preincrement_impl() const -> const map_container_const_iterator<Key, T> & {
     ++current_;
 

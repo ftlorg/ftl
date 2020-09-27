@@ -42,21 +42,6 @@ public:
   }
 
 private:
-  [[nodiscard]] constexpr auto begin_impl() const noexcept -> vector_container_const_iterator<Item> {
-    return { begin_, begin_, end_ };
-  }
-
-  [[nodiscard]] constexpr auto cbegin_impl() const noexcept -> vector_container_const_iterator<Item> {
-    return { begin_, begin_, end_ };
-  }
-
-  [[nodiscard]] constexpr auto end_impl() const noexcept -> vector_container_const_iterator<Item> {
-    return { end_, begin_, end_ };
-  }
-
-  [[nodiscard]] constexpr auto cend_impl() const noexcept -> vector_container_const_iterator<Item> {
-    return { end_, begin_, end_ };
-  }
 
   [[nodiscard]] constexpr auto const_deref_impl() const -> const_reference {
     return *current_;

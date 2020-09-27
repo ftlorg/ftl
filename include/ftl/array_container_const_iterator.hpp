@@ -49,22 +49,6 @@ private:
     return static_cast<size_type>(end_ - begin_);
   }
 
-  [[nodiscard]] constexpr auto begin_impl() const noexcept -> array_container_const_iterator<Item, N> {
-    return { begin_, begin_, end_ };
-  }
-
-  [[nodiscard]] constexpr auto cbegin_impl() const noexcept -> array_container_const_iterator<Item, N> {
-    return { begin_, begin_, end_ };
-  }
-
-  [[nodiscard]] constexpr auto end_impl() const noexcept -> array_container_const_iterator<Item, N> {
-    return { end_, begin_, end_ };
-  }
-
-  [[nodiscard]] constexpr auto cend_impl() const noexcept -> array_container_const_iterator<Item, N> {
-    return { end_, begin_, end_ };
-  }
-
   auto const_preincrement_impl() const -> const array_container_const_iterator<Item, N> & {
     current_++;
 

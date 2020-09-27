@@ -10,7 +10,7 @@ struct container_iterator_member_provider {
     return *static_cast<const Iter &>(*this).current_;
   }
 
-  [[nodiscard]] auto operator*() -> decltype(auto) { 
+  [[nodiscard]] auto operator*() -> decltype(auto) {
     return *static_cast<Iter &>(*this).current_;
   }
 
@@ -30,6 +30,40 @@ struct container_iterator_member_provider {
     ++static_cast<Iter &>(*this);
 
     return tmp;
+  }
+
+  [[nodiscard]] constexpr auto begin() const noexcept -> Iter {
+    return {
+      static_cast<const Iter &>(*this).begin_, static_cast<const Iter &>(*this).begin_, static_cast<const Iter &>(*this).end_
+    };
+  }
+
+  [[nodiscard]] constexpr auto begin() noexcept -> Iter {
+    return { static_cast<Iter &>(*this).begin_, static_cast<Iter &>(*this).begin_, static_cast<Iter &>(*this).end_ };
+  }
+
+  [[nodiscard]] constexpr auto cbegin() const noexcept -> Iter {
+    return {
+      static_cast<const Iter &>(*this).begin_, static_cast<const Iter &>(*this).begin_, static_cast<const Iter &>(*this).end_
+    };
+  }
+
+  [[nodiscard]] constexpr auto end() const noexcept -> Iter {
+    return {
+      static_cast<const Iter &>(*this).end_, static_cast<const Iter &>(*this).begin_, static_cast<const Iter &>(*this).end_
+    };
+  }
+
+  [[nodiscard]] constexpr auto end() noexcept -> Iter {
+    return {
+      static_cast<Iter &>(*this).end_, static_cast<Iter &>(*this).begin_, static_cast<Iter &>(*this).end_
+    };
+  }
+
+  [[nodiscard]] constexpr auto cend() const noexcept -> Iter {
+    return {
+      static_cast<const Iter &>(*this).end_, static_cast<const Iter &>(*this).begin_, static_cast<const Iter &>(*this).end_
+    };
   }
 };
 

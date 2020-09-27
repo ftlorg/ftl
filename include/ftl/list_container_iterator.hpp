@@ -49,30 +49,6 @@ private:
     return static_cast<size_type>(std::distance(begin_, end_));
   }
 
-  [[nodiscard]] constexpr auto begin_impl() noexcept -> list_container_iterator<Item> {
-    return { begin_, begin_, end_ };
-  }
-
-  [[nodiscard]] constexpr auto begin_impl() const noexcept -> list_container_iterator<Item> {
-    return cbegin_impl();
-  }
-
-  [[nodiscard]] constexpr auto cbegin_impl() const noexcept -> list_container_iterator<Item> {
-    return { begin_, begin_, end_ };
-  }
-
-  [[nodiscard]] constexpr auto end_impl() noexcept -> list_container_iterator<Item> {
-    return { end_, begin_, end_ };
-  }
-
-  [[nodiscard]] constexpr auto end_impl() const noexcept -> list_container_iterator<Item> {
-    return cend_impl();
-  }
-
-  [[nodiscard]] constexpr auto cend_impl() const noexcept -> list_container_iterator<Item> {
-    return { end_, begin_, end_ };
-  }
-
   [[nodiscard]] constexpr auto deref_impl() -> reference {
     return *current_;
   }

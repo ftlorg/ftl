@@ -10,10 +10,6 @@ struct iterator_member_provider {
     return static_cast<const Iter &>(*this).const_deref_impl();
   }
 
-  //[[nodiscard]] auto operator*() -> decltype(auto) {
-  //  return static_cast<Iter &>(*this).deref_impl();
-  //}
-
   auto operator++() -> decltype(auto) {
     return static_cast<Iter &>(*this).preincrement_impl();
   }
@@ -32,6 +28,30 @@ struct iterator_member_provider {
     auto result = *this;
     ++static_cast<Iter &>(*this);
     return result;
+  }
+
+  [[nodiscard]] constexpr auto begin() noexcept -> Iter {
+    return static_cast<Iter &>(*this).begin_impl();
+  }
+
+  [[nodiscard]] constexpr auto begin() const noexcept -> Iter {
+    return static_cast<const Iter &>(*this).begin_impl();
+  }
+
+  [[nodiscard]] constexpr auto cbegin() const noexcept -> Iter {
+    return static_cast<const Iter &>(*this).cbegin_impl();
+  }
+
+  [[nodiscard]] constexpr auto end() noexcept -> Iter {
+    return static_cast<Iter &>(*this).end_impl();
+  }
+
+  [[nodiscard]] constexpr auto end() const noexcept -> Iter {
+    return static_cast<const Iter &>(*this).end_impl();
+  }
+
+  [[nodiscard]] constexpr auto cend() const noexcept -> Iter {
+    return static_cast<const Iter &>(*this).cend_impl();
   }
 };
 

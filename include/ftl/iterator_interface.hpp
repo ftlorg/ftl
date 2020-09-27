@@ -103,39 +103,12 @@ public:
   [[nodiscard]] auto rev() const -> rev_iterator<Derived>;
 
   [[nodiscard]] auto take(size_type n) const -> take_iterator<Derived>;
-
-  [[nodiscard]] constexpr auto begin() const noexcept -> Derived {
-    return static_cast<const Derived &>(*this).begin_impl();
-  }
-
-  [[nodiscard]] constexpr auto cbegin() const noexcept -> Derived {
-    return static_cast<const Derived &>(*this).cbegin_impl();
-  }
-
-  [[nodiscard]] constexpr auto end() const noexcept -> Derived {
-    return static_cast<const Derived &>(*this).end_impl();
-  }
-
-  [[nodiscard]] constexpr auto cend() const noexcept -> Derived {
-    return static_cast<const Derived &>(*this).cend_impl();
-  }
 };
 
 template<typename Derived, typename Item, typename SizeType>
 class iterator_interface : public const_iterator_interface<Derived, Item, SizeType> {
 public:
   virtual ~iterator_interface() = default;
-
-  using const_iterator_interface<Derived, Item, SizeType>::begin;
-  using const_iterator_interface<Derived, Item, SizeType>::end;
-
-  [[nodiscard]] constexpr auto begin() noexcept -> Derived {
-    return static_cast<Derived &>(*this).begin_impl();
-  }
-
-  [[nodiscard]] constexpr auto end() noexcept -> Derived {
-    return static_cast<Derived &>(*this).end_impl();
-  }
 };
 
 }// namespace ftl
