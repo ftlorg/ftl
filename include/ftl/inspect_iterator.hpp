@@ -9,11 +9,11 @@ namespace ftl {
 
 template<typename Iter, typename Callable>
 class inspect_iterator final
-  : public const_iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>
+  : public const_iterator_interface<inspect_iterator<Iter, Callable>>
   , public iterator_member_provider<inspect_iterator<Iter, Callable>,
       typename std::iterator_traits<ftl::inspect_iterator<Iter, Callable>>::iterator_category> {
 
-  friend const_iterator_interface<inspect_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
+  friend const_iterator_interface<inspect_iterator<Iter, Callable>>;
   friend iterator_member_provider<inspect_iterator<Iter, Callable>, std::random_access_iterator_tag>;
   friend iterator_member_provider<inspect_iterator<Iter, Callable>, std::bidirectional_iterator_tag>;
   friend iterator_member_provider<inspect_iterator<Iter, Callable>, std::forward_iterator_tag>;

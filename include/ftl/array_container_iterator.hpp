@@ -10,11 +10,15 @@ namespace ftl {
 
 template<typename Item, std::size_t N>
 class array_container_iterator final
-  : public iterator_interface<array_container_iterator<Item, N>, Item, std::size_t>
+  : public iterator_interface<array_container_iterator<Item, N>>
   , public container_iterator_member_provider<array_container_iterator<Item, N>, std::random_access_iterator_tag> {
 
-  friend iterator_interface<array_container_iterator<Item, N>, Item, std::size_t>;
-  friend const_iterator_interface<array_container_iterator<Item, N>, Item, std::size_t>;
+  friend container_iterator_member_provider<array_container_iterator<Item, N>, std::random_access_iterator_tag>;
+  friend container_iterator_member_provider<array_container_iterator<Item, N>, std::bidirectional_iterator_tag>;
+  friend container_iterator_member_provider<array_container_iterator<Item, N>, std::forward_iterator_tag>;
+  friend container_iterator_member_provider<array_container_iterator<Item, N>, std::input_iterator_tag>;
+  friend container_iterator_member_provider<array_container_iterator<Item, N>>;
+  friend const_iterator_interface<array_container_iterator<Item, N>>;
 
 public:
   using difference_type = typename std::iterator_traits<ftl::array_container_iterator<Item, N>>::difference_type;
@@ -38,7 +42,7 @@ public:
     : current_{ current }, begin_{ begin }, end_{ end } {
   }
 
-  // private:
+private:
 
   [[nodiscard]] constexpr auto count_impl() const -> size_type {
     return static_cast<size_type>(end_ - begin_);

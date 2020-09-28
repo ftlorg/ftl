@@ -6,9 +6,6 @@
 
 namespace ftl {
 
-template<typename Derived, typename Item, typename Size>
-class iterator_interface;
-
 template<typename Iter, typename Callable>
 class map_iterator;
 

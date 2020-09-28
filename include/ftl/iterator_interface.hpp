@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ftl/from_iterator_trait.hpp>
+#include <ftl/iterator_traits.hpp>
 #include <memory>
 #include <cassert>
 #include <tuple>
@@ -8,7 +9,7 @@
 
 namespace ftl {
 
-template<typename Derived, typename Item, typename Size>
+template<typename Derived>
 class iterator_interface;
 
 template<typename Iter, typename Callable>
@@ -18,7 +19,7 @@ template<typename Iter, typename Callable>
 class filter_iterator;
 
 template<typename Iter>
-class flatten_iterator : public iterator_interface<flatten_iterator<Iter>, typename Iter::value_type, std::size_t> {};
+class flatten_iterator : public iterator_interface<flatten_iterator<Iter>> {};
 
 template<typename Iter>
 class enumerate_iterator;
@@ -27,16 +28,16 @@ template<typename Iter, typename Callable>
 class inspect_iterator;
 
 template<typename Iter>
-class take_iterator : public iterator_interface<take_iterator<Iter>, typename Iter::value_type, std::size_t> {};
+class take_iterator : public iterator_interface<take_iterator<Iter>> {};
 
 template<typename Iter>
-class rev_iterator : public iterator_interface<rev_iterator<Iter>, typename Iter::value_type, std::size_t> {};
+class rev_iterator : public iterator_interface<rev_iterator<Iter>> {};
 
-template<typename Derived, typename Item, typename SizeType>
+template<typename Derived>
 class const_iterator_interface {
 public:
-  using size_type = SizeType;
-  using value_type = std::remove_cv_t<Item>;
+  using size_type = typename std::iterator_traits<Derived>::size_type;
+  using value_type = typename std::iterator_traits<Derived>::value_type;
   using pointer = value_type *;
   using reference = value_type &;
   using const_pointer = const value_type *;
@@ -105,8 +106,8 @@ public:
   [[nodiscard]] auto take(size_type n) const -> take_iterator<Derived>;
 };
 
-template<typename Derived, typename Item, typename SizeType>
-class iterator_interface : public const_iterator_interface<Derived, Item, SizeType> {
+template<typename Derived>
+class iterator_interface : public const_iterator_interface<Derived> {
 public:
   virtual ~iterator_interface() = default;
 };

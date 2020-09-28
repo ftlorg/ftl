@@ -11,7 +11,7 @@ namespace ftl {
 
 template<typename Iter>
 class enumerate_iterator final
-  : public iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type>
+  : public iterator_interface<enumerate_iterator<Iter>>
   , public iterator_member_provider<enumerate_iterator<Iter>,
       typename std::iterator_traits<ftl::enumerate_iterator<Iter>>::iterator_category> {
 
@@ -20,8 +20,7 @@ class enumerate_iterator final
   friend iterator_member_provider<enumerate_iterator<Iter>, std::forward_iterator_tag>;
   friend iterator_member_provider<enumerate_iterator<Iter>, std::input_iterator_tag>;
   friend iterator_member_provider<enumerate_iterator<Iter>>;
-  friend iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type>;
-  friend const_iterator_interface<enumerate_iterator<Iter>, typename Iter::value_type, typename Iter::size_type>;
+  friend const_iterator_interface<enumerate_iterator<Iter>>;
 
 public:
   using difference_type = typename std::iterator_traits<ftl::enumerate_iterator<Iter>>::difference_type;
