@@ -17,7 +17,6 @@ class vector_container_iterator final
   friend container_iterator_member_provider<vector_container_iterator<Item>, std::forward_iterator_tag>;
   friend container_iterator_member_provider<vector_container_iterator<Item>, std::input_iterator_tag>;
   friend container_iterator_member_provider<vector_container_iterator<Item>>;
-  friend const_iterator_interface<vector_container_iterator<Item>>;
   friend iterator_interface<vector_container_iterator<Item>>;
 
 public:

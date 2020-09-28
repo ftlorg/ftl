@@ -9,7 +9,7 @@ namespace ftl {
 
 template<typename Item>
 class list_container_const_iterator final
-  : public const_iterator_interface<list_container_const_iterator<Item>>
+  : public iterator_interface<list_container_const_iterator<Item>>
   , public container_iterator_member_provider<list_container_const_iterator<Item>,
       typename std::iterator_traits<ftl::list_container_const_iterator<Item>>::iterator_category> {
 
@@ -18,7 +18,7 @@ class list_container_const_iterator final
   friend container_iterator_member_provider<list_container_const_iterator<Item>, std::forward_iterator_tag>;
   friend container_iterator_member_provider<list_container_const_iterator<Item>, std::input_iterator_tag>;
   friend container_iterator_member_provider<list_container_const_iterator<Item>>;
-  friend const_iterator_interface<list_container_const_iterator<Item>>;
+  friend iterator_interface<list_container_const_iterator<Item>>;
 
 public:
   using difference_type = typename std::iterator_traits<ftl::list_container_const_iterator<Item>>::difference_type;

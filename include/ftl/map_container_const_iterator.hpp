@@ -10,7 +10,7 @@ namespace ftl {
 
 template<typename Key, typename T, typename Item = std::pair<const Key, T>>
 class map_container_const_iterator final
-  : public const_iterator_interface<map_container_const_iterator<Key, T>>
+  : public iterator_interface<map_container_const_iterator<Key, T>>
   , public container_iterator_member_provider<map_container_const_iterator<Key, T>,
       typename std::iterator_traits<ftl::map_container_const_iterator<Key, T>>::iterator_category> {
 
@@ -19,11 +19,7 @@ class map_container_const_iterator final
   friend container_iterator_member_provider<map_container_const_iterator<Key, T>, std::forward_iterator_tag>;
   friend container_iterator_member_provider<map_container_const_iterator<Key, T>, std::input_iterator_tag>;
   friend container_iterator_member_provider<map_container_const_iterator<Key, T>>;
-  friend const_iterator_interface<map_container_const_iterator<Key, T>>;
-
   friend iterator_interface<map_container_const_iterator<Key, T>>;
-  friend const_iterator_interface<map_container_const_iterator<Key, T>>;
-  friend iterator_member_provider<map_container_const_iterator<Key, T>, std::bidirectional_iterator_tag>;
 
 public:
   using difference_type = typename std::iterator_traits<ftl::map_container_const_iterator<Key, T, Item>>::difference_type;

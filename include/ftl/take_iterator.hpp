@@ -7,10 +7,10 @@ namespace ftl {
 
 template<typename Iter>
 class take_iterator
-  : public const_iterator_interface<take_iterator<Iter>>
+  : public iterator_interface<take_iterator<Iter>>
   , public iterator_member_provider<take_iterator<Iter>, typename Iter::iterator_category> {
 
-  friend const_iterator_interface<take_iterator<Iter>>;
+  friend iterator_interface<take_iterator<Iter>>;
   friend iterator_member_provider<take_iterator<Iter>, std::random_access_iterator_tag>;
   friend iterator_member_provider<take_iterator<Iter>, std::bidirectional_iterator_tag>;
   friend iterator_member_provider<take_iterator<Iter>, std::forward_iterator_tag>;
