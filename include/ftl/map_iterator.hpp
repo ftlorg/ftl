@@ -61,7 +61,7 @@ private:
     return *this;
   }
 
-  [[nodiscard]] constexpr auto preincrement_impl() const -> const map_iterator<Iter, Callable> & {
+  [[nodiscard]] constexpr auto const_preincrement_impl() const -> const map_iterator<Iter, Callable> & {
     iterator_++;
     return *this;
   }
