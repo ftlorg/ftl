@@ -42,24 +42,6 @@ public:
 
 private:
 
-  [[nodiscard]] constexpr auto const_deref_impl() const -> const_reference {
-    return *current_;
-  }
-
-  auto const_preincrement_impl() const -> const vector_container_const_iterator<Item> & {
-    ++current_;
-    return *this;
-  }
-
-  auto predecrement_impl() const -> const vector_container_const_iterator<Item> & {
-    --current_;
-    return *this;
-  }
-
-  [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    return static_cast<size_type>(end_ - begin_);
-  }
-
   mutable std_vector_container_iterator current_{};
   std_vector_container_iterator begin_{};
   std_vector_container_iterator end_{};

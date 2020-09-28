@@ -43,9 +43,6 @@ public:
   }
 
 private:
-  [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    return static_cast<size_type>(std::distance(begin_, end_));
-  }
 
   mutable std_list_container_const_iterator current_;
   std_list_container_const_iterator begin_;

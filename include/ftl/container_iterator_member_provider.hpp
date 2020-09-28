@@ -55,9 +55,7 @@ struct container_iterator_member_provider {
   }
 
   [[nodiscard]] constexpr auto end() noexcept -> Iter {
-    return {
-      static_cast<Iter &>(*this).end_, static_cast<Iter &>(*this).begin_, static_cast<Iter &>(*this).end_
-    };
+    return { static_cast<Iter &>(*this).end_, static_cast<Iter &>(*this).begin_, static_cast<Iter &>(*this).end_ };
   }
 
   [[nodiscard]] constexpr auto cend() const noexcept -> Iter {

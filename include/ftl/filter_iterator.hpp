@@ -35,25 +35,6 @@ public:
   }
 
 private:
-  template<typename Collection>
-  [[nodiscard]] auto collect_impl() const -> Collection {
-    return from_iterator_trait<filter_iterator<Iter, Callable>, Collection>::from_iter(*this);
-  }
-
-  [[nodiscard]] auto enumerate_impl() const -> enumerate_iterator<filter_iterator<Iter, Callable>> {
-    return { *this };
-  }
-
-  template<typename NewCallable>
-  [[nodiscard]] auto filter_impl(NewCallable &&callable) const
-    -> filter_iterator<filter_iterator<Iter, Callable>, NewCallable> {
-    return { *this, std::forward<NewCallable>(callable) };
-  }
-
-  template<typename NewCallable>
-  [[nodiscard]] auto map_impl(NewCallable &&callable) const -> map_iterator<filter_iterator<Iter, Callable>, NewCallable> {
-    return { *this, std::forward<NewCallable>(callable) };
-  }
 
   [[nodiscard]] constexpr auto begin_impl() const noexcept -> filter_iterator<Iter, Callable> {
     return { iterator_.cbegin(), callable_ };
@@ -84,13 +65,6 @@ private:
     while (++iterator_ != iterator_.cend() && !callable_(*iterator_)) {}
     return *this;
   }
-
-  auto postincrement_impl() -> filter_iterator<Iter, Callable> & {
-    auto result = *this;
-    while (++iterator_ != iterator_.cend() && !callable_(*iterator_)) {}
-    return result;
-  }
-
 
   mutable Iter iterator_;
   Callable callable_;

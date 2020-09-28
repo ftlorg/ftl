@@ -48,36 +48,7 @@ public:
     : current_{ current }, begin_{ begin }, end_{ end } {
   }
 
-  // private:
-  template<typename Collection>
-  [[nodiscard]] auto collect_impl() const -> Collection {
-    return from_iterator_trait<map_container_const_iterator<Key, T>, Collection>::from_iter(*this);
-  }
-
-  [[nodiscard]] auto enumerate_impl() const -> enumerate_iterator<map_container_const_iterator<Key, T>> {
-    return { *this };
-  }
-
-  template<typename NewCallable>
-  [[nodiscard]] auto inspect_impl(NewCallable &&callable) const
-    -> inspect_iterator<map_container_const_iterator<Key, T>, NewCallable> {
-    return { *this, std::forward<NewCallable>(callable) };
-  }
-
-  template<typename Callable>
-  [[nodiscard]] auto map_impl(Callable &&callable) const -> map_iterator<map_container_const_iterator<Key, T>, Callable> {
-    return { *this, std::forward<Callable>(callable) };
-  }
-
-  [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    return static_cast<size_type>(std::distance(begin_, end_));
-  }
-
-  auto const_preincrement_impl() const -> const map_container_const_iterator<Key, T> & {
-    ++current_;
-
-    return *this;
-  }
+private:
 
   mutable std_map_container_const_iterator current_;
   std_map_container_const_iterator begin_;

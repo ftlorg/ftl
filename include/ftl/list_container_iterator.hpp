@@ -45,30 +45,6 @@ public:
   }
 
 private:
-  [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    return static_cast<size_type>(std::distance(begin_, end_));
-  }
-
-  [[nodiscard]] constexpr auto deref_impl() -> reference {
-    return *current_;
-  }
-
-  [[nodiscard]] constexpr auto const_deref_impl() const -> const_reference {
-    return *current_;
-  }
-
-  auto preincrement_impl() -> list_container_iterator<Item> & {
-    ++current_;
-
-    return *this;
-  }
-
-  auto const_preincrement_impl() const -> const list_container_iterator<Item> & {
-    ++current_;
-
-    return *this;
-  }
-
   mutable std_list_container_iterator current_;
   std_list_container_iterator begin_;
   std_list_container_iterator end_;

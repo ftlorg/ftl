@@ -36,10 +36,7 @@ public:
   inspect_iterator(Iter iterator, Callable callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
   }
 
-  // private:
-  [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    return iterator_.count();
-  }
+private:
 
   [[nodiscard]] constexpr auto begin_impl() const noexcept -> inspect_iterator<Iter, Callable> {
     return { iterator_.cbegin(), callable_ };
@@ -62,23 +59,16 @@ public:
     return *static_cast<const Iter &>(iterator_);
   }
 
-  auto const_preincrement_impl() const -> const inspect_iterator<Iter, Callable> & {
-    ++iterator_;
-
-    return *this;
-  }
-
   auto preincrement_impl() -> inspect_iterator<Iter, Callable> & {
     ++iterator_;
 
     return *this;
   }
 
-  auto postincrement_impl() const -> inspect_iterator<Iter, Callable> {
-    auto result = *this;
+  auto const_preincrement_impl() const -> const inspect_iterator<Iter, Callable> & {
     ++iterator_;
 
-    return result;
+    return *this;
   }
 
   mutable Iter iterator_;

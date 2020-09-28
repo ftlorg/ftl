@@ -43,23 +43,6 @@ public:
   }
 
 private:
-
-  [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    return static_cast<size_type>(end_ - begin_);
-  }
-
-  auto preincrement_impl() -> array_container_iterator<Item, N> & {
-    ++current_;
-
-    return *current_;
-  }
-
-  auto const_preincrement_impl() const -> const array_container_iterator<Item, N> & {
-    ++current_;
-
-    return *current_;
-  }
-
   mutable std_array_container_iterator current_;
   std_array_container_iterator begin_;
   std_array_container_iterator end_;

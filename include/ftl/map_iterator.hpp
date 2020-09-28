@@ -34,9 +34,6 @@ public:
   }
 
 private:
-  [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    return iterator_.count();
-  }
 
   [[nodiscard]] constexpr auto begin_impl() const noexcept -> map_iterator<Iter, Callable> {
     return { iterator_.cbegin(), callable_ };
@@ -67,12 +64,6 @@ private:
   [[nodiscard]] constexpr auto preincrement_impl() const -> const map_iterator<Iter, Callable> & {
     iterator_++;
     return *this;
-  }
-
-  [[nodiscard]] constexpr auto postincrement_impl() const -> map_iterator<Iter, Callable> {
-    auto result = this;
-    iterator_++;
-    return *result;
   }
 
   mutable Iter iterator_;

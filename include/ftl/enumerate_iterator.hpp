@@ -37,10 +37,6 @@ public:
   }
 
 private:
-  [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    return iterator_.count();
-  }
-
   [[nodiscard]] constexpr auto begin_impl() const noexcept -> enumerate_iterator<Iter> {
     return { iterator_.cbegin() };
   }

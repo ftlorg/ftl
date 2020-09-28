@@ -56,8 +56,9 @@ public:
     return from_iterator_trait<Derived, Collection>::from_iter(static_cast<const Derived &>(*this));
   }
 
-  [[nodiscard]] auto count() const -> size_type {
-    return static_cast<const Derived &>(*this).count_impl();
+  [[nodiscard]] constexpr auto count() const -> typename std::iterator_traits<Derived>::size_type {
+    return static_cast<typename std::iterator_traits<Derived>::size_type>(
+      std::distance(static_cast<const Derived &>(*this).begin(), static_cast<const Derived &>(*this).end()));
   }
 
   [[nodiscard]] auto enumerate() const -> enumerate_iterator<Derived> {

@@ -42,29 +42,6 @@ public:
   }
 
 private:
-  [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    return static_cast<size_type>(std::distance(begin_, end_));
-  }
-
-  [[nodiscard]] constexpr auto deref_impl() -> reference {
-    return *current_;
-  }
-
-  [[nodiscard]] constexpr auto const_deref_impl() const -> const_reference {
-    return *current_;
-  }
-
-  auto preincrement_impl() -> map_container_iterator<Key, T> & {
-    ++current_;
-
-    return *this;
-  }
-
-  auto const_preincrement_impl() const -> const map_container_iterator<Key, T> & {
-    ++current_;
-
-    return *this;
-  }
 
   mutable std_map_container_iterator current_;
   std_map_container_iterator begin_;
