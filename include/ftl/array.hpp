@@ -47,7 +47,7 @@ template<typename T, std::size_t N>
 
 template<typename Item, std::size_t N>
 struct ftl::from_iterator_trait<ftl::array_container_iterator<Item, N>, ftl::array<Item, N>> {
-  [[nodiscard]] constexpr static auto from_iter(array_container_iterator<Item, N> &iter) {
+  [[nodiscard]] constexpr static auto from_iter(const array_container_iterator<Item, N> &iter) {
     array<Item, N> result{};
     std::size_t i = 0;
     for (auto &&item : iter) {
@@ -121,7 +121,7 @@ struct ftl::into_iterator_trait<ftl::array<T, N>, typename ftl::array<T, N>::ftl
   using iterator = typename ftl::array<T, N>::ftl_iterator;
 
   [[nodiscard]] constexpr static auto into_iter(ftl::array<T, N> &arr) -> iterator {
-    return iterator{ arr.data(), arr.data() + arr.size() };
+    return iterator{ arr.begin(), arr.end() };
   }
 };
 
@@ -130,6 +130,6 @@ struct ftl::into_iterator_trait<ftl::array<T, N>, typename ftl::array<T, N>::ftl
   using const_iterator = typename ftl::array<T, N>::ftl_const_iterator;
 
   [[nodiscard]] constexpr static auto into_iter(const ftl::array<T, N> &arr) -> const_iterator {
-    return const_iterator{ arr.data(), arr.data() + arr.size() };
+    return const_iterator{ arr.begin(), arr.end() };
   }
 };

@@ -147,6 +147,9 @@ TEST_CASE(TEST_TAG "operator++", TEST_TAG) {
 
   ++iter;
   REQUIRE(arr[4] == *iter);
+
+  ++iter;
+  REQUIRE(iter == iter.end());
 }
 
 TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {

@@ -2,67 +2,38 @@
 
 #include <type_traits>
 #include <ftl/iterator_interface.hpp>
+#include <ftl/iterator_member_provider.hpp>
+#include <ftl/iterator_traits.hpp>
 
 namespace ftl {
 
 template<typename Iter, typename Callable>
-class map_iterator
-  : public const_iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type> {
+class map_iterator final
+  : public const_iterator_interface<map_iterator<Iter, Callable>>
+  , public iterator_member_provider<map_iterator<Iter, Callable>, typename Iter::iterator_category> {
 
-  friend const_iterator_interface<map_iterator<Iter, Callable>, typename Iter::value_type, typename Iter::size_type>;
+  friend iterator_member_provider<ftl::map_iterator<Iter, Callable>, std::random_access_iterator_tag>;
+  friend iterator_member_provider<ftl::map_iterator<Iter, Callable>, std::bidirectional_iterator_tag>;
+  friend iterator_member_provider<ftl::map_iterator<Iter, Callable>, std::forward_iterator_tag>;
+  friend iterator_member_provider<ftl::map_iterator<Iter, Callable>, std::input_iterator_tag>;
+  friend iterator_member_provider<ftl::map_iterator<Iter, Callable>>;
+  friend const_iterator_interface<map_iterator<Iter, Callable>>;
 
 public:
-  using difference_type = typename Iter::difference_type;
-  using value_type = typename Iter::value_type;
-  using pointer = typename Iter::pointer;
-  using reference = typename Iter::reference;
-  using const_pointer = typename Iter::const_pointer;
-  using const_reference = typename Iter::const_reference;
-  using inherited_iterator_category = typename Iter::iterator_category;
-  using iterator_category = inherited_iterator_category;
-  using size_type = typename Iter::size_type;
+  using difference_type = typename std::iterator_traits<ftl::map_iterator<Iter, Callable>>::difference_type;
+  using value_type = typename std::iterator_traits<ftl::map_iterator<Iter, Callable>>::value_type;
+  using pointer = typename std::iterator_traits<ftl::map_iterator<Iter, Callable>>::pointer;
+  using reference = typename std::iterator_traits<ftl::map_iterator<Iter, Callable>>::reference;
+  using const_pointer = typename std::iterator_traits<ftl::map_iterator<Iter, Callable>>::const_pointer;
+  using const_reference = typename std::iterator_traits<ftl::map_iterator<Iter, Callable>>::const_reference;
+  using inherited_iterator_category = typename std::iterator_traits<ftl::map_iterator<Iter, Callable>>::iterator_category;
+  using iterator_category = typename std::iterator_traits<ftl::map_iterator<Iter, Callable>>::inherited_iterator_category;
+  using size_type = typename std::iterator_traits<ftl::map_iterator<Iter, Callable>>::size_type;
 
   map_iterator(Iter iterator, Callable callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
   }
 
 private:
-  template<typename Collection>
-  [[nodiscard]] auto collect_impl() const -> Collection {
-    return from_iterator_trait<map_iterator<Iter, Callable>, Collection>::from_iter(*this);
-  }
-
-  [[nodiscard]] constexpr auto count_impl() const -> size_type {
-    return iterator_.count();
-  }
-
-  [[nodiscard]] auto enumerate_impl() const -> enumerate_iterator<map_iterator<Iter, Callable>> {
-    return { *this };
-  }
-
-  template<typename NewCallable>
-  [[nodiscard]] auto inspect_impl(NewCallable &&callable) const
-    -> inspect_iterator<map_iterator<Iter, Callable>, NewCallable> {
-    return { *this, std::forward<NewCallable>(callable) };
-  }
-
-  template<typename NewCallable>
-  [[nodiscard]] auto map_impl(NewCallable &&callable) const -> map_iterator<map_iterator<Iter, Callable>, NewCallable> {
-    return { *this, std::forward<NewCallable>(callable) };
-  }
-
-  template<typename NewCallable>
-  [[nodiscard]] auto filter_impl(NewCallable &&callable) const
-    -> filter_iterator<map_iterator<Iter, Callable>, NewCallable> {
-    return { *this, std::forward<NewCallable>(callable) };
-  }
-
-  [[nodiscard]] constexpr auto deref_impl() -> typename std::invoke_result_t<Callable, decltype(std::declval<Iter>().operator*())> {
-    return callable_(*iterator_);
-  }
-
-  [[nodiscard]] constexpr auto const_deref_impl() const -> typename std::invoke_result_t<Callable, decltype(std::declval<Iter>().operator*())> {
-    return callable_(*iterator_);
-  }
 
   [[nodiscard]] constexpr auto begin_impl() const noexcept -> map_iterator<Iter, Callable> {
     return { iterator_.cbegin(), callable_ };
@@ -80,84 +51,23 @@ private:
     return { iterator_.cend(), callable_ };
   }
 
-  auto preincrement_impl() const -> const map_iterator<Iter, Callable> & {
-    ++iterator_;
+  [[nodiscard]] constexpr auto const_deref_impl() const ->
+    typename std::invoke_result_t<Callable, decltype(std::declval<Iter>().operator*())> {
+    return callable_(*iterator_);
+  }
 
+  [[nodiscard]] constexpr auto preincrement_impl() -> map_iterator<Iter, Callable> & {
+    iterator_++;
     return *this;
   }
 
-  [[nodiscard]] friend constexpr auto operator+=(const map_iterator<Iter, Callable> &lhs, size_type n)
-    -> map_iterator<Iter, Callable> & {
-    return lhs.iterator_ += n;
+  [[nodiscard]] constexpr auto preincrement_impl() const -> const map_iterator<Iter, Callable> & {
+    iterator_++;
+    return *this;
   }
 
-  [[nodiscard]] friend constexpr auto operator+(const map_iterator<Iter, Callable> &lhs, size_type n)
-    -> map_iterator<Iter, Callable> {
-    return lhs.iterator_ += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator+(size_type n, const map_iterator<Iter, Callable> &rhs)
-    -> map_iterator<Iter, Callable> {
-    return rhs.iterator_ += n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-=(const map_iterator<Iter, Callable> &lhs, size_type n)
-    -> map_iterator<Iter, Callable> & {
-    return lhs.iterator_ += -n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-(const map_iterator<Iter, Callable> &lhs, size_type n)
-    -> map_iterator<Iter, Callable> {
-    return lhs.iterator_ -= n;
-  }
-
-  [[nodiscard]] friend constexpr auto operator-(const map_iterator<Iter, Callable> &lhs,
-    const map_iterator<Iter, Callable> &rhs) -> difference_type {
-    return lhs.iterator_ - rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator==(const map_iterator<Iter, Callable> &lhs,
-    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return lhs.iterator_ == rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator!=(const map_iterator<Iter, Callable> &lhs,
-    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return lhs.iterator_ != rhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator<(const map_iterator<Iter, Callable> &lhs,
-    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return rhs.iterator_ - lhs.iterator_ > 0;
-  }
-
-  [[nodiscard]] friend constexpr auto operator<=(const map_iterator<Iter, Callable> &lhs,
-    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return !(rhs.iterator_ < lhs.iterator_);
-  }
-
-  [[nodiscard]] friend constexpr auto operator>(const map_iterator<Iter, Callable> &lhs,
-    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return rhs.iterator_ < lhs.iterator_;
-  }
-
-  [[nodiscard]] friend constexpr auto operator>=(const map_iterator<Iter, Callable> &lhs,
-    const map_iterator<Iter, Callable> &rhs) noexcept -> bool {
-    return !(lhs.iterator_ < rhs.iterator_);
-  }
-
-private:
   mutable Iter iterator_;
   Callable callable_;
 };
 
 }// namespace ftl
-
-template<typename Iter, typename Callable>
-struct std::iterator_traits<ftl::map_iterator<Iter, Callable>> {
-  using difference_type = typename ftl::map_iterator<Iter, Callable>::difference_type;
-  using value_type = typename ftl::map_iterator<Iter, Callable>::value_type;
-  using pointer = typename ftl::map_iterator<Iter, Callable>::pointer;
-  using reference = typename ftl::map_iterator<Iter, Callable>::reference;
-  using iterator_category = typename ftl::map_iterator<Iter, Callable>::iterator_category;
-};
