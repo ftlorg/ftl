@@ -21,10 +21,6 @@ class map_container_const_iterator final
   friend container_iterator_member_provider<map_container_const_iterator<Key, T>>;
   friend iterator_interface<map_container_const_iterator<Key, T>>;
 
-  friend iterator_interface<map_container_const_iterator<Key, T>>;
-  friend iterator_interface<map_container_const_iterator<Key, T>>;
-  friend iterator_member_provider<map_container_const_iterator<Key, T>, std::bidirectional_iterator_tag>;
-
 public:
   using difference_type = typename std::iterator_traits<ftl::map_container_const_iterator<Key, T, Item>>::difference_type;
   using value_type = typename std::iterator_traits<ftl::map_container_const_iterator<Key, T, Item>>::value_type;

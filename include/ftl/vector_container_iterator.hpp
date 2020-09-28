@@ -18,7 +18,6 @@ class vector_container_iterator final
   friend container_iterator_member_provider<vector_container_iterator<Item>, std::input_iterator_tag>;
   friend container_iterator_member_provider<vector_container_iterator<Item>>;
   friend iterator_interface<vector_container_iterator<Item>>;
-  friend iterator_interface<vector_container_iterator<Item>>;
 
 public:
   using difference_type = typename std::iterator_traits<ftl::vector_container_iterator<Item>>::difference_type;
