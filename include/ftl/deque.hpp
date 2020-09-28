@@ -42,7 +42,7 @@ public:
 template<typename T, typename Allocator = std::allocator<T>>
 [[nodiscard]] constexpr auto to_deque(const std::deque<T> &deq) -> deque<T, Allocator> {
   return deque<T, Allocator>{ deq };
-};
+}
 
 }// namespace ftl
 
