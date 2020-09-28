@@ -18,6 +18,9 @@ class enumerate_iterator;
 template<typename Iter, typename Callable>
 class inspect_iterator;
 
+template<typename Iter>
+class take_iterator;
+
 template<typename Item>
 class vector_container_const_iterator;
 
@@ -138,6 +141,19 @@ struct std::iterator_traits<ftl::inspect_iterator<Iter, Callable>> {
 
 template<typename Iter>
 struct std::iterator_traits<ftl::enumerate_iterator<Iter>> {
+  using difference_type = typename Iter::difference_type;
+  using value_type = typename Iter::value_type;
+  using pointer = typename Iter::pointer;
+  using reference = typename Iter::reference;
+  using const_pointer = typename Iter::const_pointer;
+  using const_reference = typename Iter::const_reference;
+  using inherited_iterator_category = typename Iter::iterator_category;
+  using iterator_category = inherited_iterator_category;
+  using size_type = typename Iter::size_type;
+};
+
+template<typename Iter>
+struct std::iterator_traits<ftl::take_iterator<Iter>> {
   using difference_type = typename Iter::difference_type;
   using value_type = typename Iter::value_type;
   using pointer = typename Iter::pointer;
