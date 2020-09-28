@@ -18,7 +18,7 @@ class array_container_iterator final
   friend container_iterator_member_provider<array_container_iterator<Item, N>, std::forward_iterator_tag>;
   friend container_iterator_member_provider<array_container_iterator<Item, N>, std::input_iterator_tag>;
   friend container_iterator_member_provider<array_container_iterator<Item, N>>;
-  friend const_iterator_interface<array_container_iterator<Item, N>>;
+  friend iterator_interface<array_container_iterator<Item, N>>;
 
 public:
   using difference_type = typename std::iterator_traits<ftl::array_container_iterator<Item, N>>::difference_type;

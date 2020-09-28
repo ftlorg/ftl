@@ -34,7 +34,7 @@ template<typename Iter>
 class rev_iterator : public iterator_interface<rev_iterator<Iter>> {};
 
 template<typename Derived>
-class const_iterator_interface {
+class iterator_interface {
 public:
   using size_type = typename std::iterator_traits<Derived>::size_type;
   using value_type = typename std::iterator_traits<Derived>::value_type;
@@ -43,7 +43,7 @@ public:
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
 
-  virtual ~const_iterator_interface() = default;
+  virtual ~iterator_interface() = default;
 
   template<typename Predicate>
   [[nodiscard]] auto all(Predicate &&predicate) const -> bool;
@@ -107,12 +107,6 @@ public:
   [[nodiscard]] auto take(size_type n) const -> take_iterator<Derived> {
     return { static_cast<const Derived &>(*this), n };
   }
-};
-
-template<typename Derived>
-class iterator_interface : public const_iterator_interface<Derived> {
-public:
-  virtual ~iterator_interface() = default;
 };
 
 }// namespace ftl

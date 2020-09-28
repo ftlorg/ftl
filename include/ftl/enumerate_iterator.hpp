@@ -20,7 +20,7 @@ class enumerate_iterator final
   friend iterator_member_provider<enumerate_iterator<Iter>, std::forward_iterator_tag>;
   friend iterator_member_provider<enumerate_iterator<Iter>, std::input_iterator_tag>;
   friend iterator_member_provider<enumerate_iterator<Iter>>;
-  friend const_iterator_interface<enumerate_iterator<Iter>>;
+  friend iterator_interface<enumerate_iterator<Iter>>;
 
 public:
   using difference_type = typename std::iterator_traits<ftl::enumerate_iterator<Iter>>::difference_type;
