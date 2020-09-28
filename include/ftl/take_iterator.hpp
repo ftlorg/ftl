@@ -56,8 +56,7 @@ public:
       ++iterator_;
       ++counter_;
     } else {
-      while (++iterator_ != iterator_.end())
-        ;
+      while (++iterator_ != iterator_.end()) {}
     }
 
     return *this;
@@ -68,8 +67,7 @@ public:
       ++iterator_;
       ++counter_;
     } else {
-      while (++iterator_ != iterator_.end())
-        ;
+      while (++iterator_ != iterator_.end()) {}
     }
 
     return *this;
