@@ -140,9 +140,9 @@ struct container_iterator_member_provider<Iter, std::random_access_iterator_tag>
     return static_cast<Iter &>(*this).begin_[pos];
   }
 
-  friend constexpr auto operator+=(Iter &lhs, typename std::iterator_traits<Iter>::size_type n) -> Iter & {
-    lhs.current_ += n;
-    return lhs;
+  constexpr auto operator+=(typename std::iterator_traits<Iter>::size_type n) -> Iter & {
+    static_cast<Iter &>(*this).current_ += n;
+    return static_cast<Iter &>(*this);
   }
 
   [[nodiscard]] friend constexpr auto operator+(const Iter &lhs, typename std::iterator_traits<Iter>::size_type n) -> Iter {
