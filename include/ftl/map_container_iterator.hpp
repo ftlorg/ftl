@@ -17,7 +17,7 @@ class map_container_iterator final
   friend container_iterator_member_provider<map_container_iterator<Key, T>, std::forward_iterator_tag>;
   friend container_iterator_member_provider<map_container_iterator<Key, T>, std::input_iterator_tag>;
   friend container_iterator_member_provider<map_container_iterator<Key, T>>;
-  friend const_iterator_interface<map_container_iterator<Key, T>>;
+  friend iterator_interface<map_container_iterator<Key, T>>;
 
 public:
   using difference_type = typename std::iterator_traits<ftl::map_container_iterator<Key, T, Item>>::difference_type;

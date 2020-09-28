@@ -8,7 +8,7 @@ namespace ftl {
 
 template<typename Iter, typename Callable>
 class filter_iterator final
-  : public const_iterator_interface<filter_iterator<Iter, Callable>>
+  : public iterator_interface<filter_iterator<Iter, Callable>>
   , public iterator_member_provider<filter_iterator<Iter, Callable>,
       typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::iterator_category> {
 
@@ -17,7 +17,7 @@ class filter_iterator final
   friend iterator_member_provider<filter_iterator<Iter, Callable>, std::forward_iterator_tag>;
   friend iterator_member_provider<filter_iterator<Iter, Callable>, std::input_iterator_tag>;
   friend iterator_member_provider<filter_iterator<Iter, Callable>>;
-  friend const_iterator_interface<filter_iterator<Iter, Callable>>;
+  friend iterator_interface<filter_iterator<Iter, Callable>>;
 
 public:
   using difference_type = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::difference_type;
