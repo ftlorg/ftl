@@ -8,7 +8,7 @@ namespace ftl {
 
 template<typename Item>
 class deque_container_const_iterator final
-  : public const_iterator_interface<deque_container_const_iterator<Item>>
+  : public iterator_interface<deque_container_const_iterator<Item>>
   , public container_iterator_member_provider<deque_container_const_iterator<Item>,
       typename std::iterator_traits<ftl::deque_container_const_iterator<Item>>::iterator_category> {
 
@@ -17,7 +17,7 @@ class deque_container_const_iterator final
   friend container_iterator_member_provider<deque_container_const_iterator<Item>, std::forward_iterator_tag>;
   friend container_iterator_member_provider<deque_container_const_iterator<Item>, std::input_iterator_tag>;
   friend container_iterator_member_provider<deque_container_const_iterator<Item>>;
-  friend const_iterator_interface<deque_container_const_iterator<Item>>;
+  friend iterator_interface<deque_container_const_iterator<Item>>;
 
 public:
   using difference_type = typename std::iterator_traits<ftl::deque_container_const_iterator<Item>>::difference_type;
