@@ -12,7 +12,7 @@ TEST_CASE(TEST_TAG "default ctor", TEST_TAG) {
 TEST_CASE(TEST_TAG "input iterator ctor", TEST_TAG) {
   ftl::set<std::string> set1 = { { std::string("red"), std::string("green"), std::string("blue") } };
 
-  ftl::set<std::string> set2 = { { std::begin(set1), std::end(set1) } };
+  ftl::set<std::string> set2 = { std::begin(set1), std::end(set1) };
 
   REQUIRE(set1.size() == set2.size());
   REQUIRE(*set1.find("red") == *set2.find("red"));
@@ -178,7 +178,7 @@ TEST_CASE(TEST_TAG "swap", TEST_TAG) {
 
   REQUIRE(set1.size() == 3);
 
-  ftl::set<std::string> set2 = { { "orange", "purple" } };
+  ftl::set<std::string> set2 = { { "orange", "purple", "purple" } };
 
   REQUIRE(set2.size() == 2);
 

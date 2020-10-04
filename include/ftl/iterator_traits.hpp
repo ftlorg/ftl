@@ -34,6 +34,9 @@ class map_container_iterator;
 template<typename Key>
 class set_container_iterator;
 
+template<typename Key>
+class set_container_const_iterator;
+
 template<typename Key, typename T, typename Item>
 class map_container_const_iterator;
 
@@ -231,6 +234,19 @@ struct std::iterator_traits<ftl::set_container_iterator<Key>> {
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
   using iterator_category = std::random_access_iterator_tag;
-  using std_map_container_iterator = typename std::set<Key>::iterator;
+  using std_set_container_iterator = typename std::set<Key>::iterator;
+  using size_type = std::size_t;
+};
+
+template<typename Key>
+struct std::iterator_traits<ftl::set_container_const_iterator<Key>> {
+  using difference_type = std::ptrdiff_t;
+  using value_type = std::remove_cv_t<Key>;
+  using pointer = value_type *;
+  using reference = value_type &;
+  using const_pointer = const value_type *;
+  using const_reference = const value_type &;
+  using iterator_category = std::random_access_iterator_tag;
+  using std_set_container_const_iterator = typename std::set<Key>::const_iterator;
   using size_type = std::size_t;
 };
