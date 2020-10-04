@@ -165,7 +165,7 @@ TEST_CASE(TEST_TAG "enumerate collect const", TEST_TAG) {
 
   auto it = mapped_map.find(0);
 
-  // REQUIRE(it != mapped_map.end());
+  REQUIRE(it != mapped_map.end());
 
   // it = std::find(std::begin(mapped_map),
   //  std::end(mapped_map),
