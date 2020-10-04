@@ -5,13 +5,13 @@
 #include <ftl/array.hpp>
 #include <ftl/list.hpp>
 #include <ftl/map.hpp>
-#include <ftl/set.hpp>
 #include <ftl/vector.hpp>
 #include <ftl/iterator_interface.hpp>
 #include <ftl/map_iterator.hpp>
 #include <ftl/take_iterator.hpp>
 #include <ftl/enumerate_iterator.hpp>
 #include <ftl/filter_iterator.hpp>
+#include <ftl/set.hpp>
 
 namespace ftl {
 

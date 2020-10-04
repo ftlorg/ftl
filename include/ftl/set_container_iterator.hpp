@@ -46,3 +46,5 @@ private:
   std_set_container_iterator begin_;
   std_set_container_iterator end_;
 };
+
+}// namespace ftl
