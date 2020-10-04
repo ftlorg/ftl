@@ -260,7 +260,7 @@ TEST_CASE(TEST_TAG "lower_bound", TEST_TAG) {
 TEST_CASE(TEST_TAG "upper_bound", TEST_TAG) {
   ftl::set<std::string> set1 = { { "red", "green", "blue" } };
 
-  auto lower_bound = set1.upper_bound("red");
+  auto upper_bound = set1.upper_bound("red");
 
-  REQUIRE(lower_bound != std::end(set1));
+  REQUIRE(upper_bound == std::end(set1));
 }
