@@ -337,17 +337,3 @@ TEST_CASE(TEST_TAG "find", TEST_TAG) {
   auto not_found_it = unordered_map1.find("orange");
   REQUIRE(not_found_it == std::end(unordered_map1));
 }
-
-TEST_CASE(TEST_TAG "equal_range", TEST_TAG) {
-  ftl::unordered_map<int, std::string> unordered_map1 = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
-
-  auto [lower_bound, upper_bound] = unordered_map1.equal_range(2);
-
-  REQUIRE(lower_bound != std::end(unordered_map1));
-  REQUIRE(lower_bound->first == 2);
-  REQUIRE(lower_bound->second == "green");
-
-  REQUIRE(upper_bound != std::end(unordered_map1));
-  REQUIRE(upper_bound->first == 3);
-  REQUIRE(upper_bound->second == "blue");
-}
