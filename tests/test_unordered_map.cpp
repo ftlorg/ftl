@@ -351,23 +351,3 @@ TEST_CASE(TEST_TAG "equal_range", TEST_TAG) {
   REQUIRE(upper_bound->first == 3);
   REQUIRE(upper_bound->second == "blue");
 }
-
-TEST_CASE(TEST_TAG "lower_bound", TEST_TAG) {
-  ftl::unordered_map<int, std::string> unordered_map1 = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
-
-  auto lower_bound = unordered_map1.lower_bound(2);
-
-  REQUIRE(lower_bound != std::end(unordered_map1));
-  REQUIRE(lower_bound->first == 2);
-  REQUIRE(lower_bound->second == "green");
-}
-
-TEST_CASE(TEST_TAG "upper_bound", TEST_TAG) {
-  ftl::unordered_map<int, std::string> unordered_map1 = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
-
-  auto lower_bound = unordered_map1.upper_bound(2);
-
-  REQUIRE(lower_bound != std::end(unordered_map1));
-  REQUIRE(lower_bound->first == 3);
-  REQUIRE(lower_bound->second == "blue");
-}
