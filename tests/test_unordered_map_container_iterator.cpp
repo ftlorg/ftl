@@ -164,70 +164,52 @@ TEST_CASE(TEST_TAG "enumerate collect const", TEST_TAG) {
   auto mapped_map = map.iter().enumerate().collect<ftl::unordered_map<std::size_t, std::tuple<const int, std::string>>>();
 
   auto it = mapped_map.find(0);
-
   REQUIRE(it != mapped_map.end());
-
-  // it = std::find(std::begin(mapped_map),
-  //  std::end(mapped_map),
-  //  std::tuple<std::size_t, std::pair<const int, std::string>>{ 1, { 2, "green" } });
-  // REQUIRE(it != mapped_map.end());
-  // it = std::find(std::begin(mapped_map),
-  //  std::end(mapped_map),
-  //  std::tuple<std::size_t, std::pair<const int, std::string>>{ 2, { 3, "blue" } });
-  // REQUIRE(it != mapped_map.end());
+  it = mapped_map.find(1);
+  REQUIRE(it != mapped_map.end());
+  it = mapped_map.find(2);
+  REQUIRE(it != mapped_map.end());
 }
 
-// TEST_CASE(TEST_TAG "map enumerate collect", TEST_TAG) {
-//  ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
-//
-//  for (const auto &e : map.iter().enumerate()) { INFO(std::get<0>(e)); }
-//
-//  auto mapped_map = map.iter()
-//                      .map([](const auto &entry) {
-//                        return std::pair<const int, std::string>{ entry.first, entry.second + "abc" };
-//                      })
-//                      .enumerate()
-//                      .collect<ftl::unordered_map<std::size_t, std::pair<const int, std::string>>>();
-//
-//  auto it = std::find(std::begin(mapped_map),
-//    std::end(mapped_map),
-//    std::tuple<std::size_t, std::pair<const int, std::string>>{ 0, { 1, "redabc" } });
-//  REQUIRE(it != mapped_map.end());
-//  it = std::find(std::begin(mapped_map),
-//    std::end(mapped_map),
-//    std::tuple<std::size_t, std::pair<const int, std::string>>{ 1, { 2, "greenabc" } });
-//  REQUIRE(it != mapped_map.end());
-//  it = std::find(std::begin(mapped_map),
-//    std::end(mapped_map),
-//    std::tuple<std::size_t, std::pair<const int, std::string>>{ 2, { 3, "blueabc" } });
-//  REQUIRE(it != mapped_map.end());
-//}
-//
-// TEST_CASE(TEST_TAG "map enumerate collect const", TEST_TAG) {
-//  const ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
-//
-//  for (const auto &e : map.iter().enumerate()) { INFO(std::get<0>(e)); }
-//
-//  auto mapped_map = map.iter()
-//                      .map([](const auto &entry) {
-//                        return std::pair<const int, std::string>{ entry.first, entry.second + "abc" };
-//                      })
-//                      .enumerate()
-//                      .collect<ftl::unordered_map<std::size_t, std::tuple<const int, std::string>>>();
-//
-//  auto it = std::find(std::begin(mapped_map),
-//    std::end(mapped_map),
-//    std::tuple<std::size_t, std::pair<const int, std::string>>{ 0, { 1, "redabc" } });
-//  REQUIRE(it != mapped_map.end());
-//  it = std::find(std::begin(mapped_map),
-//    std::end(mapped_map),
-//    std::tuple<std::size_t, std::pair<const int, std::string>>{ 1, { 2, "greenabc" } });
-//  REQUIRE(it != mapped_map.end());
-//  it = std::find(std::begin(mapped_map),
-//    std::end(mapped_map),
-//    std::tuple<std::size_t, std::pair<const int, std::string>>{ 2, { 3, "blueabc" } });
-//  REQUIRE(it != mapped_map.end());
-//}
+ TEST_CASE(TEST_TAG "map enumerate collect", TEST_TAG) {
+  ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  for (const auto &e : map.iter().enumerate()) { INFO(std::get<0>(e)); }
+
+  auto mapped_map = map.iter()
+                      .map([](const auto &entry) {
+                        return std::pair<const int, std::string>{ entry.first, entry.second + "abc" };
+                      })
+                      .enumerate()
+                      .collect<ftl::unordered_map<std::size_t, std::pair<const int, std::string>>>();
+
+  auto it = mapped_map.find(0);
+  REQUIRE(it != mapped_map.end());
+  it = mapped_map.find(1);
+  REQUIRE(it != mapped_map.end());
+  it = mapped_map.find(2);
+  REQUIRE(it != mapped_map.end());
+ }
+
+ TEST_CASE(TEST_TAG "map enumerate collect const", TEST_TAG) {
+  const ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  for (const auto &e : map.iter().enumerate()) { INFO(std::get<0>(e)); }
+
+  auto mapped_map = map.iter()
+                      .map([](const auto &entry) {
+                        return std::pair<const int, std::string>{ entry.first, entry.second + "abc" };
+                      })
+                      .enumerate()
+                      .collect<ftl::unordered_map<std::size_t, std::tuple<const int, std::string>>>();
+
+  auto it = mapped_map.find(0);
+  REQUIRE(it != mapped_map.end());
+  it = mapped_map.find(1);
+  REQUIRE(it != mapped_map.end());
+  it = mapped_map.find(2);
+  REQUIRE(it != mapped_map.end());
+ }
 
 TEST_CASE(TEST_TAG "map inspect map collect", TEST_TAG) {
   ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
@@ -242,8 +224,12 @@ TEST_CASE(TEST_TAG "map inspect map collect", TEST_TAG) {
                       })
                       .collect<ftl::unordered_map<int, std::string>>();
 
-  REQUIRE(
-    mapped_map == ftl::unordered_map<int, std::string>{ { 1, "redabcabc" }, { 2, "greenabcabc" }, { 3, "blueabcabc" } });
+  auto it = mapped_map.find(1);
+  REQUIRE(it != mapped_map.end());
+  it = mapped_map.find(2);
+  REQUIRE(it != mapped_map.end());
+  it = mapped_map.find(3);
+  REQUIRE(it != mapped_map.end());
 }
 
 TEST_CASE(TEST_TAG "map inspect map collect const", TEST_TAG) {
@@ -259,8 +245,12 @@ TEST_CASE(TEST_TAG "map inspect map collect const", TEST_TAG) {
                       })
                       .collect<ftl::unordered_map<int, std::string>>();
 
-  REQUIRE(
-    mapped_map == ftl::unordered_map<int, std::string>{ { 1, "redabcabc" }, { 2, "greenabcabc" }, { 3, "blueabcabc" } });
+  auto it = mapped_map.find(1);
+  REQUIRE(it != mapped_map.end());
+  it = mapped_map.find(2);
+  REQUIRE(it != mapped_map.end());
+  it = mapped_map.find(3);
+  REQUIRE(it != mapped_map.end());
 }
 
 TEST_CASE(TEST_TAG "count", TEST_TAG) {
