@@ -171,7 +171,7 @@ TEST_CASE(TEST_TAG "enumerate collect const", TEST_TAG) {
   REQUIRE(it != mapped_map.end());
 }
 
- TEST_CASE(TEST_TAG "map enumerate collect", TEST_TAG) {
+TEST_CASE(TEST_TAG "map enumerate collect", TEST_TAG) {
   ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
 
   for (const auto &e : map.iter().enumerate()) { INFO(std::get<0>(e)); }
@@ -189,9 +189,9 @@ TEST_CASE(TEST_TAG "enumerate collect const", TEST_TAG) {
   REQUIRE(it != mapped_map.end());
   it = mapped_map.find(2);
   REQUIRE(it != mapped_map.end());
- }
+}
 
- TEST_CASE(TEST_TAG "map enumerate collect const", TEST_TAG) {
+TEST_CASE(TEST_TAG "map enumerate collect const", TEST_TAG) {
   const ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
 
   for (const auto &e : map.iter().enumerate()) { INFO(std::get<0>(e)); }
@@ -209,7 +209,7 @@ TEST_CASE(TEST_TAG "enumerate collect const", TEST_TAG) {
   REQUIRE(it != mapped_map.end());
   it = mapped_map.find(2);
   REQUIRE(it != mapped_map.end());
- }
+}
 
 TEST_CASE(TEST_TAG "map inspect map collect", TEST_TAG) {
   ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
