@@ -233,7 +233,7 @@ struct std::iterator_traits<ftl::set_container_iterator<Key>> {
   using reference = value_type &;
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
-  using iterator_category = std::random_access_iterator_tag;
+  using iterator_category = std::bidirectional_iterator_tag;
   using std_set_container_iterator = typename std::set<Key>::iterator;
   using size_type = std::size_t;
 };
@@ -246,7 +246,7 @@ struct std::iterator_traits<ftl::set_container_const_iterator<Key>> {
   using reference = value_type &;
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
-  using iterator_category = std::random_access_iterator_tag;
+  using iterator_category = std::bidirectional_iterator_tag;
   using std_set_container_const_iterator = typename std::set<Key>::const_iterator;
   using size_type = std::size_t;
 };

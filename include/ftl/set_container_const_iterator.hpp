@@ -12,7 +12,6 @@ class set_container_const_iterator final
   , public container_iterator_member_provider<set_container_const_iterator<Key>,
       typename std::iterator_traits<set_container_const_iterator<Key>>::iterator_category> {
 
-  friend container_iterator_member_provider<set_container_const_iterator<Key>, std::random_access_iterator_tag>;
   friend container_iterator_member_provider<set_container_const_iterator<Key>, std::bidirectional_iterator_tag>;
   friend container_iterator_member_provider<set_container_const_iterator<Key>, std::forward_iterator_tag>;
   friend container_iterator_member_provider<set_container_const_iterator<Key>, std::input_iterator_tag>;
