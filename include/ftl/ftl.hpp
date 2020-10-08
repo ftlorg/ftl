@@ -4,6 +4,7 @@
 
 #include <ftl/array.hpp>
 #include <ftl/deque.hpp>
+#include <ftl/forward_list.hpp>
 #include <ftl/list.hpp>
 #include <ftl/map.hpp>
 #include <ftl/vector.hpp>
