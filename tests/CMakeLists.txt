@@ -22,6 +22,8 @@ add_executable(tests
   test_list_container_iterator.cpp
   test_map.cpp
   test_map_container_iterator.cpp
+  test_unordered_map.cpp
+  test_unordered_map_container_iterator.cpp
   test_map_iterator.cpp
   test_take_iterator.cpp
   test_vector.cpp
