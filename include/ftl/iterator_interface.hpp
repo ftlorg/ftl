@@ -2,6 +2,7 @@
 
 #include <ftl/from_iterator_trait.hpp>
 #include <ftl/iterator_traits.hpp>
+#include <algorithm>
 #include <memory>
 #include <cassert>
 #include <tuple>
@@ -93,7 +94,13 @@ public:
 
   [[nodiscard]] auto max() const -> std::optional<value_type>;
 
-  [[nodiscard]] auto min() const -> std::optional<value_type>;
+  [[nodiscard]] auto min() const -> std::optional<value_type> {
+    if (count() > 0) {
+      return { *std::min_element(static_cast<const Derived &>(*this).cbegin(), static_cast<const Derived &>(*this).cend()) };
+    }
+
+    return std::nullopt;
+  }
 
   template<typename Collection, typename Predicate>
   [[nodiscard]] auto partition(Predicate &&predicate) const -> std::tuple<Collection, Collection>;
