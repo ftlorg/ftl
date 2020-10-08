@@ -38,7 +38,7 @@ TEST_CASE(TEST_TAG "collect const to std::set", TEST_TAG) {
   REQUIRE(mapped_set == std::set<int>{ { 1, 2, 3 } });
 }
 
-TEST_CASE(TEST_TAG "set collect", TEST_TAG) {
+TEST_CASE(TEST_TAG "map collect", TEST_TAG) {
   ftl::set<std::string> set = { { "red", "green", "blue" } };
 
   auto mapped_set = set.iter().map([](const auto &entry) { return entry + "abc"; }).collect<ftl::set<std::string>>();
@@ -46,7 +46,7 @@ TEST_CASE(TEST_TAG "set collect", TEST_TAG) {
   REQUIRE(mapped_set == ftl::set<std::string>{ { "redabc", "greenabc", "blueabc" } });
 }
 
-TEST_CASE(TEST_TAG "set collect const", TEST_TAG) {
+TEST_CASE(TEST_TAG "map collect const", TEST_TAG) {
   const ftl::set<std::string> set = { { "red", "green", "blue" } };
 
   auto mapped_set = set.iter().map([](const auto &entry) { return entry + "abc"; }).collect<ftl::set<std::string>>();
@@ -54,7 +54,7 @@ TEST_CASE(TEST_TAG "set collect const", TEST_TAG) {
   REQUIRE(mapped_set == ftl::set<std::string>{ { "redabc", "greenabc", "blueabc" } });
 }
 
-TEST_CASE(TEST_TAG "set set collect", TEST_TAG) {
+TEST_CASE(TEST_TAG "map map collect", TEST_TAG) {
   ftl::set<std::string> set = { { "red", "green", "blue" } };
 
   auto mapped_set = set.iter()
@@ -65,7 +65,7 @@ TEST_CASE(TEST_TAG "set set collect", TEST_TAG) {
   REQUIRE(mapped_set == ftl::vector<std::string>{ { "blueabcabc", "greenabcabc", "redabcabc" } });
 }
 
-TEST_CASE(TEST_TAG "set set collect const", TEST_TAG) {
+TEST_CASE(TEST_TAG "map map collect const", TEST_TAG) {
   const ftl::set<std::string> set = { { "red", "green", "blue" } };
 
   auto mapped_set = set.iter()
@@ -106,7 +106,7 @@ TEST_CASE(TEST_TAG "enumerate collect const", TEST_TAG) {
           });
 }
 
-TEST_CASE(TEST_TAG "set enumerate collect", TEST_TAG) {
+TEST_CASE(TEST_TAG "map enumerate collect", TEST_TAG) {
   ftl::set<std::string> set = { { "red", "green", "blue" } };
 
   for (const auto &e : set.iter().enumerate()) { INFO(std::get<0>(e)); }
@@ -124,7 +124,7 @@ TEST_CASE(TEST_TAG "set enumerate collect", TEST_TAG) {
           });
 }
 
-TEST_CASE(TEST_TAG "set enumerate collect const", TEST_TAG) {
+TEST_CASE(TEST_TAG "map enumerate collect const", TEST_TAG) {
   const ftl::set<std::string> set = { { "red", "green", "blue" } };
 
   for (const auto &e : set.iter().enumerate()) { INFO(std::get<0>(e)); }
@@ -142,7 +142,7 @@ TEST_CASE(TEST_TAG "set enumerate collect const", TEST_TAG) {
           });
 }
 
-TEST_CASE(TEST_TAG "set inspect set collect", TEST_TAG) {
+TEST_CASE(TEST_TAG "map inspect map collect", TEST_TAG) {
   ftl::set<std::string> set = { { "red", "green", "blue" } };
 
   auto mapped_set = set.iter()
@@ -154,7 +154,7 @@ TEST_CASE(TEST_TAG "set inspect set collect", TEST_TAG) {
   REQUIRE(mapped_set == ftl::set<std::string>{ { "blueabcabc", "greenabcabc", "redabcabc" } });
 }
 
-TEST_CASE(TEST_TAG "set inspect set collect const", TEST_TAG) {
+TEST_CASE(TEST_TAG "map inspect map collect const", TEST_TAG) {
   const ftl::set<std::string> set = { { "red", "green", "blue" } };
 
   auto mapped_set = set.iter()
