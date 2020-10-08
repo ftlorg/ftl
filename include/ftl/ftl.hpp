@@ -13,6 +13,7 @@
 #include <ftl/take_iterator.hpp>
 #include <ftl/enumerate_iterator.hpp>
 #include <ftl/filter_iterator.hpp>
+#include <ftl/set.hpp>
 
 namespace ftl {
 
