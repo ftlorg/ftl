@@ -234,7 +234,7 @@ struct std::iterator_traits<ftl::unordered_map_container_iterator<Key, T, Item>>
   using reference = value_type &;
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
-  using iterator_category = std::random_access_iterator_tag;
+  using iterator_category = std::forward_iterator_tag;
   using std_unordered_map_container_iterator = typename std::unordered_map<Key, T>::iterator;
   using size_type = std::size_t;
 };
@@ -247,7 +247,7 @@ struct std::iterator_traits<ftl::unordered_map_container_const_iterator<Key, T, 
   using reference = value_type &;
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
-  using iterator_category = std::random_access_iterator_tag;
+  using iterator_category = std::forward_iterator_tag;
   using std_unordered_map_container_const_iterator = typename std::unordered_map<Key, T>::const_iterator;
   using size_type = std::size_t;
 };
