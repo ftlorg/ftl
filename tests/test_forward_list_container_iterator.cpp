@@ -50,6 +50,128 @@ TEST_CASE(TEST_TAG "collect const", TEST_TAG) {
   REQUIRE(mapped_list2 == ftl::forward_list<int>{ 1, 2, 3 });
 }
 
+TEST_CASE(TEST_TAG "map collect", TEST_TAG) {
+  ftl::forward_list<std::string> forward_list = { { "red", "green", "blue" } };
+
+  auto mapped_forward_list
+    = forward_list.iter().map([](const auto &entry) { return entry + "abc"; }).collect<ftl::forward_list<std::string>>();
+
+  REQUIRE(mapped_forward_list == ftl::forward_list<std::string>{ { "redabc", "greenabc", "blueabc" } });
+}
+
+TEST_CASE(TEST_TAG "map collect const", TEST_TAG) {
+  const ftl::forward_list<std::string> forward_list = { { "red", "green", "blue" } };
+
+  auto mapped_forward_list
+    = forward_list.iter().map([](const auto &entry) { return entry + "abc"; }).collect<ftl::forward_list<std::string>>();
+
+  REQUIRE(mapped_forward_list == ftl::forward_list<std::string>{ { "redabc", "greenabc", "blueabc" } });
+}
+
+TEST_CASE(TEST_TAG "map map collect", TEST_TAG) {
+  ftl::forward_list<std::string> forward_list = { { "red", "green", "blue" } };
+
+  auto mapped_forward_list = forward_list.iter()
+                               .map([](const auto &entry) { return entry + "abc"; })
+                               .map([](const auto &entry) { return entry + "abc"; })
+                               .collect<std::vector<std::string>>();
+
+  REQUIRE(mapped_forward_list == ftl::vector<std::string>{ { "redabcabc", "greenabcabc", "blueabcabc" } });
+}
+
+TEST_CASE(TEST_TAG "map map collect const", TEST_TAG) {
+  const ftl::forward_list<std::string> forward_list = { { "red", "green", "blue" } };
+
+  auto mapped_forward_list = forward_list.iter()
+                               .map([](const auto &entry) { return entry + "abc"; })
+                               .map([](const auto &entry) { return entry + "abc"; })
+                               .collect<std::vector<std::string>>();
+
+  REQUIRE(mapped_forward_list == ftl::vector<std::string>{ { "redabcabc", "greenabcabc", "blueabcabc" } });
+}
+
+TEST_CASE(TEST_TAG "enumerate collect", TEST_TAG) {
+  ftl::forward_list<std::string> forward_list = { { "red", "green", "blue" } };
+
+  auto mapped_forward_list = forward_list.iter().enumerate().collect<std::vector<std::tuple<std::size_t, std::string>>>();
+
+  REQUIRE(mapped_forward_list
+          == std::vector<std::tuple<std::size_t, std::string>>{
+            { 0, "red" },
+            { 1, "green" },
+            { 2, "blue" },
+          });
+}
+
+TEST_CASE(TEST_TAG "enumerate collect const", TEST_TAG) {
+  const ftl::forward_list<std::string> forward_list = { { "red", "green", "blue" } };
+
+  auto mapped_forward_list = forward_list.iter().enumerate().collect<std::vector<std::tuple<std::size_t, std::string>>>();
+
+  REQUIRE(mapped_forward_list
+          == std::vector<std::tuple<std::size_t, std::string>>{
+            { 0, "red" },
+            { 1, "green" },
+            { 2, "blue" },
+          });
+}
+
+TEST_CASE(TEST_TAG "map enumerate collect", TEST_TAG) {
+  ftl::forward_list<std::string> forward_list = { { "red", "green", "blue" } };
+
+  auto mapped_forward_list = forward_list.iter()
+                               .map([](const auto &entry) { return entry + "abc"; })
+                               .enumerate()
+                               .collect<ftl::map<std::size_t, std::string>>();
+
+  REQUIRE(mapped_forward_list
+          == ftl::map<std::size_t, std::string>{
+            { 0, "redabc" },
+            { 1, "greenabc" },
+            { 2, "blueabc" },
+          });
+}
+
+TEST_CASE(TEST_TAG "map enumerate collect const", TEST_TAG) {
+  const ftl::forward_list<std::string> forward_list = { { "red", "green", "blue" } };
+
+  auto mapped_forward_list = forward_list.iter()
+                               .map([](const auto &entry) { return entry + "abc"; })
+                               .enumerate()
+                               .collect<ftl::map<std::size_t, std::string>>();
+
+  REQUIRE(mapped_forward_list
+          == ftl::map<std::size_t, std::string>{
+            { 0, "redabc" },
+            { 1, "greenabc" },
+            { 2, "blueabc" },
+          });
+}
+
+TEST_CASE(TEST_TAG "map inspect map collect", TEST_TAG) {
+  ftl::forward_list<std::string> forward_list = { { "red", "green", "blue" } };
+
+  auto mapped_forward_list = forward_list.iter()
+                               .map([](const auto &entry) { return std::string{ entry + "abc" }; })
+                               .inspect([](const auto &entry) { INFO(entry); })
+                               .map([](const auto &entry) { return std::string{ entry + "abc" }; })
+                               .collect<ftl::forward_list<std::string>>();
+
+  REQUIRE(mapped_forward_list == ftl::forward_list<std::string>{ { "redabcabc", "greenabcabc", "blueabcabc" } });
+}
+
+TEST_CASE(TEST_TAG "map inspect map collect const", TEST_TAG) {
+  const ftl::forward_list<std::string> forward_list = { { "red", "green", "blue" } };
+
+  auto mapped_forward_list = forward_list.iter()
+                               .map([](const auto &entry) { return std::string{ entry + "abc" }; })
+                               .inspect([](const auto &entry) { INFO(entry); })
+                               .map([](const auto &entry) { return std::string{ entry + "abc" }; })
+                               .collect<ftl::forward_list<std::string>>();
+
+  REQUIRE(mapped_forward_list == ftl::forward_list<std::string>{ { "redabcabc", "greenabcabc", "blueabcabc" } });
+}
+
 TEST_CASE(TEST_TAG "count", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::forward_list<int> list = { 1, 2, 3, 4, 5 };
