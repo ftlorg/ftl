@@ -39,13 +39,13 @@ public:
 
   unordered_map_container_const_iterator(std_unordered_map_container_const_iterator begin,
     std_unordered_map_container_const_iterator end)
-    : current_{ begin }, begin_{ begin }, end_{ end } {
+    : current_{ begin }, begin_{ std::move(begin) }, end_{ std::move(end) } {
   }
 
   unordered_map_container_const_iterator(std_unordered_map_container_const_iterator current,
     std_unordered_map_container_const_iterator begin,
     std_unordered_map_container_const_iterator end)
-    : current_{ current }, begin_{ begin }, end_{ end } {
+    : current_{ current }, begin_{ std::move(begin) }, end_{ std::move(end) } {
   }
 
 private:
