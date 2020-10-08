@@ -5,6 +5,7 @@
 #include <forward_list>
 #include <list>
 #include <map>
+#include <unordered_map>
 
 namespace ftl {
 
@@ -34,6 +35,12 @@ class map_container_iterator;
 
 template<typename Key, typename T, typename Item>
 class map_container_const_iterator;
+
+template<typename Key, typename T, typename Item>
+class unordered_map_container_iterator;
+
+template<typename Key, typename T, typename Item>
+class unordered_map_container_const_iterator;
 
 template<typename Item>
 class forward_list_container_iterator;
@@ -248,5 +255,31 @@ struct std::iterator_traits<ftl::map_container_iterator<Key, T, Item>> {
   using const_reference = const value_type &;
   using iterator_category = std::random_access_iterator_tag;
   using std_map_container_iterator = typename std::map<Key, T, Item>::iterator;
+  using size_type = std::size_t;
+};
+
+template<typename Key, typename T, typename Item>
+struct std::iterator_traits<ftl::unordered_map_container_iterator<Key, T, Item>> {
+  using difference_type = std::ptrdiff_t;
+  using value_type = std::remove_cv_t<Item>;
+  using pointer = value_type *;
+  using reference = value_type &;
+  using const_pointer = const value_type *;
+  using const_reference = const value_type &;
+  using iterator_category = std::forward_iterator_tag;
+  using std_unordered_map_container_iterator = typename std::unordered_map<Key, T>::iterator;
+  using size_type = std::size_t;
+};
+
+template<typename Key, typename T, typename Item>
+struct std::iterator_traits<ftl::unordered_map_container_const_iterator<Key, T, Item>> {
+  using difference_type = std::ptrdiff_t;
+  using value_type = std::remove_cv_t<Item>;
+  using pointer = value_type *;
+  using reference = value_type &;
+  using const_pointer = const value_type *;
+  using const_reference = const value_type &;
+  using iterator_category = std::forward_iterator_tag;
+  using std_unordered_map_container_const_iterator = typename std::unordered_map<Key, T>::const_iterator;
   using size_type = std::size_t;
 };

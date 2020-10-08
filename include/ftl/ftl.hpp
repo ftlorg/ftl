@@ -7,6 +7,7 @@
 #include <ftl/forward_list.hpp>
 #include <ftl/list.hpp>
 #include <ftl/map.hpp>
+#include <ftl/unordered_map.hpp>
 #include <ftl/vector.hpp>
 #include <ftl/iterator_interface.hpp>
 #include <ftl/map_iterator.hpp>
