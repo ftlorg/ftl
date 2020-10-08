@@ -15,6 +15,8 @@ add_executable(tests
   test_deque.cpp
   test_enumerate_iterator.cpp
   test_filter_iterator.cpp
+  test_forward_list.cpp
+  test_forward_list_container_iterator.cpp
   test_inspect_iterator.cpp
   test_list.cpp
   test_list_container_iterator.cpp

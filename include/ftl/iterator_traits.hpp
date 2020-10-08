@@ -2,6 +2,7 @@
 
 #include <iterator>
 #include <vector>
+#include <forward_list>
 #include <list>
 #include <map>
 #include <set>
@@ -47,6 +48,12 @@ class unordered_map_container_iterator;
 
 template<typename Key, typename T, typename Item>
 class unordered_map_container_const_iterator;
+
+template<typename Item>
+class forward_list_container_iterator;
+
+template<typename Item>
+class forward_list_container_const_iterator;
 
 template<typename Item>
 class list_container_iterator;
@@ -115,6 +122,32 @@ struct std::iterator_traits<ftl::map_container_const_iterator<Key, T, Item>> {
 };
 
 template<typename Item>
+struct std::iterator_traits<ftl::forward_list_container_iterator<Item>> {
+  using difference_type = std::ptrdiff_t;
+  using value_type = typename std::remove_cv_t<Item>;
+  using pointer = value_type *;
+  using reference = value_type &;
+  using const_pointer = const value_type *;
+  using const_reference = const value_type &;
+  using iterator_category = std::forward_iterator_tag;
+  using size_type = std::size_t;
+  using std_forward_list_container_iterator = typename std::forward_list<value_type>::iterator;
+};
+
+template<typename Item>
+struct std::iterator_traits<ftl::forward_list_container_const_iterator<Item>> {
+  using difference_type = std::ptrdiff_t;
+  using value_type = typename std::remove_cv_t<Item>;
+  using pointer = value_type *;
+  using reference = value_type &;
+  using const_pointer = const value_type *;
+  using const_reference = const value_type &;
+  using iterator_category = std::forward_iterator_tag;
+  using size_type = std::size_t;
+  using std_forward_list_container_const_iterator = typename std::forward_list<value_type>::const_iterator;
+};
+
+template<typename Item>
 struct std::iterator_traits<ftl::list_container_iterator<Item>> {
   using difference_type = std::ptrdiff_t;
   using value_type = typename std::remove_cv_t<Item>;
@@ -139,7 +172,6 @@ struct std::iterator_traits<ftl::list_container_const_iterator<Item>> {
   using size_type = std::size_t;
   using std_list_container_const_iterator = typename std::list<value_type>::const_iterator;
 };
-
 
 template<typename Iter, typename Callable>
 struct std::iterator_traits<ftl::inspect_iterator<Iter, Callable>> {

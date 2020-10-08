@@ -35,13 +35,13 @@ public:
     typename std::iterator_traits<ftl::list_container_iterator<Item>>::std_list_container_iterator;
 
   list_container_iterator(std_list_container_iterator begin, std_list_container_iterator end)
-    : current_{ begin }, begin_{ begin }, end_{ end } {
+    : current_{ begin }, begin_{ std::move(begin) }, end_{ std::move(end) } {
   }
 
   list_container_iterator(std_list_container_iterator current,
     std_list_container_iterator begin,
     std_list_container_iterator end)
-    : current_{ current }, begin_{ begin }, end_{ end } {
+    : current_{ current }, begin_{ std::move(begin) }, end_{ std::move(end) } {
   }
 
 private:
