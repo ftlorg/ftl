@@ -33,13 +33,13 @@ public:
 
   forward_list_container_const_iterator(std_forward_list_container_const_iterator begin,
     std_forward_list_container_const_iterator end)
-    : current_{ begin }, begin_{ begin }, end_{ end } {
+    : current_{ begin }, begin_{ std::move(begin) }, end_{ std::move(end) } {
   }
 
   forward_list_container_const_iterator(std_forward_list_container_const_iterator current,
     std_forward_list_container_const_iterator begin,
     std_forward_list_container_const_iterator end)
-    : current_{ current }, begin_{ begin }, end_{ end } {
+    : current_{ current }, begin_{ std::move(begin) }, end_{ std::move(end) } {
   }
 
 private:
