@@ -130,7 +130,7 @@ struct std::iterator_traits<ftl::forward_list_container_const_iterator<Item>> {
   using const_reference = const value_type &;
   using iterator_category = std::forward_iterator_tag;
   using size_type = std::size_t;
-  using forward_list_container_const_iterator = typename std::forward_list<value_type>::const_iterator;
+  using std_forward_list_container_const_iterator = typename std::forward_list<value_type>::const_iterator;
 };
 
 template<typename Item>
