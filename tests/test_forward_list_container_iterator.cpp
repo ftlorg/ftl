@@ -91,28 +91,28 @@ TEST_CASE(TEST_TAG "map map collect const", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "enumerate collect", TEST_TAG) {
-  ftl::forward_list<std::string> forward_list = { { "red", "green", "blue" } };
+  ftl::forward_list<int> forward_list = { { 1, 2, 3 } };
 
-  auto mapped_forward_list = forward_list.iter().enumerate().collect<std::vector<std::tuple<std::size_t, std::string>>>();
+  auto mapped_forward_list = forward_list.iter().enumerate().collect<std::vector<std::tuple<std::size_t, int>>>();
 
   REQUIRE(mapped_forward_list
-          == std::vector<std::tuple<std::size_t, std::string>>{
-            { 0, "red" },
-            { 1, "green" },
-            { 2, "blue" },
+          == std::vector<std::tuple<std::size_t, int>>{
+            { 0, 1 },
+            { 1, 2 },
+            { 2, 3 },
           });
 }
 
 TEST_CASE(TEST_TAG "enumerate collect const", TEST_TAG) {
-  const ftl::forward_list<std::string> forward_list = { { "red", "green", "blue" } };
+  const ftl::forward_list<int> forward_list = { { 1, 2, 3 } };
 
-  auto mapped_forward_list = forward_list.iter().enumerate().collect<std::vector<std::tuple<std::size_t, std::string>>>();
+  auto mapped_forward_list = forward_list.iter().enumerate().collect<std::vector<std::tuple<std::size_t, int>>>();
 
   REQUIRE(mapped_forward_list
-          == std::vector<std::tuple<std::size_t, std::string>>{
-            { 0, "red" },
-            { 1, "green" },
-            { 2, "blue" },
+          == std::vector<std::tuple<std::size_t, int>>{
+            { 0, 1 },
+            { 1, 2 },
+            { 2, 3 },
           });
 }
 
