@@ -49,7 +49,13 @@ public:
   [[nodiscard]] auto all(Predicate &&predicate) const -> bool;
 
   template<typename Predicate>
-  [[nodiscard]] auto any(Predicate &&predicate) const -> bool;
+  [[nodiscard]] auto any(Predicate &&predicate) const -> bool {
+    for (auto &&x : static_cast<const Derived &>(*this)) {
+      if (predicate(x)) { return true; }
+    }
+
+    return false;
+  }
 
   template<typename Collection>
   [[nodiscard]] auto collect() const -> Collection {

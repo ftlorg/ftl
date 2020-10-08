@@ -10,6 +10,7 @@ target_link_libraries(catch_main PUBLIC CONAN_PKG::catch2)
 target_link_libraries(catch_main PRIVATE project_options)
 
 add_executable(tests 
+  test_any.cpp
   test_array.cpp
   test_array_container_iterator.cpp
   test_deque.cpp
