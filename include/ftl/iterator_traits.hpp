@@ -258,7 +258,7 @@ struct std::iterator_traits<ftl::set_container_const_iterator<Key>> {
   using std_set_container_const_iterator = typename std::set<Key>::const_iterator;
   using size_type = std::size_t;
 };
-};
+
 
 template<typename Key, typename T, typename Item>
 struct std::iterator_traits<ftl::unordered_map_container_iterator<Key, T, Item>> {
