@@ -14,7 +14,7 @@ TEST_CASE(TEST_TAG "collect to std::vector", TEST_TAG) {
   REQUIRE(mapped_set == std::vector<std::string>{ "blue", "green", "red" });
 }
 
-TEST_CASE(TEST_TAG "collect const to std::vector", TEST_TAG) {
+TEST_CASE(TEST_TAG "collect to std::vector const", TEST_TAG) {
   const ftl::set<int> set = { { 1, 2, 3 } };
 
   auto mapped_set = set.iter().collect<std::vector<int>>();
