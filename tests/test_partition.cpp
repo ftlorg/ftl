@@ -9,8 +9,8 @@ TEST_CASE(TEST_TAG "partition", TEST_TAG) {
   const auto is_even = [](const auto &x) { return x % 2 == 0; };
   auto [coll1, coll2] = vec.iter().partition<ftl::vector<int>>(is_even);
 
-  for (const auto &x : coll1) { REQUIRE(is_even(x) == true); }
-  for (const auto &x : coll2) { REQUIRE(is_even(x) == false); }
+  for (const auto &e : coll1) { REQUIRE(is_even(e) == true); }
+  for (const auto &e : coll2) { REQUIRE(is_even(e) == false); }
 }
 
 TEST_CASE(TEST_TAG "partition first empty", TEST_TAG) {
@@ -20,7 +20,7 @@ TEST_CASE(TEST_TAG "partition first empty", TEST_TAG) {
   auto [coll1, coll2] = vec.iter().partition<ftl::vector<int>>(is_even);
 
   REQUIRE(coll1.empty() == true);
-  for (const auto &x : coll2) { REQUIRE(is_even(x) == false); }
+  for (const auto &e : coll2) { REQUIRE(is_even(e) == false); }
 }
 
 TEST_CASE(TEST_TAG "partition second empty", TEST_TAG) {
@@ -29,7 +29,7 @@ TEST_CASE(TEST_TAG "partition second empty", TEST_TAG) {
   const auto is_even = [](const auto &x) { return x % 2 == 0; };
   auto [coll1, coll2] = vec.iter().partition<ftl::vector<int>>(is_even);
 
-  for (const auto &x : coll1) { REQUIRE(is_even(x) == true); }
+  for (const auto &e : coll1) { REQUIRE(is_even(e) == true); }
   REQUIRE(coll2.empty() == true);
 }
 
@@ -42,5 +42,5 @@ TEST_CASE(TEST_TAG "partition no criteria met", TEST_TAG) {
   REQUIRE(coll1.empty() == true);
 
   int i = 0;
-  for (const auto &x : coll2) { REQUIRE(x == ++i); }
+  for (const auto &e : coll2) { REQUIRE(e == ++i); }
 }
