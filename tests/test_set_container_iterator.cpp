@@ -249,7 +249,7 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
 TEST_CASE(TEST_TAG "find", TEST_TAG) {
   const ftl::set<std::string> set = { { "red", "green", "blue" } };
 
-  auto element = set.iter().find([](const auto &element) { return element.size() > 4; });
+  auto element = set.iter().find([](const auto &x) { return x.size() > 4; });
   REQUIRE(element.has_value());
   REQUIRE(element.value() == "green");
 }
@@ -257,7 +257,7 @@ TEST_CASE(TEST_TAG "find", TEST_TAG) {
 TEST_CASE(TEST_TAG "find element not in set", TEST_TAG) {
   const ftl::set<std::string> set = { { "red", "green", "blue" } };
 
-  auto element = set.iter().find([](const auto &element) { return element.size() > 10; });
+  auto element = set.iter().find([](const auto &x) { return x.size() > 10; });
   REQUIRE_FALSE(element.has_value());
   REQUIRE(element == std::nullopt);
 }
