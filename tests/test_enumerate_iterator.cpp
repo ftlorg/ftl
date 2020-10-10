@@ -157,3 +157,12 @@ TEST_CASE(TEST_TAG "enumerate collect to std::vector const", TEST_TAG) {
             { 4, 5 },
           });
 }
+
+TEST_CASE(TEST_TAG "find", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto element = arr.iter().enumerate().find([]([[maybe_unused]]const auto &element) { return true; });
+  if (element.value() == 1) {}
+  //REQUIRE(element.value() == std::tuple<std::size_t, int>{ 0, 1 });
+}
