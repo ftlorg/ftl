@@ -195,7 +195,7 @@ TEST_CASE(TEST_TAG "find element not in array", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { { 1, 7, 3, 11, 5 } };
 
-  auto elem = arr.iter().find([](const auto &elem) { return elem % 2 == 0; });
+  auto elem = arr.iter().find([](const auto &element) { return element % 2 == 0; });
 
   REQUIRE_FALSE(elem.has_value());
   REQUIRE(elem == std::nullopt);
