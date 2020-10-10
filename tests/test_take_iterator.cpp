@@ -101,3 +101,19 @@ TEST_CASE(TEST_TAG "take filter take more collect", TEST_TAG) {
   REQUIRE(mapped_list == ftl::list<int>{ 2, 4 });
   REQUIRE(mapped_vec == ftl::vector<int>{ 2, 4 });
 }
+
+TEST_CASE(TEST_TAG "find", TEST_TAG) {
+  ftl::list<int> list = { 1, 2, 3, 4, 5 };
+
+  auto element = list.iter().take(4).find([](const auto &x) { return x > 2; });
+  REQUIRE(element.has_value());
+  REQUIRE(element.value() == 3);
+}
+
+TEST_CASE(TEST_TAG "find element not in list", TEST_TAG) {
+  ftl::list<int> list = { 1, 2, 3, 4, 5 };
+
+  auto element = list.iter().take(4).find([](const auto &x) { return x == 5; });
+  REQUIRE_FALSE(element.has_value());
+  REQUIRE(element == std::nullopt);
+}

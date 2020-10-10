@@ -168,3 +168,19 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   ++iter;
   REQUIRE(arr[4] == *iter);
 }
+
+TEST_CASE(TEST_TAG "find", TEST_TAG) {
+  const ftl::vector<int> arr = { 1, 2, 3, 4, 5 };
+
+  auto element = arr.iter().find([](const auto &elem) { return elem % 2 == 0; });
+  REQUIRE(element.has_value());
+  REQUIRE(element.value() == 2);
+}
+
+TEST_CASE(TEST_TAG "find element not in array", TEST_TAG) {
+  const ftl::vector<int> arr = { 1, 2, 3, 4, 5 };
+
+  auto element = arr.iter().find([](const auto &elem) { return elem > 10; });
+  REQUIRE_FALSE(element.has_value());
+  REQUIRE(element == std::nullopt);
+}

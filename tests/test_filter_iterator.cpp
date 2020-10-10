@@ -109,3 +109,27 @@ TEST_CASE(TEST_TAG "chain enumerate and filter", TEST_TAG) {
 
   REQUIRE(mapped_arr == ftl::vector<int>{ 4, 5 });
 }
+
+TEST_CASE(TEST_TAG "find", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto element
+    = arr.iter().filter([](const auto &x) { return x % 2 == 0; }).find([](const auto &element) { return element > 2; });
+                      
+
+  REQUIRE(element.has_value());
+  REQUIRE(element.value() == 4);
+}
+
+TEST_CASE(TEST_TAG "find element not in array", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto element
+    = arr.iter().filter([](const auto &x) { return x % 2 == 0; }).find([](const auto &element) { return element > 10; });
+
+
+  REQUIRE_FALSE(element.has_value());
+  REQUIRE(element == std::nullopt);
+}

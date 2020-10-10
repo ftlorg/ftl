@@ -326,3 +326,19 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   ++iter;
   REQUIRE(iter != map.iter().end());
 }
+
+TEST_CASE(TEST_TAG "find", TEST_TAG) {
+  const ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  auto element = map.iter().find([](const auto &x) { return x.first > 2; });
+  REQUIRE(element.has_value());
+  REQUIRE(element.value() == std::pair<const int, std::string>{ 3, "blue" });
+}
+
+TEST_CASE(TEST_TAG "find element not in map", TEST_TAG) {
+  const ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  auto element = map.iter().find([](const auto &x) { return x.first > 5; });
+  REQUIRE_FALSE(element.has_value());
+  REQUIRE(element == std::nullopt);
+}

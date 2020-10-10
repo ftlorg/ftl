@@ -82,3 +82,29 @@ TEST_CASE(TEST_TAG "chain map const", TEST_TAG) {
 
   REQUIRE(mapped_arr == ftl::array<int, size>{ { 2, 8, 18, 32, 50 } });
 }
+
+TEST_CASE(TEST_TAG "find", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto element
+    = arr.iter().map([](const auto &x) { return x * x; }).map([](const auto &x) { return 2 * x; }).find([](const auto &x) {
+        return x > 15;
+      });
+
+  REQUIRE(element.has_value());
+  REQUIRE(element.value() == 18);
+}
+
+TEST_CASE(TEST_TAG "find element not in array", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto element
+    = arr.iter().map([](const auto &x) { return x * x; }).map([](const auto &x) { return 2 * x; }).find([](const auto &x) {
+        return x % 2;
+      });
+
+  REQUIRE_FALSE(element.has_value());
+  REQUIRE(element == std::nullopt);
+}

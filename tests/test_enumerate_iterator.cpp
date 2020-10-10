@@ -162,7 +162,16 @@ TEST_CASE(TEST_TAG "find", TEST_TAG) {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
 
-  auto element = arr.iter().enumerate().find([]([[maybe_unused]]const auto &element) { return true; });
-  if (element.value() == 1) {}
-  //REQUIRE(element.value() == std::tuple<std::size_t, int>{ 0, 1 });
+  auto element = arr.iter().enumerate().find([](const auto &element) { return std::get<1>(element) == 1; });
+  REQUIRE(element.has_value());
+  REQUIRE(element.value() == std::tuple<std::size_t, int>{ 0, 1 });
+}
+
+TEST_CASE(TEST_TAG "find element not in array", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto element = arr.iter().enumerate().find([](const auto &element) { return std::get<0>(element) == 10; });
+  REQUIRE_FALSE(element.has_value());
+  REQUIRE(element == std::nullopt);
 }

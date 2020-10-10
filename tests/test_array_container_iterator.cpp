@@ -191,7 +191,7 @@ TEST_CASE(TEST_TAG "find", TEST_TAG) {
   REQUIRE(elem.value() == 2);
 }
 
-TEST_CASE(TEST_TAG "find when non of elements satisfies predicat", TEST_TAG) {
+TEST_CASE(TEST_TAG "find element not in array", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { { 1, 7, 3, 11, 5 } };
 
