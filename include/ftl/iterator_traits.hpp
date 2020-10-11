@@ -260,7 +260,7 @@ struct std::iterator_traits<ftl::map_container_iterator<Key, T, Item>> {
   using reference = value_type &;
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
-  using iterator_category = std::random_access_iterator_tag;
+  using iterator_category = std::bidirectional_iterator_tag;
   using std_map_container_iterator = typename std::map<Key, T, Item>::iterator;
   using size_type = std::size_t;
 };
