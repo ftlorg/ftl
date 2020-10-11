@@ -189,14 +189,14 @@ struct std::iterator_traits<ftl::inspect_iterator<Iter, Callable>> {
 template<typename Iter>
 struct std::iterator_traits<ftl::enumerate_iterator<Iter>> {
   using difference_type = typename Iter::difference_type;
-  using value_type = typename Iter::value_type;
+  using size_type = typename Iter::size_type;
+  using value_type = typename std::tuple<size_type, typename Iter::value_type>;
   using pointer = typename Iter::pointer;
   using reference = typename Iter::reference;
   using const_pointer = typename Iter::const_pointer;
   using const_reference = typename Iter::const_reference;
   using inherited_iterator_category = typename Iter::iterator_category;
   using iterator_category = inherited_iterator_category;
-  using size_type = typename Iter::size_type;
 };
 
 template<typename Iter>
