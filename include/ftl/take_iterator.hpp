@@ -40,10 +40,12 @@ public:
   }
 
   [[nodiscard]] constexpr auto end_impl() const noexcept -> take_iterator<Iter> {
+    // TODO: This is suboptimal
     return { std::next(iterator_.cbegin(), n_), n_ };
   }
 
   [[nodiscard]] constexpr auto cend_impl() const noexcept -> take_iterator<Iter> {
+    // TODO: This is suboptimal
     return { std::next(iterator_.cbegin(), n_), n_ };
   }
 
