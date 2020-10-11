@@ -169,7 +169,7 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   REQUIRE(arr[4] == *iter);
 }
 
-TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
+TEST_CASE(TEST_TAG "sum", TEST_TAG) {
   const ftl::vector<int> arr = { 2, 4, 5 };
 
   auto sum = arr.iter().sum();
