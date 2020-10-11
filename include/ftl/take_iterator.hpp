@@ -56,7 +56,7 @@ public:
       ++iterator_;
       ++counter_;
     } else {
-      while (++iterator_ != iterator_.end()) {}
+      iterator_ = iterator_.end();
     }
 
     return *this;
@@ -67,7 +67,7 @@ public:
       ++iterator_;
       ++counter_;
     } else {
-      while (++iterator_ != iterator_.end()) {}
+      iterator_ = iterator_.end();
     }
 
     return *this;
@@ -75,7 +75,7 @@ public:
 
 private:
   mutable Iter iterator_;
-  const size_type n_ = 0;
+  size_type n_ = 0;
   mutable size_type counter_ = 0;
 };
 

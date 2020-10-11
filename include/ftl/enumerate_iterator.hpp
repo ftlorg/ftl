@@ -59,11 +59,18 @@ private:
   }
 
   [[nodiscard]] constexpr auto const_deref_impl() const
-    -> std::tuple<size_type, decltype(std::declval<const Iter&>().operator*())> {
+    -> std::tuple<size_type, decltype(std::declval<const Iter &>().operator*())> {
     return { index_, *iterator_ };
   }
 
   auto preincrement_impl() -> enumerate_iterator<Iter> & {
+    ++iterator_;
+    ++index_;
+
+    return *this;
+  }
+
+  auto const_preincrement_impl() const -> const enumerate_iterator<Iter> & {
     ++iterator_;
     ++index_;
 

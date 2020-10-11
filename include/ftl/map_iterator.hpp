@@ -1,6 +1,7 @@
 #pragma once
 
 #include <type_traits>
+#include <functional>
 #include <ftl/iterator_interface.hpp>
 #include <ftl/iterator_member_provider.hpp>
 #include <ftl/iterator_traits.hpp>
@@ -29,12 +30,12 @@ public:
   using inherited_iterator_category = typename std::iterator_traits<ftl::map_iterator<Iter, Callable>>::iterator_category;
   using iterator_category = typename std::iterator_traits<ftl::map_iterator<Iter, Callable>>::inherited_iterator_category;
   using size_type = typename std::iterator_traits<ftl::map_iterator<Iter, Callable>>::size_type;
+  using callable_t = std::function<std::invoke_result_t<Callable, typename Iter::value_type>(typename Iter::value_type)>;
 
-  map_iterator(Iter iterator, Callable callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
+  map_iterator(Iter iterator, callable_t callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
   }
 
 private:
-
   [[nodiscard]] constexpr auto begin_impl() const noexcept -> map_iterator<Iter, Callable> {
     return { iterator_.cbegin(), callable_ };
   }
@@ -67,7 +68,7 @@ private:
   }
 
   mutable Iter iterator_;
-  Callable callable_;
+  callable_t callable_;
 };
 
 }// namespace ftl

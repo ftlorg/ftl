@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+#include <type_traits>
 #include <ftl/iterator_interface.hpp>
 #include <ftl/iterator_member_provider.hpp>
 #include <ftl/from_iterator_trait.hpp>
@@ -32,8 +34,9 @@ public:
   using iterator_category =
     typename std::iterator_traits<ftl::inspect_iterator<Iter, Callable>>::inherited_iterator_category;
   using size_type = typename std::iterator_traits<ftl::inspect_iterator<Iter, Callable>>::size_type;
+  using callable_t = std::function<std::invoke_result_t<Callable, typename Iter::value_type>(typename Iter::value_type)>;
 
-  inspect_iterator(Iter iterator, Callable callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
+  inspect_iterator(Iter iterator, callable_t callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
   }
 
 private:
@@ -72,7 +75,7 @@ private:
   }
 
   mutable Iter iterator_;
-  Callable callable_;
+  callable_t callable_;
 };
 
 }// namespace ftl

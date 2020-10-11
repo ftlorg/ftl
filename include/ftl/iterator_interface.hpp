@@ -95,14 +95,17 @@ public:
   [[nodiscard]] auto max() const -> std::optional<value_type>;
 
   [[nodiscard]] auto min() const -> std::optional<value_type> {
-    auto begin = std::begin(static_cast<const Derived &>(*this));
-    auto end = std::end(static_cast<const Derived &>(*this));
+    const auto begin = std::begin(static_cast<const Derived &>(*this));
+    const auto end = std::end(static_cast<const Derived &>(*this));
 
     if (begin != end) {
       auto min = *begin;
 
-      for (auto it = std::next(begin); it != end; it++) {
-        if (*it < min) { min = *it; }
+      for (auto it = ++begin; it != end; it++) {
+        [[maybe_unused]] auto val = *it;
+        if (*it < min) { 
+          min = *it;
+        }
       }
 
       return { min };

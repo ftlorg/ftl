@@ -109,3 +109,11 @@ TEST_CASE(TEST_TAG "chain enumerate and filter", TEST_TAG) {
 
   REQUIRE(mapped_arr == ftl::vector<int>{ 4, 5 });
 }
+
+TEST_CASE(TEST_TAG "filter min", TEST_TAG) {
+  ftl::list<int> list = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
+
+  const auto min = list.iter().filter([](const auto &x) { return x != -1; }).min();
+  REQUIRE(min.has_value() == true);
+  REQUIRE(min.value() == 0);
+}

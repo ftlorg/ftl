@@ -157,3 +157,12 @@ TEST_CASE(TEST_TAG "enumerate collect to std::vector const", TEST_TAG) {
             { 4, 5 },
           });
 }
+
+TEST_CASE(TEST_TAG "enumerate min", TEST_TAG) {
+  constexpr std::size_t size = 8;
+  ftl::array<int, size> arr = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
+
+  const auto min = arr.iter().enumerate().min();
+  REQUIRE(min.has_value() == true);
+  REQUIRE(min.value() == std::make_tuple<std::size_t, int>(0, 3));
+}
