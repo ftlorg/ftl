@@ -40,11 +40,11 @@ public:
   }
 
   [[nodiscard]] constexpr auto end_impl() const noexcept -> take_iterator<Iter> {
-    return { iterator_.cend(), n_ };
+    return { std::next(iterator_.cbegin(), n_), n_ };
   }
 
   [[nodiscard]] constexpr auto cend_impl() const noexcept -> take_iterator<Iter> {
-    return { iterator_.cend(), n_ };
+    return { std::next(iterator_.cbegin(), n_), n_ };
   }
 
   [[nodiscard]] constexpr auto const_deref_impl() const -> decltype(std::declval<const Iter &>().operator*()) {
@@ -52,9 +52,9 @@ public:
   }
 
   auto preincrement_impl() -> const take_iterator<Iter> & {
-    if (counter_ < n_ - 1) {
-      ++iterator_;
+    if (counter_ <= n_) {
       ++counter_;
+      ++iterator_;
     } else {
       iterator_ = iterator_.end();
     }
@@ -63,9 +63,9 @@ public:
   }
 
   auto const_preincrement_impl() const -> const take_iterator<Iter> & {
-    if (counter_ < n_ - 1) {
-      ++iterator_;
+    if (counter_ <= n_) {
       ++counter_;
+      ++iterator_;
     } else {
       iterator_ = iterator_.end();
     }
