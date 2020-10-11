@@ -95,9 +95,10 @@ public:
   [[nodiscard]] auto max() const -> std::optional<value_type>;
 
   [[nodiscard]] auto min() const -> std::optional<value_type> {
-    if (count() > 0) {
-      auto begin = std::begin(static_cast<const Derived &>(*this));
-      auto end = std::end(static_cast<const Derived &>(*this));
+    auto begin = std::begin(static_cast<const Derived &>(*this));
+    auto end = std::end(static_cast<const Derived &>(*this));
+
+    if (begin != end) {
       auto min = *begin;
 
       for (auto it = std::next(begin); it != end; it++) {
