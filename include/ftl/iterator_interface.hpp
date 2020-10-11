@@ -98,7 +98,7 @@ public:
     if (count() > 0) {
       auto begin = std::begin(static_cast<const Derived &>(*this));
       auto end = std::end(static_cast<const Derived &>(*this));
-      value_type min = *begin;
+      auto min = *begin;
 
       for (auto it = std::next(begin); it != end; it++) {
         if (*it < min) { min = *it; }

@@ -168,3 +168,18 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   ++iter;
   REQUIRE(arr[4] == *iter);
 }
+
+ TEST_CASE(TEST_TAG "min", TEST_TAG) {
+  const ftl::vector<int> vec = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
+
+  const auto min = vec.iter().min();
+  REQUIRE(min.has_value() == true);
+  REQUIRE(min.value() == -1);
+}
+
+ TEST_CASE(TEST_TAG "min empty", TEST_TAG) {
+  const ftl::vector<int> vec = {};
+
+  const auto min = vec.iter().min();
+  REQUIRE_FALSE(min.has_value());
+}

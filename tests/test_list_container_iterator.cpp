@@ -149,3 +149,10 @@ TEST_CASE(TEST_TAG "min", TEST_TAG) {
   REQUIRE(min.has_value() == true);
   REQUIRE(min.value() == -1);
 }
+
+TEST_CASE(TEST_TAG "min empty", TEST_TAG) {
+  const ftl::list<int> list = {};
+
+  const auto min = list.iter().min();
+  REQUIRE_FALSE(min.has_value());
+}
