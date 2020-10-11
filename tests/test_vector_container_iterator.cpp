@@ -168,3 +168,11 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   ++iter;
   REQUIRE(arr[4] == *iter);
 }
+
+TEST_CASE(TEST_TAG "product", TEST_TAG) {
+  const ftl::vector<int> arr = { 2, 4, 5 };
+
+  auto product = arr.iter().product();
+
+  REQUIRE(product == 40);
+}

@@ -82,3 +82,12 @@ TEST_CASE(TEST_TAG "chain map const", TEST_TAG) {
 
   REQUIRE(mapped_arr == ftl::array<int, size>{ { 2, 8, 18, 32, 50 } });
 }
+
+TEST_CASE(TEST_TAG "product", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto product = arr.iter().map([](const auto &x) { return x * x; }).map([](const auto &x) { return 2 * x; }).product();
+
+  REQUIRE(product == 460800);
+}

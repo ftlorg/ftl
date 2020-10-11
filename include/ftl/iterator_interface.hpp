@@ -98,7 +98,11 @@ public:
   template<typename Collection, typename Predicate>
   [[nodiscard]] auto partition(Predicate &&predicate) const -> std::tuple<Collection, Collection>;
 
-  [[nodiscard]] auto product() const -> value_type;
+  [[nodiscard]] auto product() const -> value_type {
+    value_type result = static_cast<value_type>(1);
+    for (const auto &element : static_cast<const Derived &>(*this)) { result *= element; }
+    return result;
+  }
 
   [[nodiscard]] auto sum() const -> value_type;
 

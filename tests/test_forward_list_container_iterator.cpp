@@ -263,3 +263,11 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   ++iter;
   REQUIRE(5 == *iter);
 }
+
+TEST_CASE(TEST_TAG "product", TEST_TAG) {
+  const ftl::forward_list<int> list = { 1, 2, 3, 4, 5 };
+
+  auto product = list.iter().product();
+
+  REQUIRE(product == 120);
+}

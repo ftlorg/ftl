@@ -180,3 +180,12 @@ TEST_CASE(TEST_TAG "operator+=", TEST_TAG) {
   iter += 4;
   REQUIRE(arr[4] == *iter);
 }
+
+TEST_CASE(TEST_TAG "product", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 2, 4, 6, 8, 10 } };
+
+  auto product = arr.iter().product();
+
+  REQUIRE(product == 3840);
+}
