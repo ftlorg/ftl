@@ -327,6 +327,22 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   REQUIRE(iter != map.iter().end());
 }
 
+ TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
+  const ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  auto element = map.iter().all([](const auto &x) { return x.second.size() > 2; });
+
+  REQUIRE(element);
+}
+
+TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
+  const ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  auto element = map.iter().all([](const auto &x) { return x.first > 2; });
+
+  REQUIRE_FALSE(element);
+}
+
 TEST_CASE(TEST_TAG "any", TEST_TAG) {
   const ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
 

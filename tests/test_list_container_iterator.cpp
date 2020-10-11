@@ -185,3 +185,19 @@ TEST_CASE(TEST_TAG "min empty", TEST_TAG) {
   const auto min = list.iter().min();
   REQUIRE_FALSE(min.has_value());
 }
+
+TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
+  const ftl::list<int> list = { 1, 2, 3, 4, 5 };
+
+  auto element = list.iter().all([](const auto &number) { return number < 10; });
+
+  REQUIRE(element);
+}
+
+TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
+  const ftl::list<int> list = { 1, 2, 3, 4, 5 };
+
+  auto element = list.iter().all([](const auto &number) { return number == 3; });
+
+  REQUIRE_FALSE(element);
+}

@@ -46,8 +46,6 @@ public:
 
   virtual ~iterator_interface() = default;
 
-  template<typename Predicate>
-  [[nodiscard]] auto all(Predicate &&predicate) const -> bool;
 
   template<typename Predicate>
   [[nodiscard]] auto any(Predicate &&predicate) const -> bool {
@@ -84,6 +82,14 @@ public:
 
   template<typename Operator>
   [[nodiscard]] auto fold(value_type initial, Operator &&op) const -> value_type;
+
+  template<typename Predicate>
+  [[nodiscard]] auto all(Predicate &&predicate) const -> bool {
+    for (const auto &element : static_cast<const Derived &>(*this)) {
+      if (!predicate(element)) return false;
+    }
+    return true;
+  }
 
   template<typename Callable>
   auto for_each(Callable &&callable) const -> void;
@@ -130,6 +136,6 @@ public:
   [[nodiscard]] auto take(size_type n) const -> take_iterator<Derived> {
     return { static_cast<const Derived &>(*this), n };
   }
-};// namespace ftl
+};
 
 }// namespace ftl
