@@ -200,8 +200,8 @@ TEST_CASE(TEST_TAG "begin const", TEST_TAG) {
   REQUIRE(std::string{ "green" } == *iter);
 }
 
- TEST_CASE(TEST_TAG "cbegin", TEST_TAG) {
-  ftl::set<std::string> set = { { "red" , "green", "blue" } };
+TEST_CASE(TEST_TAG "cbegin", TEST_TAG) {
+  ftl::set<std::string> set = { { "red", "green", "blue" } };
 
   auto iter = set.iter().cbegin();
   REQUIRE(std::string{ "blue" } == *iter);
@@ -210,17 +210,17 @@ TEST_CASE(TEST_TAG "begin const", TEST_TAG) {
   REQUIRE(std::string{ "green" } == *iter);
 }
 
- TEST_CASE(TEST_TAG "cbegin const", TEST_TAG) {
+TEST_CASE(TEST_TAG "cbegin const", TEST_TAG) {
   const ftl::set<std::string> set = { { "red", "green", "blue" } };
 
   auto iter = set.iter().cbegin();
-  REQUIRE(std::string{"blue"} == *iter);
+  REQUIRE(std::string{ "blue" } == *iter);
 
   ++iter;
-  REQUIRE(std::string{"green" } == *iter);
+  REQUIRE(std::string{ "green" } == *iter);
 }
 
- TEST_CASE(TEST_TAG "operator++", TEST_TAG) {
+TEST_CASE(TEST_TAG "operator++", TEST_TAG) {
   ftl::set<std::string> set = { { "red", "green", "blue" } };
 
   auto iter = set.iter();
@@ -233,7 +233,7 @@ TEST_CASE(TEST_TAG "begin const", TEST_TAG) {
   REQUIRE(std::string{ "red" } == *iter);
 }
 
- TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
+TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   const ftl::set<std::string> set = { { "red", "green", "blue" } };
 
   auto iter = set.iter();
@@ -244,4 +244,36 @@ TEST_CASE(TEST_TAG "begin const", TEST_TAG) {
 
   ++iter;
   REQUIRE(std::string{ "red" } == *iter);
+}
+
+TEST_CASE(TEST_TAG "collect into std::vector", TEST_TAG) {
+  ftl::set<std::string> set = { { "red", "green", "blue" } };
+  std::vector<std::string> vec;
+  set.iter().collect_into(vec);
+
+  REQUIRE(vec == std::vector<std::string>{ "blue", "green", "red" });
+}
+
+TEST_CASE(TEST_TAG "collect into std::vector const", TEST_TAG) {
+  const ftl::set<int> set = { { 1, 2, 3 } };
+  std::vector<int> vec;
+  set.iter().collect_into(vec);
+
+  REQUIRE(vec == std::vector<int>{ { 1, 2, 3 } });
+}
+
+TEST_CASE(TEST_TAG "collect into std::set", TEST_TAG) {
+  ftl::set<int> set = { { 1, 2, 3 } };
+  std::set<int> set_result;
+  set.iter().collect_into(set_result);
+
+  REQUIRE(set_result == std::set<int>{ { 1, 2, 3 } });
+}
+
+TEST_CASE(TEST_TAG "collect const into std::set", TEST_TAG) {
+  const ftl::set<int> set = { { 1, 2, 3 } };
+  std::set<int> set_result;
+  set.iter().collect_into(set_result);
+
+  REQUIRE(set_result == std::set<int>{ { 1, 2, 3 } });
 }

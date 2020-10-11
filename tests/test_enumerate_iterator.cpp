@@ -157,3 +157,35 @@ TEST_CASE(TEST_TAG "enumerate collect to std::vector const", TEST_TAG) {
             { 4, 5 },
           });
 }
+
+TEST_CASE(TEST_TAG "enumerate collect into std::vector", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+  std::vector<std::tuple<std::size_t, int>> vec;
+  arr.iter().enumerate().collect_into(vec);
+
+  REQUIRE(vec
+          == std::vector<std::tuple<std::size_t, int>>{
+            { 0, 1 },
+            { 1, 2 },
+            { 2, 3 },
+            { 3, 4 },
+            { 4, 5 },
+          });
+}
+
+TEST_CASE(TEST_TAG "enumerate collect into std::vector const", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+  std::vector<std::tuple<std::size_t, int>> vec;
+  arr.iter().enumerate().collect_into(vec);
+
+  REQUIRE(vec
+          == std::vector<std::tuple<std::size_t, int>>{
+            { 0, 1 },
+            { 1, 2 },
+            { 2, 3 },
+            { 3, 4 },
+            { 4, 5 },
+          });
+}

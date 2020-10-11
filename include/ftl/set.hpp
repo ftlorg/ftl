@@ -54,3 +54,27 @@ struct ftl::into_iterator_trait<ftl::set<Key, Compare, Allocator>,
     return { set.begin(), set.end() };
   }
 };
+
+template<typename Iter, class Key, class Compare, class Allocator> 
+struct ftl::from_iterator_trait<Iter, ftl::set<Key, Compare, Allocator>> {
+  [[nodiscard]] constexpr static auto from_iter(const Iter &iter) -> ftl::set<Key, Compare, Allocator> {
+    return ftl::set<Key, Compare, Allocator>{ iter.begin(), iter.end() };
+  }
+
+  constexpr static auto from_iter_into_collection(const Iter &iter, ftl::set<Key, Compare, Allocator> &collection)
+    -> void {
+    collection.insert(iter.begin(), iter.end());
+  }
+};
+
+template<typename Iter, class Key, class Compare, class Allocator>
+struct ftl::from_iterator_trait<Iter, std::set<Key, Compare, Allocator>> {
+  [[nodiscard]] constexpr static auto from_iter(const Iter &iter) -> std::set<Key, Compare, Allocator> {
+    return std::set<Key, Compare, Allocator>{ iter.begin(), iter.end() };
+  }
+
+  constexpr static auto from_iter_into_collection(const Iter &iter, std::set<Key, Compare, Allocator> &collection)
+    -> void {
+    collection.insert(iter.begin(), iter.end());
+  }
+};

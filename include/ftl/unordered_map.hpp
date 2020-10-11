@@ -82,3 +82,27 @@ struct ftl::into_iterator_trait<ftl::unordered_map<Key, T, Hash, KeyEqual, Alloc
     return { unordered_map.begin(), unordered_map.end() };
   }
 };
+
+template<typename Iter, typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
+struct ftl::from_iterator_trait<Iter, std::unordered_map<Key, T, Hash, KeyEqual, Allocator>> {
+  [[nodiscard]] constexpr static auto from_iter(const Iter &iter) -> std::unordered_map<Key, T, Hash, KeyEqual, Allocator> {
+    return std::unordered_map<Key, T, Hash, KeyEqual, Allocator>{ iter.begin(), iter.end() };
+  }
+
+  constexpr static auto from_iter_into_collection(const Iter &iter,
+    std::unordered_map<Key, T, Hash, KeyEqual, Allocator> &collection) -> void {
+    collection.insert(iter.begin(), iter.end());
+  }
+};
+
+template<typename Iter, typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
+struct ftl::from_iterator_trait<Iter, ftl::unordered_map<Key, T, Hash, KeyEqual, Allocator>> {
+  [[nodiscard]] constexpr static auto from_iter(const Iter &iter) -> ftl::unordered_map<Key, T, Hash, KeyEqual, Allocator> {
+    return ftl::unordered_map<Key, T, Hash, KeyEqual, Allocator>{ iter.begin(), iter.end() };
+  }
+
+  constexpr static auto from_iter_into_collection(const Iter &iter,
+    ftl::unordered_map<Key, T, Hash, KeyEqual, Allocator> &collection) -> void {
+    collection.insert(iter.begin(), iter.end());
+  }
+};

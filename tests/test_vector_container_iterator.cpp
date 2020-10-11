@@ -168,3 +168,19 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   ++iter;
   REQUIRE(arr[4] == *iter);
 }
+
+TEST_CASE(TEST_TAG "collect into ftl::vector", TEST_TAG) {
+  ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
+  ftl::vector<int> vec_result;
+  vec.iter().collect_into(vec_result);
+
+  REQUIRE(vec_result == ftl::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const into ftl::vector", TEST_TAG) {
+  const ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
+  ftl::vector<int> vec_result;
+  vec.iter().collect_into(vec_result);
+
+  REQUIRE(vec_result == ftl::vector<int>{ 1, 2, 3, 4, 5 });
+}

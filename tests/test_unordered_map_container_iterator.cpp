@@ -326,3 +326,21 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   ++iter;
   REQUIRE(iter != map.iter().end());
 }
+
+TEST_CASE(TEST_TAG "collect into std::map_unordered", TEST_TAG) {
+  ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+  ftl::unordered_map<int, std::string> map_result = {  };
+
+  map.iter().collect_into(map_result);
+
+  REQUIRE(map_result == map);
+}
+
+TEST_CASE(TEST_TAG "collect const to std::map_unordered", TEST_TAG) {
+  const ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+  ftl::unordered_map<int, std::string> map_result = {};
+
+  map.iter().collect_into(map_result);
+
+  REQUIRE(map_result == map);
+}
