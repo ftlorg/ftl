@@ -245,3 +245,19 @@ TEST_CASE(TEST_TAG "begin const", TEST_TAG) {
   ++iter;
   REQUIRE(std::string{ "red" } == *iter);
 }
+
+ TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
+  const ftl::set<std::string> set = { { "red", "green", "blue" } };
+
+  auto element = set.iter().all([](const auto &x) { return x.size() >= 3; });
+
+  REQUIRE(element);
+}
+
+TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
+  const ftl::set<std::string> set = { { "red", "green", "blue" } };
+
+  auto element = set.iter().all([](const auto &x) { return x.size() > 4; });
+
+  REQUIRE_FALSE(element);
+}

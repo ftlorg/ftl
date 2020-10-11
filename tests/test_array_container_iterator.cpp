@@ -180,3 +180,22 @@ TEST_CASE(TEST_TAG "operator+=", TEST_TAG) {
   iter += 4;
   REQUIRE(arr[4] == *iter);
 }
+
+
+TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 2, 4, 6, 8, 10 } };
+
+  auto elem = arr.iter().all([](const auto &element) { return element % 2 == 0; });
+
+  REQUIRE(elem);
+}
+
+TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 7, 3, 11, 5 } };
+
+  auto elem = arr.iter().all([](const auto &element) { return element % 2 == 0; });
+
+  REQUIRE_FALSE(elem);
+}

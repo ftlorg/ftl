@@ -168,3 +168,19 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   ++iter;
   REQUIRE(arr[4] == *iter);
 }
+
+TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
+  const ftl::vector<int> arr = { 2, 4 };
+
+  auto element = arr.iter().all([](const auto &elem) { return elem % 2 == 0; });
+
+  REQUIRE(element);
+}
+
+TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
+  const ftl::vector<int> arr = { 2, 4, 5 };
+
+  auto element = arr.iter().all([](const auto &elem) { return elem % 2 == 0; });
+
+  REQUIRE_FALSE(element);
+}
