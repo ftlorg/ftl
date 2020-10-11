@@ -141,3 +141,11 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   ++iter;
   REQUIRE(5 == *iter);
 }
+
+TEST_CASE(TEST_TAG "min", TEST_TAG) {
+  const ftl::list<int> list = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
+
+  const auto min = list.iter().min();
+  REQUIRE(min.has_value() == true);
+  REQUIRE(min.value() == -1);
+}

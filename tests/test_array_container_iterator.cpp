@@ -180,3 +180,12 @@ TEST_CASE(TEST_TAG "operator+=", TEST_TAG) {
   iter += 4;
   REQUIRE(arr[4] == *iter);
 }
+
+TEST_CASE(TEST_TAG "min", TEST_TAG) {
+  constexpr std::size_t size = 8;
+  const ftl::array<int, size> arr = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
+
+  const auto min = arr.iter().min();
+  REQUIRE(min.has_value() == true);
+  REQUIRE(min.value() == -1);
+}

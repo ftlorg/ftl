@@ -309,3 +309,11 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   ++iter;
   REQUIRE(std::pair<const int, std::string>{ 3, "blue" } == *iter);
 }
+
+TEST_CASE(TEST_TAG "min", TEST_TAG) {
+  const ftl::map<int, int> map = { { 0, 1 }, { 1, 2 }, { 2, 3 } };
+
+  [[maybe_unused]] const auto min = map.iter().min();
+  //REQUIRE(min.has_value() == true);
+  //REQUIRE(min.value() == -1);
+}

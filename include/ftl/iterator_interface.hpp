@@ -96,7 +96,15 @@ public:
 
   [[nodiscard]] auto min() const -> std::optional<value_type> {
     if (count() > 0) {
-      return { *std::min_element(static_cast<const Derived &>(*this).cbegin(), static_cast<const Derived &>(*this).cend()) };
+      auto begin = std::begin(static_cast<const Derived &>(*this));
+      auto end = std::end(static_cast<const Derived &>(*this));
+      value_type min = *begin;
+
+      for (auto it = std::next(begin); it != end; it++) {
+        if (*it < min) { min = *it; }
+      }
+
+      return { min };
     }
 
     return std::nullopt;
@@ -114,6 +122,6 @@ public:
   [[nodiscard]] auto take(size_type n) const -> take_iterator<Derived> {
     return { static_cast<const Derived &>(*this), n };
   }
-};
+};// namespace ftl
 
 }// namespace ftl
