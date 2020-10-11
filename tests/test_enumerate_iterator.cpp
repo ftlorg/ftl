@@ -157,3 +157,19 @@ TEST_CASE(TEST_TAG "enumerate collect to std::vector const", TEST_TAG) {
             { 4, 5 },
           });
 }
+
+TEST_CASE(TEST_TAG "enumerate any", TEST_TAG) {
+  ftl::list<std::string> arr = { { "red", "green", "blue" } };
+
+  REQUIRE(arr.iter().enumerate().any([](const auto &x) { return std::get<1>(x) == "red"; }) == true);
+  REQUIRE(arr.iter().enumerate().any([](const auto &x) { return std::get<1>(x) == "green"; }) == true);
+  REQUIRE(arr.iter().enumerate().any([](const auto &x) { return std::get<1>(x) == "blue"; }) == true);
+}
+
+TEST_CASE(TEST_TAG "enumerate filter any", TEST_TAG) {
+  ftl::list<std::string> arr = { { "red", "green", "blue" } };
+
+  REQUIRE(arr.iter().enumerate().filter([](const auto& x){return std::get<1>(x) != "green";}).any([](const auto &x) { return std::get<1>(x) == "red"; }) == true);
+  REQUIRE(arr.iter().enumerate().filter([](const auto& x){return std::get<1>(x) != "green";}).any([](const auto &x) { return std::get<1>(x) == "green"; }) == false);
+  REQUIRE(arr.iter().enumerate().filter([](const auto& x){return std::get<1>(x) != "green";}).any([](const auto &x) { return std::get<1>(x) == "blue"; }) == true);
+}

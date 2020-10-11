@@ -154,3 +154,30 @@ TEST_CASE(TEST_TAG "inspect collect to std::vector const", TEST_TAG) {
   REQUIRE(mapped_list == std::vector<int>{ 1, 2, 3, 4, 5 });
 }
 
+TEST_CASE(TEST_TAG "inspect any", TEST_TAG) {
+  ftl::list<std::string> arr = { { "red", "green", "blue" } };
+
+  REQUIRE(arr.iter().inspect([](const auto &x) { INFO(x); }).any([](const auto &x) { return x == "red"; }) == true);
+  REQUIRE(arr.iter().inspect([](const auto &x) { INFO(x); }).any([](const auto &x) { return x == "green"; }) == true);
+  REQUIRE(arr.iter().inspect([](const auto &x) { INFO(x); }).any([](const auto &x) { return x == "blue"; }) == true);
+}
+
+TEST_CASE(TEST_TAG "inspect filter any", TEST_TAG) {
+  ftl::list<std::string> arr = { { "red", "green", "blue" } };
+
+  REQUIRE(arr.iter()
+            .inspect([](const auto &x) { INFO(x); })
+            .filter([](const auto &x) { return x != "green"; })
+            .any([](const auto &x) { return x == "red"; })
+          == true);
+  REQUIRE(arr.iter()
+            .inspect([](const auto &x) { INFO(x); })
+            .filter([](const auto &x) { return x != "green"; })
+            .any([](const auto &x) { return x == "green"; })
+          == false);
+  REQUIRE(arr.iter()
+            .inspect([](const auto &x) { INFO(x); })
+            .filter([](const auto &x) { return x != "green"; })
+            .any([](const auto &x) { return x == "blue"; })
+          == true);
+}
