@@ -145,7 +145,7 @@ struct container_iterator_member_provider<Iter, std::random_access_iterator_tag>
   }
 
   constexpr auto operator+=(typename std::iterator_traits<Iter>::size_type n) -> Iter & {
-    static_cast<Iter &>(*this).current_ += static_cast<typename std::iterator_traits<Iter>::difference_type>(n);
+    static_cast<Iter &>(*this).current_ += n;
     return static_cast<Iter &>(*this);
   }
 
