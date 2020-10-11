@@ -109,3 +109,12 @@ TEST_CASE(TEST_TAG "chain enumerate and filter", TEST_TAG) {
 
   REQUIRE(mapped_arr == ftl::vector<int>{ 4, 5 });
 }
+
+TEST_CASE(TEST_TAG "sum", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto sum = arr.iter().filter([](const auto &x) { return x % 2 == 0; }).sum();
+
+  REQUIRE(sum == 6);
+}

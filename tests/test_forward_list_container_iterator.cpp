@@ -263,3 +263,11 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   ++iter;
   REQUIRE(5 == *iter);
 }
+
+TEST_CASE(TEST_TAG "sum", TEST_TAG) {
+  const ftl::forward_list<int> list = { 1, 2, 3, 4, 5 };
+
+  auto sum = list.iter().sum();
+
+  REQUIRE(sum == 15);
+}

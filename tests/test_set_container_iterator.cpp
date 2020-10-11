@@ -245,3 +245,11 @@ TEST_CASE(TEST_TAG "begin const", TEST_TAG) {
   ++iter;
   REQUIRE(std::string{ "red" } == *iter);
 }
+
+  TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
+  const ftl::set<float> set = { { 1.5f, 2.5f, 3.5f } };
+
+  auto sum = set.iter().sum();
+
+  REQUIRE(sum == 7.5f);
+}
