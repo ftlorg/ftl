@@ -86,7 +86,7 @@ TEST_CASE(TEST_TAG "chain map const", TEST_TAG) {
 TEST_CASE(TEST_TAG "map min", TEST_TAG) {
   ftl::list<int> list = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
 
-  // const auto min = list.iter().map([](const auto &x) { return x < 0 ? -x : x; }).min();
-  // REQUIRE(min.has_value() == true);
-  // REQUIRE(min.value() == 0);
+  const auto min = list.iter().map([](const auto &x) { return x < 0 ? -x : x; }).min();
+  REQUIRE(min.has_value() == true);
+  REQUIRE(min.value() == 0);
 }

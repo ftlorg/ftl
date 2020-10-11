@@ -109,6 +109,8 @@ TEST_CASE(TEST_TAG "take min", TEST_TAG) {
   REQUIRE(min1.has_value() == true);
   REQUIRE(min1.value() == 1);
 
+
+  // TODO: Fix this
   const auto min2 = list.iter().take(0).min();
   REQUIRE_FALSE(min2.has_value());
 }
