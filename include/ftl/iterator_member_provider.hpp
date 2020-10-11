@@ -100,14 +100,26 @@ struct iterator_member_provider<Iter, std::forward_iterator_tag>
 template<typename Iter>
 struct iterator_member_provider<Iter, std::bidirectional_iterator_tag>
   : public iterator_member_provider<Iter, std::forward_iterator_tag> {
-  auto operator--() const -> Iter & {
+  auto operator--() const -> const Iter & {
     return --static_cast<const Iter &>(*this).iterator_;
+  }
+
+  auto operator--() -> Iter & {
+    return --static_cast<Iter &>(*this).iterator_;
   }
 
   auto operator--(int) -> Iter {
     auto tmp = static_cast<Iter &>(*this);
 
     --static_cast<Iter &>(*this);
+
+    return tmp;
+  }
+
+  auto operator--(int) const -> Iter {
+    auto tmp = static_cast<const Iter &>(*this);
+
+    --static_cast<const Iter &>(*this);
 
     return tmp;
   }
