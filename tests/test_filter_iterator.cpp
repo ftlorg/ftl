@@ -127,7 +127,6 @@ TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
 
   REQUIRE_FALSE(element);
 }
-}
 
 TEST_CASE(TEST_TAG "filter any", TEST_TAG) {
   ftl::forward_list<std::string> vec = { { "red", "green", "blue" } };
@@ -154,7 +153,6 @@ TEST_CASE(TEST_TAG "filter min", TEST_TAG) {
   const auto min = list.iter().filter([](const auto &x) { return x != -1; }).min();
   REQUIRE(min.has_value() == true);
   REQUIRE(min.value() == 0);
-}
 }
 
 TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
