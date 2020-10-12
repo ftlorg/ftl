@@ -108,10 +108,8 @@ public:
       auto min = *begin;
 
       for (auto it = ++begin; it != end; it++) {
-        [[maybe_unused]] auto val = *it;
-        if (*it < min) { 
-          min = *it;
-        }
+        const auto& val = *it;
+        if (val < min) { min = val; }
       }
 
       return { min };

@@ -72,6 +72,27 @@ TEST_CASE(TEST_TAG "collect to std::list", TEST_TAG) {
   REQUIRE(mapped_arr == std::list<int>{ 1, 4, 9, 16, 25 });
 }
 
+TEST_CASE(TEST_TAG "collect to std::list of doubles", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto mapped_arr
+    = arr.iter()
+        .map([](const auto &x) { return x * x; })
+        .map([](const auto &x) { return std::make_pair<double, double>(static_cast<double>(x), static_cast<double>(x)); })
+        .map([](const auto &p) { return p; })
+        .collect<std::list<std::pair<double, double>>>();
+
+  REQUIRE(mapped_arr
+          == std::list<std::pair<double, double>>{
+            { 1.0, 1.0 },
+            { 4.0, 4.0 },
+            { 9.0, 9.0 },
+            { 16.0, 16.0 },
+            { 25.0, 25.0 },
+          });
+}
+
 TEST_CASE(TEST_TAG "collect const to std::list", TEST_TAG) {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };

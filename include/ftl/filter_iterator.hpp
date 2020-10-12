@@ -29,7 +29,7 @@ public:
   using iterator_category = typename std::iterator_traits<filter_iterator<Iter, Callable>>::iterator_category;
   using inherited_iterator_category = typename std::iterator_traits<filter_iterator<Iter, Callable>>::iterator_category;
   using size_type = typename std::iterator_traits<filter_iterator<Iter, Callable>>::size_type;
-  using callable_t = std::function<std::invoke_result_t<Callable, typename Iter::value_type>(typename Iter::value_type)>;
+  using callable_t = typename std::iterator_traits<filter_iterator<Iter, Callable>>::callable_t;
 
   filter_iterator(Iter iterator, callable_t callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {
     while (iterator_ != iterator_.cend() && !callable_(*iterator_)) { ++iterator_; }
