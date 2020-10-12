@@ -5,6 +5,28 @@
 
 #define TEST_TAG "[map_iterator]"
 
+TEST_CASE(TEST_TAG "operator--", TEST_TAG) {
+  ftl::vector<int> vec = { { 1, 2, 3, 4, 5 } };
+
+  auto iter = vec.iter().map([](const auto &x) { return x; }) + 4;
+  REQUIRE(vec[4] == *iter);
+  REQUIRE(vec[3] == *(--iter));
+  REQUIRE(vec[2] == *(--iter));
+  REQUIRE(vec[1] == *(--iter));
+  REQUIRE(vec[0] == *(--iter));
+}
+
+TEST_CASE(TEST_TAG "operator-- const", TEST_TAG) {
+  const ftl::vector<int> vec = { { 1, 2, 3, 4, 5 } };
+
+  auto iter = vec.iter().map([](const auto &x) { return x; }) + 4;
+  REQUIRE(vec[4] == *iter);
+  REQUIRE(vec[3] == *(--iter));
+  REQUIRE(vec[2] == *(--iter));
+  REQUIRE(vec[1] == *(--iter));
+  REQUIRE(vec[0] == *(--iter));
+}
+
 TEST_CASE(TEST_TAG "map collect", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };

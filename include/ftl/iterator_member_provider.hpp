@@ -138,11 +138,19 @@ struct iterator_member_provider<Iter, std::random_access_iterator_tag>
     return lhs;
   }
 
-  [[nodiscard]] friend constexpr auto operator+(const Iter &lhs, typename std::iterator_traits<Iter>::size_type n) -> Iter {
+  [[nodiscard]] friend constexpr auto operator+(Iter &lhs, typename std::iterator_traits<Iter>::size_type n) -> Iter {
     return lhs += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator+(typename std::iterator_traits<Iter>::size_type n, const Iter &rhs) -> Iter {
+  [[nodiscard]] friend constexpr auto operator+(Iter &&lhs, typename std::iterator_traits<Iter>::size_type n) -> Iter {
+    return lhs += n;
+  }
+
+  [[nodiscard]] friend constexpr auto operator+(typename std::iterator_traits<Iter>::size_type n, Iter &rhs) -> Iter {
+    return rhs += n;
+  }
+
+  [[nodiscard]] friend constexpr auto operator+(typename std::iterator_traits<Iter>::size_type n, Iter &&rhs) -> Iter {
     return rhs += n;
   }
 
