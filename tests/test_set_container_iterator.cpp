@@ -283,19 +283,3 @@ TEST_CASE(TEST_TAG "min empty", TEST_TAG) {
   const auto min = set.iter().min();
   REQUIRE_FALSE(min.has_value());
 }
-
- TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
-  const ftl::set<std::string> set = { { "red", "green", "blue" } };
-
-  auto element = set.iter().all([](const auto &x) { return x.size() >= 3; });
-
-  REQUIRE(element);
-}
-
-TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
-  const ftl::set<std::string> set = { { "red", "green", "blue" } };
-
-  auto element = set.iter().all([](const auto &x) { return x.size() > 4; });
-
-  REQUIRE_FALSE(element);
-}

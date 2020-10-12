@@ -154,21 +154,3 @@ TEST_CASE(TEST_TAG "filter min", TEST_TAG) {
   REQUIRE(min.has_value() == true);
   REQUIRE(min.value() == 0);
 }
-
-TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
-  constexpr std::size_t size = 5;
-  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
-
-  auto element = arr.iter().filter([](const auto &x) { return x % 2 == 0; }).all([](const auto &elem) { return elem > 0; });
-
-  REQUIRE(element);
-}
-
-TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
-  constexpr std::size_t size = 5;
-  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
-
-  auto element = arr.iter().filter([](const auto &x) { return x % 2 == 0; }).all([](const auto &elem) { return elem > 2; });
-
-  REQUIRE_FALSE(element);
-}

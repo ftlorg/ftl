@@ -183,15 +183,6 @@ TEST_CASE(TEST_TAG "enumerate min", TEST_TAG) {
   REQUIRE(min.value() == std::make_tuple<std::size_t, int>(0, 3));
 }
 
-TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
-  constexpr std::size_t size = 5;
-  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
-
-  auto element = arr.iter().enumerate().all([](const auto &x) { return std::get<1>(x) > 0; });
-
-  REQUIRE(element);
-}
-
 TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
@@ -208,13 +199,4 @@ TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
   auto element = arr.iter().enumerate().all([](const auto &x) { return std::get<1>(x) > 0; });
 
   REQUIRE(element);
-}
-
-TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
-  constexpr std::size_t size = 5;
-  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
-
-  auto element = arr.iter().enumerate().all([](const auto &x) { return std::get<1>(x) < 3; });
-
-  REQUIRE_FALSE(element);
 }
