@@ -142,6 +142,28 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   REQUIRE(5 == *iter);
 }
 
+TEST_CASE(TEST_TAG "operator--", TEST_TAG) {
+  ftl::list<int> list = { { 1, 2, 3, 4, 5 } };
+
+  auto iter = --list.iter().end();
+  REQUIRE(5 == *iter);
+  REQUIRE(4 == *(--iter));
+  REQUIRE(3 == *(--iter));
+  REQUIRE(2 == *(--iter));
+  REQUIRE(1 == *(--iter));
+}
+
+TEST_CASE(TEST_TAG "operator-- const", TEST_TAG) {
+  const ftl::list<int> list = { { 1, 2, 3, 4, 5 } };
+
+  auto iter = --list.iter().end();
+  REQUIRE(5 == *iter);
+  REQUIRE(4 == *(--iter));
+  REQUIRE(3 == *(--iter));
+  REQUIRE(2 == *(--iter));
+  REQUIRE(1 == *(--iter));
+}
+
 TEST_CASE(TEST_TAG "min", TEST_TAG) {
   const ftl::list<int> list = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
 
