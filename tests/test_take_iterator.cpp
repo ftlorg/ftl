@@ -108,3 +108,14 @@ TEST_CASE(TEST_TAG "any", TEST_TAG) {
   REQUIRE(list.iter().take(2).any([](const auto &x) { return x == "red"; }) == true);
   REQUIRE(list.iter().take(2).any([](const auto &x) { return x == "purple"; }) == false);
 }
+
+TEST_CASE(TEST_TAG "take min", TEST_TAG) {
+  ftl::list<int> list = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
+
+  const auto min1 = list.iter().take(3).min();
+  REQUIRE(min1.has_value() == true);
+  REQUIRE(min1.value() == 1);
+
+  const auto min2 = list.iter().take(0).min();
+  REQUIRE_FALSE(min2.has_value());
+}

@@ -148,3 +148,40 @@ TEST_CASE(TEST_TAG "any", TEST_TAG) {
   REQUIRE(list.iter().any([](const auto &x) { return x == "red"; }) == true);
   REQUIRE(list.iter().any([](const auto &x) { return x == "purple"; }) == false);
 }
+
+TEST_CASE(TEST_TAG "operator--", TEST_TAG) {
+  ftl::list<int> list = { { 1, 2, 3, 4, 5 } };
+
+  auto iter = --list.iter().end();
+  REQUIRE(5 == *iter);
+  REQUIRE(4 == *(--iter));
+  REQUIRE(3 == *(--iter));
+  REQUIRE(2 == *(--iter));
+  REQUIRE(1 == *(--iter));
+}
+
+TEST_CASE(TEST_TAG "operator-- const", TEST_TAG) {
+  const ftl::list<int> list = { { 1, 2, 3, 4, 5 } };
+
+  auto iter = --list.iter().end();
+  REQUIRE(5 == *iter);
+  REQUIRE(4 == *(--iter));
+  REQUIRE(3 == *(--iter));
+  REQUIRE(2 == *(--iter));
+  REQUIRE(1 == *(--iter));
+}
+
+TEST_CASE(TEST_TAG "min", TEST_TAG) {
+  const ftl::list<int> list = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
+
+  const auto min = list.iter().min();
+  REQUIRE(min.has_value() == true);
+  REQUIRE(min.value() == -1);
+}
+
+TEST_CASE(TEST_TAG "min empty", TEST_TAG) {
+  const ftl::list<int> list = {};
+
+  const auto min = list.iter().min();
+  REQUIRE_FALSE(min.has_value());
+}

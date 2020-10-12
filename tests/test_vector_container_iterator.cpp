@@ -173,3 +173,40 @@ TEST_CASE(TEST_TAG "any", TEST_TAG) {
   REQUIRE(vec.iter().any([](const auto &x) { return x == "red"; }) == true);
   REQUIRE(vec.iter().any([](const auto &x) { return x == "purple"; }) == false);
 }
+
+TEST_CASE(TEST_TAG "operator--", TEST_TAG) {
+  ftl::vector<int> vec = { { 1, 2, 3, 4, 5 } };
+
+  auto iter = vec.iter() + 4;
+  REQUIRE(vec[4] == *iter);
+  REQUIRE(vec[3] == *(--iter));
+  REQUIRE(vec[2] == *(--iter));
+  REQUIRE(vec[1] == *(--iter));
+  REQUIRE(vec[0] == *(--iter));
+}
+
+TEST_CASE(TEST_TAG "operator-- const", TEST_TAG) {
+  const ftl::vector<int> vec = { { 1, 2, 3, 4, 5 } };
+
+  auto iter = vec.iter() + 4;
+  REQUIRE(vec[4] == *iter);
+  REQUIRE(vec[3] == *(--iter));
+  REQUIRE(vec[2] == *(--iter));
+  REQUIRE(vec[1] == *(--iter));
+  REQUIRE(vec[0] == *(--iter));
+}
+
+ TEST_CASE(TEST_TAG "min", TEST_TAG) {
+  const ftl::vector<int> vec = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
+
+  const auto min = vec.iter().min();
+  REQUIRE(min.has_value() == true);
+  REQUIRE(min.value() == -1);
+}
+
+ TEST_CASE(TEST_TAG "min empty", TEST_TAG) {
+  const ftl::vector<int> vec = {};
+
+  const auto min = vec.iter().min();
+  REQUIRE_FALSE(min.has_value());
+}

@@ -87,7 +87,7 @@ TEST_CASE(TEST_TAG "map enumerate inspect map const", TEST_TAG) {
 TEST_CASE(TEST_TAG "inspect count", TEST_TAG) {
   ftl::list<int> list = { 1, 2, 3, 4, 5 };
 
-  const auto size = list.iter().inspect([](const auto &x) { INFO("Inspecting x = " << std::get<0>(x)) }).count();
+  const auto size = list.iter().inspect([](const auto &x) { INFO("Inspecting x = " << x) }).count();
 
   REQUIRE(size == 5);
 }
@@ -95,7 +95,7 @@ TEST_CASE(TEST_TAG "inspect count", TEST_TAG) {
 TEST_CASE(TEST_TAG "inspect count const", TEST_TAG) {
   const ftl::list<int> list = { 1, 2, 3, 4, 5 };
 
-  const auto size = list.iter().inspect([](const auto &x) { INFO("Inspecting x = " << std::get<0>(x)) }).count();
+  const auto size = list.iter().inspect([](const auto &x) { INFO("Inspecting x = " << x) }).count();
 
   REQUIRE(size == 5);
 }
@@ -180,4 +180,11 @@ TEST_CASE(TEST_TAG "inspect filter any", TEST_TAG) {
             .filter([](const auto &x) { return x != "green"; })
             .any([](const auto &x) { return x == "blue"; })
           == true);
+}
+TEST_CASE(TEST_TAG "inspect min", TEST_TAG) {
+  ftl::list<int> list = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
+
+  const auto min = list.iter().inspect([](const auto &x) { INFO(x); }).min();
+  REQUIRE(min.has_value() == true);
+  REQUIRE(min.value() == -1);
 }

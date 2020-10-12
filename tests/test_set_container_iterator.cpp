@@ -252,3 +252,18 @@ TEST_CASE(TEST_TAG "any", TEST_TAG) {
   REQUIRE(set.iter().any([](const auto &x) { return x == "red"; }) == true);
   REQUIRE(set.iter().any([](const auto &x) { return x == "purple"; }) == false);
 }
+
+TEST_CASE(TEST_TAG "min", TEST_TAG) {
+  const ftl::set<int> set = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
+
+  const auto min = set.iter().min();
+  REQUIRE(min.has_value() == true);
+  REQUIRE(min.value() == -1);
+}
+
+TEST_CASE(TEST_TAG "min empty", TEST_TAG) {
+  const ftl::set<int> set = {};
+
+  const auto min = set.iter().min();
+  REQUIRE_FALSE(min.has_value());
+}
