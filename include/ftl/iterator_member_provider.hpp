@@ -77,7 +77,7 @@ struct iterator_member_provider<Iter, std::input_iterator_tag> : public iterator
 template<typename Iter>
 struct iterator_member_provider<Iter, std::output_iterator_tag> : public iterator_member_provider<Iter> {
   constexpr friend auto operator==(const Iter &lhs, const Iter &rhs) {
-    return lhs.begin_ == rhs.begin_ && lhs.end_ == rhs.end_ && lhs.iterator_ == rhs.iterator_;
+    return static_cast<const Iter &>(*this).iterator_ == rhs.iterator_;
   }
 
   constexpr friend auto operator!=(const Iter &lhs, const Iter &rhs) {

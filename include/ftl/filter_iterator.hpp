@@ -10,7 +10,7 @@ template<typename Iter, typename Callable>
 class filter_iterator final
   : public iterator_interface<filter_iterator<Iter, Callable>>
   , public iterator_member_provider<filter_iterator<Iter, Callable>,
-      typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::iterator_category> {
+      typename std::iterator_traits<filter_iterator<Iter, Callable>>::iterator_category> {
 
   friend iterator_member_provider<filter_iterator<Iter, Callable>, std::random_access_iterator_tag>;
   friend iterator_member_provider<filter_iterator<Iter, Callable>, std::bidirectional_iterator_tag>;
@@ -20,15 +20,15 @@ class filter_iterator final
   friend iterator_interface<filter_iterator<Iter, Callable>>;
 
 public:
-  using difference_type = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::difference_type;
-  using value_type = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::value_type;
-  using pointer = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::pointer;
-  using reference = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::reference;
-  using const_pointer = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::const_pointer;
-  using const_reference = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::const_reference;
-  using iterator_category = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::iterator_category;
-  using inherited_iterator_category = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::iterator_category;
-  using size_type = typename std::iterator_traits<ftl::filter_iterator<Iter, Callable>>::size_type;
+  using difference_type = typename std::iterator_traits<filter_iterator<Iter, Callable>>::difference_type;
+  using value_type = typename std::iterator_traits<filter_iterator<Iter, Callable>>::value_type;
+  using pointer = typename std::iterator_traits<filter_iterator<Iter, Callable>>::pointer;
+  using reference = typename std::iterator_traits<filter_iterator<Iter, Callable>>::reference;
+  using const_pointer = typename std::iterator_traits<filter_iterator<Iter, Callable>>::const_pointer;
+  using const_reference = typename std::iterator_traits<filter_iterator<Iter, Callable>>::const_reference;
+  using iterator_category = typename std::iterator_traits<filter_iterator<Iter, Callable>>::iterator_category;
+  using inherited_iterator_category = typename std::iterator_traits<filter_iterator<Iter, Callable>>::iterator_category;
+  using size_type = typename std::iterator_traits<filter_iterator<Iter, Callable>>::size_type;
   using callable_t = std::function<std::invoke_result_t<Callable, typename Iter::value_type>(typename Iter::value_type)>;
 
   filter_iterator(Iter iterator, callable_t callable) : iterator_{ std::move(iterator) }, callable_{ std::move(callable) } {

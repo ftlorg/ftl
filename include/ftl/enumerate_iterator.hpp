@@ -13,7 +13,7 @@ template<typename Iter>
 class enumerate_iterator final
   : public iterator_interface<enumerate_iterator<Iter>>
   , public iterator_member_provider<enumerate_iterator<Iter>,
-      typename std::iterator_traits<ftl::enumerate_iterator<Iter>>::iterator_category> {
+      typename std::iterator_traits<enumerate_iterator<Iter>>::iterator_category> {
 
   friend iterator_member_provider<enumerate_iterator<Iter>, std::random_access_iterator_tag>;
   friend iterator_member_provider<enumerate_iterator<Iter>, std::bidirectional_iterator_tag>;
@@ -23,15 +23,15 @@ class enumerate_iterator final
   friend iterator_interface<enumerate_iterator<Iter>>;
 
 public:
-  using difference_type = typename std::iterator_traits<ftl::enumerate_iterator<Iter>>::difference_type;
-  using pointer = typename std::iterator_traits<ftl::enumerate_iterator<Iter>>::pointer;
-  using reference = typename std::iterator_traits<ftl::enumerate_iterator<Iter>>::reference;
-  using const_pointer = typename std::iterator_traits<ftl::enumerate_iterator<Iter>>::const_pointer;
-  using const_reference = typename std::iterator_traits<ftl::enumerate_iterator<Iter>>::const_reference;
-  using inherited_iterator_category = typename std::iterator_traits<ftl::enumerate_iterator<Iter>>::iterator_category;
-  using iterator_category = typename std::iterator_traits<ftl::enumerate_iterator<Iter>>::inherited_iterator_category;
-  using size_type = typename std::iterator_traits<ftl::enumerate_iterator<Iter>>::size_type;
-  using value_type = typename std::iterator_traits<ftl::enumerate_iterator<Iter>>::value_type;
+  using difference_type = typename std::iterator_traits<enumerate_iterator<Iter>>::difference_type;
+  using pointer = typename std::iterator_traits<enumerate_iterator<Iter>>::pointer;
+  using reference = typename std::iterator_traits<enumerate_iterator<Iter>>::reference;
+  using const_pointer = typename std::iterator_traits<enumerate_iterator<Iter>>::const_pointer;
+  using const_reference = typename std::iterator_traits<enumerate_iterator<Iter>>::const_reference;
+  using inherited_iterator_category = typename std::iterator_traits<enumerate_iterator<Iter>>::iterator_category;
+  using iterator_category = typename std::iterator_traits<enumerate_iterator<Iter>>::inherited_iterator_category;
+  using size_type = typename std::iterator_traits<enumerate_iterator<Iter>>::size_type;
+  using value_type = typename std::iterator_traits<enumerate_iterator<Iter>>::value_type;
 
   enumerate_iterator(Iter iterator) : iterator_{ std::move(iterator) }, index_{ 0 } {
   }
