@@ -180,3 +180,11 @@ TEST_CASE(TEST_TAG "operator+=", TEST_TAG) {
   iter += 4;
   REQUIRE(arr[4] == *iter);
 }
+
+TEST_CASE(TEST_TAG "any", TEST_TAG) {
+  constexpr std::size_t size = 3;
+  ftl::array<std::string, size> arr = { { "red", "green", "blue" } };
+
+  REQUIRE(arr.iter().any([](const auto &x) { return x == "red"; }) == true);
+  REQUIRE(arr.iter().any([](const auto &x) { return x == "purple"; }) == false);
+}

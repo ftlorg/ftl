@@ -101,3 +101,10 @@ TEST_CASE(TEST_TAG "take filter take more collect", TEST_TAG) {
   REQUIRE(mapped_list == ftl::list<int>{ 2, 4 });
   REQUIRE(mapped_vec == ftl::vector<int>{ 2, 4 });
 }
+
+TEST_CASE(TEST_TAG "any", TEST_TAG) {
+  const ftl::list<std::string> list = { { "red", "green", "blue" } };
+
+  REQUIRE(list.iter().take(2).any([](const auto &x) { return x == "red"; }) == true);
+  REQUIRE(list.iter().take(2).any([](const auto &x) { return x == "purple"; }) == false);
+}
