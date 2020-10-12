@@ -28,7 +28,7 @@ public:
   using iterator_category = std::forward_iterator_tag;
   using size_type = typename Iter::size_type;
 
-  take_iterator(Iter iterator, size_type n) : iterator_{ std::move(iterator) }, n_{ n } {
+  take_iterator(Iter iterator, size_type n) : iterator_{ std::move(iterator) }, n_{ std::min(n, iterator_.count()) } {
   }
 
   [[nodiscard]] constexpr auto begin_impl() const noexcept -> take_iterator<Iter> {
@@ -41,12 +41,12 @@ public:
 
   [[nodiscard]] constexpr auto end_impl() const noexcept -> take_iterator<Iter> {
     // TODO: This is suboptimal
-    return { std::next(iterator_.cbegin(), n_), n_ };
+    return { std::next(iterator_.cbegin(), static_cast<difference_type>(n_)), n_ };
   }
 
   [[nodiscard]] constexpr auto cend_impl() const noexcept -> take_iterator<Iter> {
     // TODO: This is suboptimal
-    return { std::next(iterator_.cbegin(), n_), n_ };
+    return { std::next(iterator_.cbegin(), static_cast<difference_type>(n_)), n_ };
   }
 
   [[nodiscard]] constexpr auto const_deref_impl() const -> decltype(std::declval<const Iter &>().operator*()) {
