@@ -128,7 +128,6 @@ TEST_CASE(TEST_TAG "map filter any", TEST_TAG) {
             .any([](const auto &x) { return x % 2 == 0; })
           == false);
 }
-}
 
 TEST_CASE(TEST_TAG "filter min", TEST_TAG) {
   ftl::list<int> list = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
