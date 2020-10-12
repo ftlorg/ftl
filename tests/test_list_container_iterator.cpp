@@ -142,6 +142,13 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   REQUIRE(5 == *iter);
 }
 
+TEST_CASE(TEST_TAG "any", TEST_TAG) {
+  ftl::list<std::string> list = { { "red", "green", "blue" } };
+
+  REQUIRE(list.iter().any([](const auto &x) { return x == "red"; }) == true);
+  REQUIRE(list.iter().any([](const auto &x) { return x == "purple"; }) == false);
+}
+
 TEST_CASE(TEST_TAG "operator--", TEST_TAG) {
   ftl::list<int> list = { { 1, 2, 3, 4, 5 } };
 

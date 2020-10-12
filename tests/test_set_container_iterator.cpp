@@ -246,6 +246,13 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   REQUIRE(std::string{ "red" } == *iter);
 }
 
+TEST_CASE(TEST_TAG "any", TEST_TAG) {
+  const ftl::set<std::string> set = { { "red", "green", "blue" } };
+
+  REQUIRE(set.iter().any([](const auto &x) { return x == "red"; }) == true);
+  REQUIRE(set.iter().any([](const auto &x) { return x == "purple"; }) == false);
+}
+
 TEST_CASE(TEST_TAG "min", TEST_TAG) {
   const ftl::set<int> set = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
 
