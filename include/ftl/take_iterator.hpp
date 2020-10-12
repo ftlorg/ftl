@@ -54,31 +54,18 @@ public:
   }
 
   auto preincrement_impl() -> const take_iterator<Iter> & {
-    if (counter_ <= n_) {
-      ++counter_;
-      ++iterator_;
-    } else {
-      iterator_ = iterator_.end();
-    }
-
+    ++iterator_;
     return *this;
   }
 
   auto const_preincrement_impl() const -> const take_iterator<Iter> & {
-    if (counter_ <= n_) {
-      ++counter_;
-      ++iterator_;
-    } else {
-      iterator_ = iterator_.end();
-    }
-
+    ++iterator_;
     return *this;
   }
 
 private:
   mutable Iter iterator_;
   size_type n_ = 0;
-  mutable size_type counter_ = 0;
 };
 
 }// namespace ftl
