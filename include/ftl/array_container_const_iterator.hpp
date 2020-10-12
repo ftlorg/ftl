@@ -45,8 +45,8 @@ public:
 
 private:
   mutable std_array_container_iterator current_;
-  std_array_container_iterator const begin_;
-  std_array_container_iterator const end_;
+  std_array_container_iterator begin_;
+  std_array_container_iterator end_;
 };
 
 }// namespace ftl
