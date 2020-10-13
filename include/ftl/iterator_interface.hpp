@@ -46,11 +46,15 @@ public:
 
   virtual ~iterator_interface() = default;
 
-  template<typename Predicate>
-  [[nodiscard]] auto all(Predicate &&predicate) const -> bool;
 
   template<typename Predicate>
-  [[nodiscard]] auto any(Predicate &&predicate) const -> bool;
+  [[nodiscard]] auto any(Predicate &&predicate) const -> bool {
+    for (auto &&x : static_cast<const Derived &>(*this)) {
+      if (predicate(x)) { return true; }
+    }
+
+    return false;
+  }
 
   template<typename Collection>
   [[nodiscard]] auto collect() const -> Collection {
@@ -79,6 +83,14 @@ public:
   template<typename Operator>
   [[nodiscard]] auto fold(value_type initial, Operator &&op) const -> value_type;
 
+  template<typename Predicate>
+  [[nodiscard]] auto all(Predicate &&predicate) const -> bool {
+    for (const auto &element : static_cast<const Derived &>(*this)) {
+      if (!predicate(element)) { return false; }
+    }
+    return true;
+  }
+
   template<typename Callable>
   auto for_each(Callable &&callable) const -> void;
 
@@ -100,7 +112,23 @@ public:
     return std::nullopt;
   }
 
-  [[nodiscard]] auto min() const -> std::optional<value_type>;
+  [[nodiscard]] auto min() const -> std::optional<value_type> {
+    const auto begin = std::begin(static_cast<const Derived &>(*this));
+    const auto end = std::end(static_cast<const Derived &>(*this));
+
+    if (begin != end) {
+      auto min = *begin;
+
+      for (auto it = ++begin; it != end; it++) {
+        const auto &val = *it;
+        if (val < min) { min = val; }
+      }
+
+      return { min };
+    }
+
+    return std::nullopt;
+  }
 
   template<typename Collection, typename Predicate>
   [[nodiscard]] auto partition(Predicate &&predicate) const -> std::tuple<Collection, Collection>;

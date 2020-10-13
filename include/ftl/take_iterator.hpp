@@ -28,7 +28,7 @@ public:
   using iterator_category = std::forward_iterator_tag;
   using size_type = typename Iter::size_type;
 
-  take_iterator(Iter iterator, size_type n) : iterator_{ std::move(iterator) }, n_{ n } {
+  take_iterator(Iter iterator, size_type n) : iterator_{ std::move(iterator) }, n_{ std::min(n, iterator_.count()) } {
   }
 
   [[nodiscard]] constexpr auto begin_impl() const noexcept -> take_iterator<Iter> {
@@ -40,11 +40,13 @@ public:
   }
 
   [[nodiscard]] constexpr auto end_impl() const noexcept -> take_iterator<Iter> {
-    return { iterator_.cend(), n_ };
+    // TODO: This is suboptimal
+    return { std::next(iterator_.cbegin(), static_cast<difference_type>(n_)), n_ };
   }
 
   [[nodiscard]] constexpr auto cend_impl() const noexcept -> take_iterator<Iter> {
-    return { iterator_.cend(), n_ };
+    // TODO: This is suboptimal
+    return { std::next(iterator_.cbegin(), static_cast<difference_type>(n_)), n_ };
   }
 
   [[nodiscard]] constexpr auto const_deref_impl() const -> decltype(std::declval<const Iter &>().operator*()) {
@@ -52,31 +54,18 @@ public:
   }
 
   auto preincrement_impl() -> const take_iterator<Iter> & {
-    if (counter_ < n_ - 1) {
-      ++iterator_;
-      ++counter_;
-    } else {
-      while (++iterator_ != iterator_.end()) {}
-    }
-
+    ++iterator_;
     return *this;
   }
 
   auto const_preincrement_impl() const -> const take_iterator<Iter> & {
-    if (counter_ < n_ - 1) {
-      ++iterator_;
-      ++counter_;
-    } else {
-      while (++iterator_ != iterator_.end()) {}
-    }
-
+    ++iterator_;
     return *this;
   }
 
 private:
   mutable Iter iterator_;
-  const size_type n_ = 0;
-  mutable size_type counter_ = 0;
+  size_type n_ = 0;
 };
 
 }// namespace ftl
