@@ -86,7 +86,7 @@ public:
   template<typename Predicate>
   [[nodiscard]] auto all(Predicate &&predicate) const -> bool {
     for (const auto &element : static_cast<const Derived &>(*this)) {
-      if (!predicate(element)) return false;
+      if (!predicate(element)) { return false; }
     }
     return true;
   }
@@ -114,7 +114,7 @@ public:
       auto min = *begin;
 
       for (auto it = ++begin; it != end; it++) {
-        const auto& val = *it;
+        const auto &val = *it;
         if (val < min) { min = val; }
       }
 
