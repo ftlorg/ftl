@@ -102,6 +102,22 @@ TEST_CASE(TEST_TAG "take filter take more collect", TEST_TAG) {
   REQUIRE(mapped_vec == ftl::vector<int>{ 2, 4 });
 }
 
+ TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
+  ftl::list<int> list = { 1, 2, 3, 4, 5 };
+
+  auto element = list.iter().take(4).all([](const auto &x) { return x < 5; });
+
+  REQUIRE(element);
+}
+
+TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
+  ftl::list<int> list = { 1, 2, 3, 4, 5 };
+
+  auto element = list.iter().take(5).all([](const auto &x) { return x < 5; });
+
+  REQUIRE_FALSE(element);
+}
+
 TEST_CASE(TEST_TAG "any", TEST_TAG) {
   const ftl::list<std::string> list = { { "red", "green", "blue" } };
 
