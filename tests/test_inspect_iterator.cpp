@@ -188,3 +188,39 @@ TEST_CASE(TEST_TAG "inspect min", TEST_TAG) {
   REQUIRE(min.has_value() == true);
   REQUIRE(min.value() == -1);
 }
+
+TEST_CASE(TEST_TAG "inspect max", TEST_TAG) {
+  const ftl::forward_list<int> list = { { 3, 1, 12, 0, -1, 4, 4, 7 } };
+
+  REQUIRE(list.iter().inspect([](const auto &x) { INFO(x); }).max().value() == 12);
+}
+
+TEST_CASE(TEST_TAG "inspect max empty range", TEST_TAG) {
+  const ftl::forward_list<int> list = {};
+
+  REQUIRE(list.iter().inspect([](const auto &x) { INFO(x); }).max().has_value() == false);
+}
+
+TEST_CASE(TEST_TAG "inspect max equal range lower than zero", TEST_TAG) {
+  const ftl::forward_list<int> list = { { -2, -2, -2 } };
+
+  REQUIRE(list.iter().inspect([](const auto &x) { INFO(x); }).max().value() == -2);
+}
+
+TEST_CASE(TEST_TAG "inspect max equal range greater than zero", TEST_TAG) {
+  const ftl::forward_list<int> list = { { 2, 2, 2 } };
+
+  REQUIRE(list.iter().inspect([](const auto &x) { INFO(x); }).max().value() == 2);
+}
+
+TEST_CASE(TEST_TAG "inspect max at the beginning", TEST_TAG) {
+  const ftl::forward_list<int> list = { { 4, 3, -1 } };
+
+  REQUIRE(list.iter().inspect([](const auto &x) { INFO(x); }).max().value() == 4);
+}
+
+TEST_CASE(TEST_TAG "inspect max at the end", TEST_TAG) {
+  const ftl::forward_list<int> list = { { -1, 3, 7 } };
+
+  REQUIRE(list.iter().inspect([](const auto &x) { INFO(x); }).max().value() == 7);
+}

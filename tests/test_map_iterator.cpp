@@ -156,6 +156,42 @@ TEST_CASE(TEST_TAG "map min", TEST_TAG) {
   REQUIRE(min.value() == 0);
 }
 
+TEST_CASE(TEST_TAG "map max", TEST_TAG) {
+  const ftl::forward_list<int> list = { { 3, 1, 12, 0, -1, 4, 4, 7 } };
+
+  REQUIRE(list.iter().map([](const auto &x) { return x; }).max().value() == 12);
+}
+
+TEST_CASE(TEST_TAG "map max empty range", TEST_TAG) {
+  const ftl::forward_list<int> list = {};
+
+  REQUIRE(list.iter().map([](const auto &x) { return x; }).max().has_value() == false);
+}
+
+TEST_CASE(TEST_TAG "map max equal range lower than zero", TEST_TAG) {
+  const ftl::forward_list<int> list = { { -2, -2, -2 } };
+
+  REQUIRE(list.iter().map([](const auto &x) { return x; }).max().value() == -2);
+}
+
+TEST_CASE(TEST_TAG "map max equal range greater than zero", TEST_TAG) {
+  const ftl::forward_list<int> list = { { 2, 2, 2 } };
+
+  REQUIRE(list.iter().map([](const auto &x) { return x; }).max().value() == 2);
+}
+
+TEST_CASE(TEST_TAG "map max at the beginning", TEST_TAG) {
+  const ftl::forward_list<int> list = { { 4, 3, -1 } };
+
+  REQUIRE(list.iter().map([](const auto &x) { return x; }).max().value() == 4);
+}
+
+TEST_CASE(TEST_TAG "map max at the end", TEST_TAG) {
+  const ftl::forward_list<int> list = { { -1, 3, 7 } };
+
+  REQUIRE(list.iter().map([](const auto &x) { return x; }).max().value() == 7);
+}
+
 TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
