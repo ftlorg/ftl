@@ -161,12 +161,6 @@ TEST_CASE(TEST_TAG "filter max", TEST_TAG) {
   REQUIRE(list.iter().filter([](const auto &x) { return x != 12; }).max().value() == 7);
 }
 
-TEST_CASE(TEST_TAG "filter max empty range", TEST_TAG) {
-  ftl::list<int> list = {};
-
-  REQUIRE_FALSE(list.iter().filter([](const auto &x) { return x != 12; }).max().has_value());
-}
-
 TEST_CASE(TEST_TAG "filter max equal range lower than zero", TEST_TAG) {
   ftl::list<int> list = { { -2, -2, -2 } };
 
