@@ -198,7 +198,7 @@ TEST_CASE(TEST_TAG "inspect max", TEST_TAG) {
 TEST_CASE(TEST_TAG "inspect max empty range", TEST_TAG) {
   const ftl::forward_list<int> list = {};
 
-  REQUIRE(list.iter().inspect([](const auto &x) { INFO(x); }).max().has_value() == false);
+  REQUIRE_FALSE(list.iter().inspect([](const auto &x) { INFO(x); }).max().has_value());
 }
 
 TEST_CASE(TEST_TAG "inspect max equal range lower than zero", TEST_TAG) {

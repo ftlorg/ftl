@@ -165,7 +165,7 @@ TEST_CASE(TEST_TAG "map max", TEST_TAG) {
 TEST_CASE(TEST_TAG "map max empty range", TEST_TAG) {
   const ftl::forward_list<int> list = {};
 
-  REQUIRE(list.iter().map([](const auto &x) { return x; }).max().has_value() == false);
+  REQUIRE_FALSE(list.iter().map([](const auto &x) { return x; }).max().has_value());
 }
 
 TEST_CASE(TEST_TAG "map max equal range lower than zero", TEST_TAG) {
