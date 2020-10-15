@@ -310,11 +310,69 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   REQUIRE(std::pair<const int, std::string>{ 3, "blue" } == *iter);
 }
 
+TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  auto element = map.iter().all([](const auto &elem) { return elem.second.size() >= 3; });
+
+  REQUIRE(element);
+}
+
+TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  auto element = map.iter().all([](const auto &elem) { return elem.first == 3; });
+
+  REQUIRE_FALSE(element);
+}
+
 TEST_CASE(TEST_TAG "any", TEST_TAG) {
   const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
 
   REQUIRE(map.iter().any([](const auto &x) { return x.second == "red"; }) == true);
   REQUIRE(map.iter().any([](const auto &x) { return x.second == "purple"; }) == false);
+}
+
+TEST_CASE(TEST_TAG "partition", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  const auto is_even = [](const auto &x) { return x.first % 2 == 0; };
+  auto [coll1, coll2] = map.iter().partition<ftl::vector<std::pair<int, std::string>>>(is_even);
+
+  REQUIRE(coll1.size() == 1);
+  REQUIRE(coll2.size() == 2);
+}
+
+TEST_CASE(TEST_TAG "partition first empty", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 3, "green" }, { 5, "blue" } };
+
+  const auto is_even = [](const auto &x) { return x.first % 2 == 0; };
+  auto [coll1, coll2] = map.iter().partition<ftl::vector<std::pair<int, std::string>>>(is_even);
+
+  REQUIRE(coll1.empty() == true);
+  REQUIRE(coll2.size() == 3);
+}
+
+TEST_CASE(TEST_TAG "partition second empty", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 2, "red" }, { 4, "green" }, { 6, "blue" } };
+
+  const auto is_even = [](const auto &x) { return x.first % 2 == 0; };
+  auto [coll1, coll2] = map.iter().partition<ftl::vector<std::pair<int, std::string>>>(is_even);
+
+  REQUIRE(coll1.size() == 3);
+  REQUIRE(coll2.empty() == true);
+}
+
+TEST_CASE(TEST_TAG "partition no criteria met", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  const auto has_seven = [](const auto &x) { return x.first == 7; };
+  auto [coll1, coll2] = map.iter().partition<ftl::vector<std::pair<int, std::string>>>(has_seven);
+
+  REQUIRE(coll1.empty() == true);
+
+  int i = 0;
+  for (const auto &e : coll2) { REQUIRE(e.first == ++i); }
 }
 
 TEST_CASE(TEST_TAG "find", TEST_TAG) {

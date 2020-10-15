@@ -201,3 +201,97 @@ TEST_CASE(TEST_TAG "find element not in list", TEST_TAG) {
   REQUIRE_FALSE(element.has_value());
   REQUIRE(element == std::nullopt);
 }
+
+TEST_CASE(TEST_TAG "max", TEST_TAG) {
+  const ftl::list<int> list = { { 3, 1, 12, 0, -1, 4, 4, 7 } };
+
+  REQUIRE(list.iter().max().value() == 12);
+}
+
+TEST_CASE(TEST_TAG "max empty range", TEST_TAG) {
+  const ftl::list<int> list = {};
+
+  REQUIRE(list.iter().max().has_value() == false);
+}
+
+TEST_CASE(TEST_TAG "max equal range lower than zero", TEST_TAG) {
+  const ftl::list<int> list = { { -2, -2, -2 } };
+
+  REQUIRE(list.iter().max().value() == -2);
+}
+
+TEST_CASE(TEST_TAG "max equal range greater than zero", TEST_TAG) {
+  const ftl::list<int> list = { { 2, 2, 2 } };
+
+  REQUIRE(list.iter().max().value() == 2);
+}
+
+TEST_CASE(TEST_TAG "max at the beginning", TEST_TAG) {
+  const ftl::list<int> list = { { 4, 3, -1 } };
+
+  REQUIRE(list.iter().max().value() == 4);
+}
+
+TEST_CASE(TEST_TAG "max at the end", TEST_TAG) {
+  const ftl::list<int> list = { { -1, 3, 7 } };
+
+  REQUIRE(list.iter().max().value() == 7);
+}
+
+TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
+  const ftl::list<int> list = { 1, 2, 3, 4, 5 };
+
+  auto element = list.iter().all([](const auto &number) { return number < 10; });
+
+  REQUIRE(element);
+}
+
+TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
+  const ftl::list<int> list = { 1, 2, 3, 4, 5 };
+
+  auto element = list.iter().all([](const auto &number) { return number == 3; });
+
+  REQUIRE_FALSE(element);
+}
+
+TEST_CASE(TEST_TAG "partition", TEST_TAG) {
+  ftl::list<int> list = { { 1, 3, 2, 0, 2, 5, 7, 8 } };
+
+  const auto is_even = [](const auto &x) { return x % 2 == 0; };
+  auto [coll1, coll2] = list.iter().partition<ftl::list<int>>(is_even);
+
+  for (const auto &e : coll1) { REQUIRE(is_even(e) == true); }
+  for (const auto &e : coll2) { REQUIRE(is_even(e) == false); }
+}
+
+TEST_CASE(TEST_TAG "partition first empty", TEST_TAG) {
+  ftl::list<int> list = { { 1, 3, 9, 5 } };
+
+  const auto is_even = [](const auto &x) { return x % 2 == 0; };
+  auto [coll1, coll2] = list.iter().partition<ftl::list<int>>(is_even);
+
+  REQUIRE(coll1.empty() == true);
+  for (const auto &e : coll2) { REQUIRE(is_even(e) == false); }
+}
+
+TEST_CASE(TEST_TAG "partition second empty", TEST_TAG) {
+  ftl::list<int> list = { { 8, 2, 4, 0 } };
+
+  const auto is_even = [](const auto &x) { return x % 2 == 0; };
+  auto [coll1, coll2] = list.iter().partition<ftl::list<int>>(is_even);
+
+  for (const auto &e : coll1) { REQUIRE(is_even(e) == true); }
+  REQUIRE(coll2.empty() == true);
+}
+
+TEST_CASE(TEST_TAG "partition no criteria met", TEST_TAG) {
+  ftl::list<int> list = { { 1, 2, 3, 4 } };
+
+  const auto has_seven = [](const auto &x) { return x == 7; };
+  auto [coll1, coll2] = list.iter().partition<ftl::list<int>>(has_seven);
+
+  REQUIRE(coll1.empty() == true);
+
+  int i = 0;
+  for (const auto &e : coll2) { REQUIRE(e == ++i); }
+}
