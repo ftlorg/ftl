@@ -315,3 +315,35 @@ TEST_CASE(TEST_TAG "enumerate partition no criteria met", TEST_TAG) {
   REQUIRE(coll1.empty() == true);
   REQUIRE(coll2.size() == 4);
 }
+
+TEST_CASE(TEST_TAG "enumerate collect to sorted std::vector", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto mapped_arr = arr.iter().enumerate().collect_sorted<std::vector<std::tuple<std::size_t, int>>>();
+
+  REQUIRE(mapped_arr
+          == std::vector<std::tuple<std::size_t, int>>{
+            { 0, 1 },
+            { 1, 2 },
+            { 2, 3 },
+            { 3, 4 },
+            { 4, 5 },
+          });
+}
+
+TEST_CASE(TEST_TAG "enumerate const collect to sorted std::vector", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 5, 1, 4, 2, 3 } };
+
+  auto mapped_arr = arr.iter().enumerate().collect_sorted<std::vector<std::tuple<std::size_t, int>>>();
+
+  REQUIRE(mapped_arr
+          == std::vector<std::tuple<std::size_t, int>>{
+            { 0, 5 },
+            { 1, 1 },
+            { 2, 4 },
+            { 3, 2 },
+            { 4, 3 },
+          });
+}

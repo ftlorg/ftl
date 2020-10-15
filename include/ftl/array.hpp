@@ -122,10 +122,10 @@ struct ftl::from_iterator_trait<ftl::enumerate_iterator<Iter>, ftl::array<std::t
   }
 };
 
-template<typename Iter, typename Callable, typename Item, std::size_t N>
-struct ftl::from_iterator_trait<ftl::inspect_iterator<Iter, Callable>, ftl::array<Item, N>> {
-  [[nodiscard]] constexpr static auto from_iter(const inspect_iterator<Iter, Callable> &iter) -> ftl::array<Item, N> {
-    array<Item, N> result{};
+template<typename Iter, typename Item, std::size_t N>
+struct ftl::from_iterator_trait<Iter, ftl::array<Item, N>> {
+  [[nodiscard]] constexpr static auto from_iter(const Iter &iter) -> ftl::array<Item, N> {
+    ftl::array<Item, N> result{};
     std::size_t i = 0;
     for (auto &&item : iter) {
       result[i] = item;
@@ -133,6 +133,12 @@ struct ftl::from_iterator_trait<ftl::inspect_iterator<Iter, Callable>, ftl::arra
     }
 
     return result;
+  }
+
+  [[nodiscard]] constexpr static auto from_iter_sorted(const Iter &iter) -> ftl::array<Item, N> {
+    ftl::array<Item, N> collection{ iter.begin(), iter.end() };
+    std::sort(collection.begin(), collection.end());
+    return collection;
   }
 };
 

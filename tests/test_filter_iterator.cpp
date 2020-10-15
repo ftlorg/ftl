@@ -260,3 +260,25 @@ TEST_CASE(TEST_TAG "sum", TEST_TAG) {
 
   REQUIRE(sum == 6);
 }
+
+TEST_CASE(TEST_TAG "filter collect sorted", TEST_TAG) {
+  ftl::vector<int> vec = { 1, 5, 12, 6};
+
+  auto f_vec = vec.iter()
+                 .filter([](const auto &x) { return x % 2 == 0; })
+                 .filter([](const auto &x) { return x % 3 == 0; })
+                 .collect_sorted<std::vector<int>>();
+
+  REQUIRE(f_vec == ftl::vector<int>{ 6, 12 });
+}
+
+TEST_CASE(TEST_TAG "const filter collect sorted", TEST_TAG) {
+  const ftl::vector<int> vec = { 12, 1, 2, 3, 4, 5, 6 };
+
+  auto f_vec = vec.iter()
+                 .filter([](const auto &x) { return x % 2 == 0; })
+                 .filter([](const auto &x) { return x % 3 == 0; })
+                 .collect_sorted<std::vector<int>>();
+
+  REQUIRE(f_vec == ftl::vector<int>{ 6, 12 });
+}

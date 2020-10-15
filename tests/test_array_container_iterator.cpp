@@ -357,3 +357,57 @@ TEST_CASE(TEST_TAG "sum", TEST_TAG) {
 
   REQUIRE(sum == 30);
 }
+
+TEST_CASE(TEST_TAG "collect to sorted std::vector", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 5, 1, 4, 2, 3 } };
+
+  auto mapped_arr = arr.iter().collect_sorted<std::vector<int>>();
+
+  REQUIRE(mapped_arr == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const to sorted std::vector", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 5, 1, 4, 2, 3 } };
+
+  auto mapped_arr = arr.iter().collect_sorted<std::vector<int>>();
+
+  REQUIRE(mapped_arr == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect to sorted std::list", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 5, 1, 4, 2, 3 } };
+
+  auto mapped_arr = arr.iter().collect_sorted<std::list<int>>();
+
+  REQUIRE(mapped_arr == std::list<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const to sorted std::list", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 5, 1, 4, 2, 3 } };
+
+  auto mapped_arr = arr.iter().collect_sorted<std::list<int>>();
+
+  REQUIRE(mapped_arr == std::list<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect to sorted std::deque", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 5, 1, 4, 2, 3 } };
+
+  auto mapped_arr = arr.iter().collect_sorted<std::deque<int>>();
+
+  REQUIRE(mapped_arr == std::deque<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const to sorted std::deque", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 5, 1, 4, 2, 3 } };
+
+  auto mapped_arr = arr.iter().collect_sorted<std::deque<int>>();
+
+  REQUIRE(mapped_arr == std::deque<int>{ 1, 2, 3, 4, 5 });
+}

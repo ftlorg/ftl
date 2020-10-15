@@ -303,3 +303,19 @@ TEST_CASE(TEST_TAG "partition no criteria met", TEST_TAG) {
   int i = 0;
   for (const auto &e : coll2) { REQUIRE(e == ++i); }
 }
+
+TEST_CASE(TEST_TAG "collect to sorted std::list", TEST_TAG) {
+  ftl::list<int> list = { 2, 3, 4, 1, 5 };
+
+  auto mapped_list = list.iter().collect_sorted<std::list<int>>();
+
+  REQUIRE(mapped_list == std::list<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const to sorted std::list", TEST_TAG) {
+  const ftl::list<int> list = { 2, 3, 4, 1, 5 };
+
+  auto mapped_list = list.iter().collect_sorted<std::list<int>>();
+
+  REQUIRE(mapped_list == std::list<int>{ 1, 2, 3, 4, 5 });
+}

@@ -68,3 +68,29 @@ struct ftl::into_iterator_trait<ftl::forward_list<Item, Allocator>,
     return { forward_list.begin(), forward_list.end() };
   }
 };
+
+template<typename T, typename Item, typename Allocator>
+struct ftl::from_iterator_trait<T, ftl::forward_list<Item, Allocator>> {
+  [[nodiscard]] constexpr static auto from_iter(const T &iter) -> ftl::forward_list<Item, Allocator> {
+    return ftl::forward_list<Item, Allocator>{ iter.begin(), iter.end() };
+  }
+
+  [[nodiscard]] constexpr static auto from_iter_sorted(const T &iter) -> ftl::forward_list<Item, Allocator> {
+    ftl::forward_list<Item, Allocator> collection{ iter.begin(), iter.end() };
+    std::sort(collection.begin(), collection.end());
+    return collection;
+  }
+};
+
+template<typename T, typename Item, typename Allocator>
+struct ftl::from_iterator_trait<T, std::forward_list<Item, Allocator>> {
+  [[nodiscard]] constexpr static auto from_iter(const T &iter) -> std::forward_list<Item, Allocator> {
+    return std::forward_list<Item, Allocator>{ iter.begin(), iter.end() };
+  }
+
+  [[nodiscard]] constexpr static auto from_iter_sorted(const T &iter) -> std::forward_list<Item, Allocator> {
+    std::forward_list<Item, Allocator> collection{ iter.begin(), iter.end() };
+    collection.sort();
+    return collection;
+  }
+};
