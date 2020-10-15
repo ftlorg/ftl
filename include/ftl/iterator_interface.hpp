@@ -141,7 +141,20 @@ public:
   }
 
   template<typename Collection, typename Predicate>
-  [[nodiscard]] auto partition(Predicate &&predicate) const -> std::tuple<Collection, Collection>;
+  [[nodiscard]] auto partition(Predicate &&predicate) const -> std::tuple<Collection, Collection> {
+    Collection coll1{};
+    Collection coll2{};
+
+    for (const auto &x : static_cast<const Derived &>(*this)) {
+      if (predicate(x)) {
+        coll1.insert(std::end(coll1), x);
+      } else {
+        coll2.insert(std::end(coll2), x);
+      }
+    }
+
+    return { coll1, coll2 };
+  }
 
   [[nodiscard]] auto product() const -> value_type;
 
