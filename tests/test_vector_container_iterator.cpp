@@ -304,7 +304,6 @@ TEST_CASE(TEST_TAG "partition no criteria met", TEST_TAG) {
   int i = 0;
   for (const auto &e : coll2) { REQUIRE(e == ++i); }
 }
-}
 
 TEST_CASE(TEST_TAG "find", TEST_TAG) {
   const ftl::vector<int> arr = { 1, 2, 3, 4, 5 };
