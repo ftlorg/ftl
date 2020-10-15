@@ -65,63 +65,6 @@ struct ftl::from_iterator_trait<ftl::array_container_iterator<Item, N>, ftl::arr
   }
 };
 
-template<typename Item, std::size_t N>
-struct ftl::from_iterator_trait<ftl::array_container_const_iterator<Item, N>, ftl::array<Item, N>> {
-  [[nodiscard]] constexpr static auto from_iter(const array_container_const_iterator<Item, N> &iter) {
-    array<Item, N> result{};
-    std::size_t i = 0;
-    for (auto &&item : iter) {
-      result[i] = item;
-      ++i;
-    }
-
-    return result;
-  }
-};
-
-template<typename Iter, typename Item, std::size_t N>
-struct ftl::from_iterator_trait<ftl::take_iterator<Iter>, ftl::array<Item, N>> {
-  [[nodiscard]] constexpr static auto from_iter(const ftl::take_iterator<Iter> &iter) -> ftl::array<Item, N> {
-    array<Item, N> result{};
-    std::size_t i = 0;
-    for (auto &&item : iter) {
-      result[i] = item;
-      ++i;
-    }
-
-    return result;
-  }
-};
-
-template<typename Iter, typename Callable, typename Item, std::size_t N>
-struct ftl::from_iterator_trait<ftl::map_iterator<Iter, Callable>, ftl::array<Item, N>> {
-  [[nodiscard]] constexpr static auto from_iter(const map_iterator<Iter, Callable> &iter) -> ftl::array<Item, N> {
-    array<Item, N> result{};
-    std::size_t i = 0;
-    for (auto &&item : iter) {
-      result[i] = item;
-      ++i;
-    }
-
-    return result;
-  }
-};
-
-template<typename Iter, typename Item, std::size_t N>
-struct ftl::from_iterator_trait<ftl::enumerate_iterator<Iter>, ftl::array<std::tuple<std::size_t, Item>, N>> {
-  [[nodiscard]] constexpr static auto from_iter(const enumerate_iterator<Iter> &iter)
-    -> ftl::array<std::tuple<std::size_t, Item>, N> {
-    array<std::tuple<std::size_t, Item>, N> result{};
-    std::size_t i = 0;
-    for (auto &&item : iter) {
-      result[i] = item;
-      ++i;
-    }
-
-    return result;
-  }
-};
-
 template<typename Iter, typename Item, std::size_t N>
 struct ftl::from_iterator_trait<Iter, ftl::array<Item, N>> {
   [[nodiscard]] constexpr static auto from_iter(const Iter &iter) -> ftl::array<Item, N> {
@@ -136,7 +79,7 @@ struct ftl::from_iterator_trait<Iter, ftl::array<Item, N>> {
   }
 
   [[nodiscard]] constexpr static auto from_iter_sorted(const Iter &iter) -> ftl::array<Item, N> {
-    ftl::array<Item, N> collection{ iter.begin(), iter.end() };
+    ftl::array<Item, N> collection = ftl::from_iterator_trait<Iter, ftl::array<Item, N>>::from_iter(iter);
     std::sort(collection.begin(), collection.end());
     return collection;
   }

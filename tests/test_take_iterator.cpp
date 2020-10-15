@@ -249,7 +249,7 @@ TEST_CASE(TEST_TAG "take collect sorted", TEST_TAG) {
   REQUIRE(mapped_arr == ftl::array<int, size>{ { 1, 2, 3, 4, 5 } });
 }
 
-TEST_CASE(TEST_TAG "take collect sorted", TEST_TAG) {
+TEST_CASE(TEST_TAG "take const collect sorted", TEST_TAG) {
   constexpr std::size_t size = 3;
   const ftl::array<int, size> arr = { { 3, 1, 2 } };
 
