@@ -246,34 +246,134 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   REQUIRE(std::string{ "red" } == *iter);
 }
 
-TEST_CASE(TEST_TAG "collect into std::vector", TEST_TAG) {
-  ftl::set<std::string> set = { { "red", "green", "blue" } };
-  std::vector<std::string> vec;
-  set.iter().collect_into(vec);
+  TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
+  const ftl::set<float> set = { { 1.5f, 2.5f, 3.5f } };
 
-  REQUIRE(vec == std::vector<std::string>{ "blue", "green", "red" });
+  auto sum = set.iter().sum();
+
+  REQUIRE(sum == 7.5f);
 }
 
-TEST_CASE(TEST_TAG "collect into std::vector const", TEST_TAG) {
-  const ftl::set<int> set = { { 1, 2, 3 } };
-  std::vector<int> vec;
-  set.iter().collect_into(vec);
+TEST_CASE(TEST_TAG "find", TEST_TAG) {
+  const ftl::set<std::string> set = { { "red", "green", "blue" } };
 
-  REQUIRE(vec == std::vector<int>{ { 1, 2, 3 } });
+  auto element = set.iter().find([](const auto &x) { return x.size() > 4; });
+  REQUIRE(element.has_value());
+  REQUIRE(element.value() == "green");
 }
 
-TEST_CASE(TEST_TAG "collect into std::set", TEST_TAG) {
-  ftl::set<int> set = { { 1, 2, 3 } };
-  std::set<int> set_result;
-  set.iter().collect_into(set_result);
+TEST_CASE(TEST_TAG "find element not in set", TEST_TAG) {
+  const ftl::set<std::string> set = { { "red", "green", "blue" } };
 
-  REQUIRE(set_result == std::set<int>{ { 1, 2, 3 } });
+  auto element = set.iter().find([](const auto &x) { return x.size() > 10; });
+  REQUIRE_FALSE(element.has_value());
+  REQUIRE(element == std::nullopt);
 }
 
-TEST_CASE(TEST_TAG "collect const into std::set", TEST_TAG) {
-  const ftl::set<int> set = { { 1, 2, 3 } };
-  std::set<int> set_result;
-  set.iter().collect_into(set_result);
+TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
+  const ftl::set<std::string> set = { { "red", "green", "blue" } };
 
-  REQUIRE(set_result == std::set<int>{ { 1, 2, 3 } });
+  auto element = set.iter().all([](const auto &x) { return x.size() > 4; });
+
+  REQUIRE_FALSE(element);
+}
+
+TEST_CASE(TEST_TAG "any", TEST_TAG) {
+  const ftl::set<std::string> set = { { "red", "green", "blue" } };
+
+  REQUIRE(set.iter().any([](const auto &x) { return x == "red"; }) == true);
+  REQUIRE(set.iter().any([](const auto &x) { return x == "purple"; }) == false);
+}
+
+TEST_CASE(TEST_TAG "min", TEST_TAG) {
+  const ftl::set<int> set = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
+
+  const auto min = set.iter().min();
+  REQUIRE(min.has_value() == true);
+  REQUIRE(min.value() == -1);
+}
+
+TEST_CASE(TEST_TAG "min empty", TEST_TAG) {
+  const ftl::set<int> set = {};
+
+  const auto min = set.iter().min();
+  REQUIRE_FALSE(min.has_value());
+}
+
+TEST_CASE(TEST_TAG "max", TEST_TAG) {
+  const ftl::set<int> set = { { 3, 1, 12, 0, -1, 4, 4, 7 } };
+
+  REQUIRE(set.iter().max().value() == 12);
+}
+
+TEST_CASE(TEST_TAG "max empty range", TEST_TAG) {
+  const ftl::set<int> set = {};
+
+  REQUIRE(set.iter().max().has_value() == false);
+}
+
+TEST_CASE(TEST_TAG "max equal range lower than zero", TEST_TAG) {
+  const ftl::set<int> set = { { -2, -2, -2 } };
+
+  REQUIRE(set.iter().max().value() == -2);
+}
+
+TEST_CASE(TEST_TAG "max equal range greater than zero", TEST_TAG) {
+  const ftl::set<int> set = { { 2, 2, 2 } };
+
+  REQUIRE(set.iter().max().value() == 2);
+}
+
+TEST_CASE(TEST_TAG "max at the beginning", TEST_TAG) {
+  const ftl::set<int> set = { { 4, 3, -1 } };
+
+  REQUIRE(set.iter().max().value() == 4);
+}
+
+TEST_CASE(TEST_TAG "max at the end", TEST_TAG) {
+  const ftl::set<int> set = { { -1, 3, 7 } };
+
+  REQUIRE(set.iter().max().value() == 7);
+}
+
+TEST_CASE(TEST_TAG "partition", TEST_TAG) {
+  ftl::set<int> set = { { 1, 3, 2, 0, 2, 5, 7, 8 } };
+
+  const auto is_even = [](const auto &x) { return x % 2 == 0; };
+  auto [coll1, coll2] = set.iter().partition<ftl::set<int>>(is_even);
+
+  for (const auto &e : coll1) { REQUIRE(is_even(e) == true); }
+  for (const auto &e : coll2) { REQUIRE(is_even(e) == false); }
+}
+
+TEST_CASE(TEST_TAG "partition first empty", TEST_TAG) {
+  ftl::set<int> set = { { 1, 3, 9, 5 } };
+
+  const auto is_even = [](const auto &x) { return x % 2 == 0; };
+  auto [coll1, coll2] = set.iter().partition<ftl::set<int>>(is_even);
+
+  REQUIRE(coll1.empty() == true);
+  for (const auto &e : coll2) { REQUIRE(is_even(e) == false); }
+}
+
+TEST_CASE(TEST_TAG "partition second empty", TEST_TAG) {
+  ftl::set<int> set = { { 8, 2, 4, 0 } };
+
+  const auto is_even = [](const auto &x) { return x % 2 == 0; };
+  auto [coll1, coll2] = set.iter().partition<ftl::set<int>>(is_even);
+
+  for (const auto &e : coll1) { REQUIRE(is_even(e) == true); }
+  REQUIRE(coll2.empty() == true);
+}
+
+TEST_CASE(TEST_TAG "partition no criteria met", TEST_TAG) {
+  ftl::set<int> set = { { 1, 2, 3, 4 } };
+
+  const auto has_seven = [](const auto &x) { return x == 7; };
+  auto [coll1, coll2] = set.iter().partition<ftl::set<int>>(has_seven);
+
+  REQUIRE(coll1.empty() == true);
+
+  int i = 0;
+  for (const auto &e : coll2) { REQUIRE(e == ++i); }
 }

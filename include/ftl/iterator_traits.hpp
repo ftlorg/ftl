@@ -1,3 +1,9 @@
+
+// Copyright Grzegorz Litarowicz and Lukasz Gut 2020 - 2020.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          https://www.boost.org/LICENSE_1_0.txt)
+
 #pragma once
 
 #include <iterator>
@@ -7,6 +13,7 @@
 #include <map>
 #include <set>
 #include <unordered_map>
+#include <functional>
 
 namespace ftl {
 
@@ -98,7 +105,7 @@ struct std::iterator_traits<ftl::vector_container_iterator<Item>> {
 template<typename Iter, typename Callable>
 struct std::iterator_traits<ftl::map_iterator<Iter, Callable>> {
   using difference_type = typename Iter::difference_type;
-  using value_type = typename Iter::value_type;
+  using value_type = typename std::invoke_result_t<Callable, typename Iter::value_type>;
   using pointer = typename Iter::pointer;
   using reference = typename Iter::reference;
   using const_pointer = typename Iter::const_pointer;
@@ -106,6 +113,7 @@ struct std::iterator_traits<ftl::map_iterator<Iter, Callable>> {
   using inherited_iterator_category = typename Iter::iterator_category;
   using iterator_category = inherited_iterator_category;
   using size_type = typename Iter::size_type;
+  using callable_t = std::function<value_type(typename Iter::value_type)>;
 };
 
 template<typename Key, typename T, typename Item>
@@ -184,6 +192,7 @@ struct std::iterator_traits<ftl::inspect_iterator<Iter, Callable>> {
   using inherited_iterator_category = typename Iter::iterator_category;
   using iterator_category = inherited_iterator_category;
   using size_type = typename Iter::size_type;
+  using callable_t = std::function<void(typename Iter::value_type)>;
 };
 
 template<typename Iter>
@@ -223,6 +232,7 @@ struct std::iterator_traits<ftl::filter_iterator<Iter, Callable>> {
   using iterator_category = std::forward_iterator_tag;
   using inherited_iterator_category = typename Iter::iterator_category;
   using size_type = typename Iter::size_type;
+  using callable_t = std::function<std::invoke_result_t<Callable, typename Iter::value_type>(typename Iter::value_type)>;
 };
 
 
