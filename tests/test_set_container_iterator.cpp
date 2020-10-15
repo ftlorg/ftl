@@ -270,14 +270,6 @@ TEST_CASE(TEST_TAG "find element not in set", TEST_TAG) {
   REQUIRE(element == std::nullopt);
 }
 
-TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
-  const ftl::set<std::string> set = { { "red", "green", "blue" } };
-
-  auto element = set.iter().all([](const auto &x) { return x.size() >= 3; });
-
-  REQUIRE(element);
-}
-
 TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
   const ftl::set<std::string> set = { { "red", "green", "blue" } };
 

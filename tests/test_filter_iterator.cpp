@@ -251,7 +251,6 @@ TEST_CASE(TEST_TAG "find element not in array", TEST_TAG) {
   REQUIRE_FALSE(element.has_value());
   REQUIRE(element == std::nullopt);
 }
-}
 
 TEST_CASE(TEST_TAG "sum", TEST_TAG) {
   constexpr std::size_t size = 5;
