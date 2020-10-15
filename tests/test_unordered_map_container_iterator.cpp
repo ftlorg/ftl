@@ -387,7 +387,5 @@ TEST_CASE(TEST_TAG "partition no criteria met", TEST_TAG) {
   auto [coll1, coll2] = map.iter().partition<ftl::vector<std::pair<int, std::string>>>(has_seven);
 
   REQUIRE(coll1.empty() == true);
-
-  int i = 0;
-  for (const auto &e : coll2) { REQUIRE(e.first == ++i); }
+  REQUIRE(coll2.size() == 3);
 }
