@@ -72,7 +72,7 @@ public:
 
   template<typename Predicate>
   [[nodiscard]] auto find(Predicate &&predicate) const -> std::optional<value_type> {
-    for (const auto elem : static_cast<const Derived &>(*this)) {
+    for (const auto& elem : static_cast<const Derived &>(*this)) {
       if (predicate(elem)) { return std::optional<value_type>(elem); }
     }
     return std::nullopt;
