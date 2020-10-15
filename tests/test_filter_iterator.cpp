@@ -234,7 +234,7 @@ TEST_CASE(TEST_TAG "find", TEST_TAG) {
   ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
 
   auto element = arr.iter().filter([](const auto &x) { return x % 2 == 0; }).find([](const auto &elem) { return elem > 2; });
-                      
+
 
   REQUIRE(element.has_value());
   REQUIRE(element.value() == 4);
@@ -259,4 +259,13 @@ TEST_CASE(TEST_TAG "sum", TEST_TAG) {
   auto sum = arr.iter().filter([](const auto &x) { return x % 2 == 0; }).sum();
 
   REQUIRE(sum == 6);
+}
+
+TEST_CASE(TEST_TAG "filter fold", TEST_TAG) {
+  const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
+
+  const auto sum
+    = list.iter().filter([](const auto &x) { return x >= 0; }).fold(0, [](auto acc, const auto &x) { return acc += x; });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
 }

@@ -328,3 +328,11 @@ TEST_CASE(TEST_TAG "sum", TEST_TAG) {
 
   REQUIRE(sum == 11);
 }
+
+TEST_CASE(TEST_TAG "fold", TEST_TAG) {
+  const ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
+
+  const auto sum = vec.iter().fold(0, [](auto acc, const auto &x) { return acc += x; });
+
+  REQUIRE(sum == vec.iter().count() * (1 + 5) / 2);
+}
