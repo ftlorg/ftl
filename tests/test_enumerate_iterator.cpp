@@ -157,3 +157,103 @@ TEST_CASE(TEST_TAG "enumerate collect to std::vector const", TEST_TAG) {
             { 4, 5 },
           });
 }
+
+TEST_CASE(TEST_TAG "enumerate any", TEST_TAG) {
+  ftl::list<std::string> arr = { { "red", "green", "blue" } };
+
+  REQUIRE(arr.iter().enumerate().any([](const auto &x) { return std::get<1>(x) == "red"; }) == true);
+  REQUIRE(arr.iter().enumerate().any([](const auto &x) { return std::get<1>(x) == "green"; }) == true);
+  REQUIRE(arr.iter().enumerate().any([](const auto &x) { return std::get<1>(x) == "blue"; }) == true);
+}
+
+TEST_CASE(TEST_TAG "enumerate filter any", TEST_TAG) {
+  ftl::list<std::string> arr = { { "red", "green", "blue" } };
+
+  REQUIRE(arr.iter().enumerate().filter([](const auto &x) { return std::get<1>(x) != "green"; }).any([](const auto &x) {
+    return std::get<1>(x) == "red";
+  }) == true);
+  REQUIRE(arr.iter().enumerate().filter([](const auto &x) { return std::get<1>(x) != "green"; }).any([](const auto &x) {
+    return std::get<1>(x) == "green";
+  }) == false);
+  REQUIRE(arr.iter().enumerate().filter([](const auto &x) { return std::get<1>(x) != "green"; }).any([](const auto &x) {
+    return std::get<1>(x) == "blue";
+  }) == true);
+}
+
+TEST_CASE(TEST_TAG "enumerate min", TEST_TAG) {
+  constexpr std::size_t size = 8;
+  ftl::array<int, size> arr = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
+
+  const auto min = arr.iter().enumerate().min();
+  REQUIRE(min.has_value() == true);
+  REQUIRE(min.value() == std::make_tuple<std::size_t, int>(0, 3));
+}
+
+TEST_CASE(TEST_TAG "enumerate max", TEST_TAG) {
+  constexpr std::size_t size = 8;
+  ftl::array<int, size> arr = { { 3, 1, 12, 0, -1, 4, 4, 7 } };
+
+  const auto max = arr.iter().enumerate().max();
+  REQUIRE(max.has_value() == true);
+  REQUIRE(max.value() == std::make_tuple<std::size_t, int>(7, 7));
+}
+
+TEST_CASE(TEST_TAG "enumerate max empty range", TEST_TAG) {
+  constexpr std::size_t size = 0;
+  ftl::array<int, size> arr = {};
+
+  const auto max = arr.iter().enumerate().max();
+  REQUIRE_FALSE(max.has_value());
+}
+
+TEST_CASE(TEST_TAG "enumerate max equal range lower than zero", TEST_TAG) {
+  constexpr std::size_t size = 3;
+  ftl::array<int, size> arr = { { -2, -2, -2 } };
+
+  const auto max = arr.iter().enumerate().max();
+  REQUIRE(max.has_value() == true);
+  REQUIRE(max.value() == std::make_tuple<std::size_t, int>(2, -2));
+}
+
+TEST_CASE(TEST_TAG "enumerate max equal range greater than zero", TEST_TAG) {
+  constexpr std::size_t size = 3;
+  ftl::array<int, size> arr = { { 2, 2, 2 } };
+
+  const auto max = arr.iter().enumerate().max();
+  REQUIRE(max.has_value() == true);
+  REQUIRE(max.value() == std::make_tuple<std::size_t, int>(2, 2));
+}
+
+TEST_CASE(TEST_TAG "enumerate max at the beginning", TEST_TAG) {
+  constexpr std::size_t size = 3;
+  ftl::array<int, size> arr = { { 4, 3, -1 } };
+
+  const auto max = arr.iter().enumerate().max();
+  REQUIRE(max.has_value() == true);
+  REQUIRE(max.value() == std::make_tuple<std::size_t, int>(2, -1));
+}
+
+TEST_CASE(TEST_TAG "enumerate max at the end", TEST_TAG) {
+  constexpr std::size_t size = 3;
+  ftl::array<int, size> arr = { { -1, 3, 7 } };
+
+  const auto max = arr.iter().enumerate().max();
+  REQUIRE(max.has_value() == true);
+  REQUIRE(max.value() == std::make_tuple<std::size_t, int>(2, 7));
+}
+
+TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto element = arr.iter().enumerate().all([](const auto &x) { return std::get<1>(x) < 3; });
+  REQUIRE_FALSE(element);
+}
+
+TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto element = arr.iter().enumerate().all([](const auto &x) { return std::get<1>(x) > 0; });
+  REQUIRE(element);
+}

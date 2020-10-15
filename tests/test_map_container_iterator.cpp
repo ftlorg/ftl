@@ -309,3 +309,26 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   ++iter;
   REQUIRE(std::pair<const int, std::string>{ 3, "blue" } == *iter);
 }
+
+TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  auto element = map.iter().all([](const auto &elem) { return elem.second.size() >= 3; });
+
+  REQUIRE(element);
+}
+
+TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  auto element = map.iter().all([](const auto &elem) { return elem.first == 3; });
+
+  REQUIRE_FALSE(element);
+}
+
+TEST_CASE(TEST_TAG "any", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  REQUIRE(map.iter().any([](const auto &x) { return x.second == "red"; }) == true);
+  REQUIRE(map.iter().any([](const auto &x) { return x.second == "purple"; }) == false);
+}

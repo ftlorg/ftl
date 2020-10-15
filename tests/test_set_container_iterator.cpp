@@ -200,8 +200,8 @@ TEST_CASE(TEST_TAG "begin const", TEST_TAG) {
   REQUIRE(std::string{ "green" } == *iter);
 }
 
- TEST_CASE(TEST_TAG "cbegin", TEST_TAG) {
-  ftl::set<std::string> set = { { "red" , "green", "blue" } };
+TEST_CASE(TEST_TAG "cbegin", TEST_TAG) {
+  ftl::set<std::string> set = { { "red", "green", "blue" } };
 
   auto iter = set.iter().cbegin();
   REQUIRE(std::string{ "blue" } == *iter);
@@ -210,17 +210,17 @@ TEST_CASE(TEST_TAG "begin const", TEST_TAG) {
   REQUIRE(std::string{ "green" } == *iter);
 }
 
- TEST_CASE(TEST_TAG "cbegin const", TEST_TAG) {
+TEST_CASE(TEST_TAG "cbegin const", TEST_TAG) {
   const ftl::set<std::string> set = { { "red", "green", "blue" } };
 
   auto iter = set.iter().cbegin();
-  REQUIRE(std::string{"blue"} == *iter);
+  REQUIRE(std::string{ "blue" } == *iter);
 
   ++iter;
-  REQUIRE(std::string{"green" } == *iter);
+  REQUIRE(std::string{ "green" } == *iter);
 }
 
- TEST_CASE(TEST_TAG "operator++", TEST_TAG) {
+TEST_CASE(TEST_TAG "operator++", TEST_TAG) {
   ftl::set<std::string> set = { { "red", "green", "blue" } };
 
   auto iter = set.iter();
@@ -233,7 +233,7 @@ TEST_CASE(TEST_TAG "begin const", TEST_TAG) {
   REQUIRE(std::string{ "red" } == *iter);
 }
 
- TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
+TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   const ftl::set<std::string> set = { { "red", "green", "blue" } };
 
   auto iter = set.iter();
@@ -244,4 +244,78 @@ TEST_CASE(TEST_TAG "begin const", TEST_TAG) {
 
   ++iter;
   REQUIRE(std::string{ "red" } == *iter);
+}
+
+TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
+  const ftl::set<std::string> set = { { "red", "green", "blue" } };
+
+  auto element = set.iter().all([](const auto &x) { return x.size() >= 3; });
+
+  REQUIRE(element);
+}
+
+TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
+  const ftl::set<std::string> set = { { "red", "green", "blue" } };
+
+  auto element = set.iter().all([](const auto &x) { return x.size() > 4; });
+
+  REQUIRE_FALSE(element);
+}
+
+TEST_CASE(TEST_TAG "any", TEST_TAG) {
+  const ftl::set<std::string> set = { { "red", "green", "blue" } };
+
+  REQUIRE(set.iter().any([](const auto &x) { return x == "red"; }) == true);
+  REQUIRE(set.iter().any([](const auto &x) { return x == "purple"; }) == false);
+}
+
+TEST_CASE(TEST_TAG "min", TEST_TAG) {
+  const ftl::set<int> set = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
+
+  const auto min = set.iter().min();
+  REQUIRE(min.has_value() == true);
+  REQUIRE(min.value() == -1);
+}
+
+TEST_CASE(TEST_TAG "min empty", TEST_TAG) {
+  const ftl::set<int> set = {};
+
+  const auto min = set.iter().min();
+  REQUIRE_FALSE(min.has_value());
+}
+
+TEST_CASE(TEST_TAG "max", TEST_TAG) {
+  const ftl::set<int> list = { { 3, 1, 12, 0, -1, 4, 4, 7 } };
+
+  REQUIRE(list.iter().max().value() == 12);
+}
+
+TEST_CASE(TEST_TAG "max empty range", TEST_TAG) {
+  const ftl::set<int> list = {};
+
+  REQUIRE(list.iter().max().has_value() == false);
+}
+
+TEST_CASE(TEST_TAG "max equal range lower than zero", TEST_TAG) {
+  const ftl::set<int> list = { { -2, -2, -2 } };
+
+  REQUIRE(list.iter().max().value() == -2);
+}
+
+TEST_CASE(TEST_TAG "max equal range greater than zero", TEST_TAG) {
+  const ftl::set<int> list = { { 2, 2, 2 } };
+
+  REQUIRE(list.iter().max().value() == 2);
+}
+
+TEST_CASE(TEST_TAG "max at the beginning", TEST_TAG) {
+  const ftl::set<int> list = { { 4, 3, -1 } };
+
+  REQUIRE(list.iter().max().value() == 4);
+}
+
+TEST_CASE(TEST_TAG "max at the end", TEST_TAG) {
+  const ftl::set<int> list = { { -1, 3, 7 } };
+
+  REQUIRE(list.iter().max().value() == 7);
 }
