@@ -13,6 +13,7 @@
 #include <cassert>
 #include <tuple>
 #include <optional>
+#include <numeric>
 
 namespace ftl {
 
@@ -169,7 +170,10 @@ public:
 
   [[nodiscard]] auto product() const -> value_type;
 
-  [[nodiscard]] auto sum() const -> value_type;
+  [[nodiscard]] auto sum() const -> value_type {
+    return std::accumulate(
+      static_cast<const Derived &>(*this).begin(), static_cast<const Derived &>(*this).end(), value_type{});
+  }
 
   [[nodiscard]] auto rev() const -> rev_iterator<Derived>;
 

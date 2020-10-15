@@ -142,6 +142,14 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   REQUIRE(5 == *iter);
 }
 
+TEST_CASE(TEST_TAG "sum", TEST_TAG) {
+  const ftl::list<int> list = { 1, 2, 3, 4, 5 };
+
+  auto sum = list.iter().sum();
+
+  REQUIRE(sum == 15);
+}
+
 TEST_CASE(TEST_TAG "any", TEST_TAG) {
   ftl::list<std::string> list = { { "red", "green", "blue" } };
 

@@ -251,3 +251,12 @@ TEST_CASE(TEST_TAG "find element not in array", TEST_TAG) {
   REQUIRE_FALSE(element.has_value());
   REQUIRE(element == std::nullopt);
 }
+
+TEST_CASE(TEST_TAG "sum", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto sum = arr.iter().filter([](const auto &x) { return x % 2 == 0; }).sum();
+
+  REQUIRE(sum == 6);
+}

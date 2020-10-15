@@ -231,3 +231,11 @@ TEST_CASE(TEST_TAG "take partition no criteria met", TEST_TAG) {
   int i = 0;
   for (const auto &e : coll2) { REQUIRE(e == ++i); }
 }
+
+TEST_CASE(TEST_TAG "sum", TEST_TAG) {
+  ftl::list<int> list = { 1, 2, 3, 4, 5 };
+
+  auto sum = list.iter().take(4).sum();
+
+  REQUIRE(sum == 10);
+}

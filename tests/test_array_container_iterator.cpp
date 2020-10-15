@@ -348,3 +348,12 @@ TEST_CASE(TEST_TAG "partition no criteria met", TEST_TAG) {
   int i = 0;
   for (const auto &e : coll2) { REQUIRE(e == ++i); }
 }
+
+TEST_CASE(TEST_TAG "sum", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 2, 4, 6, 8, 10 } };
+
+  auto sum = arr.iter().sum();
+
+  REQUIRE(sum == 30);
+}

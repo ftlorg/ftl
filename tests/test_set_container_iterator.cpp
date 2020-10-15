@@ -246,6 +246,14 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   REQUIRE(std::string{ "red" } == *iter);
 }
 
+  TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
+  const ftl::set<float> set = { { 1.5f, 2.5f, 3.5f } };
+
+  auto sum = set.iter().sum();
+
+  REQUIRE(sum == 7.5f);
+}
+
 TEST_CASE(TEST_TAG "find", TEST_TAG) {
   const ftl::set<std::string> set = { { "red", "green", "blue" } };
 
@@ -260,14 +268,6 @@ TEST_CASE(TEST_TAG "find element not in set", TEST_TAG) {
   auto element = set.iter().find([](const auto &x) { return x.size() > 10; });
   REQUIRE_FALSE(element.has_value());
   REQUIRE(element == std::nullopt);
-}
-
-TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
-  const ftl::set<std::string> set = { { "red", "green", "blue" } };
-
-  auto element = set.iter().all([](const auto &x) { return x.size() >= 3; });
-
-  REQUIRE(element);
 }
 
 TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {

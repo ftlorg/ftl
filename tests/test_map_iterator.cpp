@@ -277,3 +277,12 @@ TEST_CASE(TEST_TAG "map partition no criteria met", TEST_TAG) {
   int i = 0;
   for (const auto &e : coll2) { REQUIRE(e == ++i); }
 }
+
+TEST_CASE(TEST_TAG "sum", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto sum = arr.iter().map([](const auto &x) { return x * x; }).map([](const auto &x) { return 2 * x; }).sum();
+
+  REQUIRE(sum == 110);
+}

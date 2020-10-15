@@ -320,3 +320,11 @@ TEST_CASE(TEST_TAG "find element not in array", TEST_TAG) {
   REQUIRE_FALSE(element.has_value());
   REQUIRE(element == std::nullopt);
 }
+
+TEST_CASE(TEST_TAG "sum", TEST_TAG) {
+  const ftl::vector<int> arr = { 2, 4, 5 };
+
+  auto sum = arr.iter().sum();
+
+  REQUIRE(sum == 11);
+}
