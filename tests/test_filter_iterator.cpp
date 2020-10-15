@@ -260,7 +260,6 @@ TEST_CASE(TEST_TAG "sum", TEST_TAG) {
 
   REQUIRE(sum == 6);
 }
-}
 
 TEST_CASE(TEST_TAG "product", TEST_TAG) {
   constexpr std::size_t size = 5;
