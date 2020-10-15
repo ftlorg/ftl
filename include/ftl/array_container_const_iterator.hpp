@@ -1,3 +1,9 @@
+
+// Copyright Grzegorz Litarowicz and Lukasz Gut 2020 - 2020.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          https://www.boost.org/LICENSE_1_0.txt)
+
 #pragma once
 
 #include <ftl/iterator_interface.hpp>
@@ -34,13 +40,13 @@ public:
     typename std::iterator_traits<ftl::array_container_const_iterator<Item, N>>::std_array_container_iterator;
 
   constexpr array_container_const_iterator(std_array_container_iterator const begin, std_array_container_iterator const end)
-    : current_{ begin }, begin_{ begin }, end_{ end } {
+    : current_{ begin }, begin_{ std::move(begin) }, end_{ std::move(end) } {
   }
 
   constexpr array_container_const_iterator(std_array_container_iterator current,
     std_array_container_iterator begin,
     std_array_container_iterator end)
-    : current_{ current }, begin_{ begin }, end_{ end } {
+    : current_{ current }, begin_{ std::move(begin) }, end_{ std::move(end) } {
   }
 
 private:

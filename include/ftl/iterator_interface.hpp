@@ -1,11 +1,19 @@
+
+// Copyright Grzegorz Litarowicz and Lukasz Gut 2020 - 2020.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          https://www.boost.org/LICENSE_1_0.txt)
+
 #pragma once
 
 #include <ftl/from_iterator_trait.hpp>
 #include <ftl/iterator_traits.hpp>
+#include <algorithm>
 #include <memory>
 #include <cassert>
 #include <tuple>
 #include <optional>
+#include <numeric>
 
 namespace ftl {
 
@@ -45,11 +53,15 @@ public:
 
   virtual ~iterator_interface() = default;
 
-  template<typename Predicate>
-  [[nodiscard]] auto all(Predicate &&predicate) const -> bool;
 
   template<typename Predicate>
-  [[nodiscard]] auto any(Predicate &&predicate) const -> bool;
+  [[nodiscard]] auto any(Predicate &&predicate) const -> bool {
+    for (auto &&x : static_cast<const Derived &>(*this)) {
+      if (predicate(x)) { return true; }
+    }
+
+    return false;
+  }
 
   template<typename Collection>
   [[nodiscard]] auto collect() const -> Collection {
@@ -71,12 +83,25 @@ public:
   }
 
   template<typename Predicate>
-  [[nodiscard]] auto find(Predicate &&predicate) const -> std::optional<value_type>;
+  [[nodiscard]] auto find(Predicate &&predicate) const -> std::optional<value_type> {
+    for (const auto& elem : static_cast<const Derived &>(*this)) {
+      if (predicate(elem)) { return std::optional<value_type>(elem); }
+    }
+    return std::nullopt;
+  }
 
   [[nodiscard]] auto flatten() const -> flatten_iterator<Derived>;
 
   template<typename Operator>
   [[nodiscard]] auto fold(value_type initial, Operator &&op) const -> value_type;
+
+  template<typename Predicate>
+  [[nodiscard]] auto all(Predicate &&predicate) const -> bool {
+    for (const auto &element : static_cast<const Derived &>(*this)) {
+      if (!predicate(element)) { return false; }
+    }
+    return true;
+  }
 
   template<typename Callable>
   auto for_each(Callable &&callable) const -> void;
@@ -91,12 +116,57 @@ public:
     return { static_cast<const Derived &>(*this), std::forward<Callable>(callable) };
   }
 
-  [[nodiscard]] auto max() const -> std::optional<value_type>;
+  [[nodiscard]] auto max() const -> std::optional<value_type> {
+    const auto begin = std::begin(static_cast<const Derived &>(*this));
+    const auto end = std::end(static_cast<const Derived &>(*this));
 
-  [[nodiscard]] auto min() const -> std::optional<value_type>;
+    if (begin != end) {
+      auto max = *begin;
+
+      for (auto it = ++begin; it != end; it++) {
+        const auto &val = *it;
+        if (val > max) { max = val; }
+      }
+
+      return { max };
+    }
+
+    return std::nullopt;
+  }
+
+  [[nodiscard]] auto min() const -> std::optional<value_type> {
+    const auto begin = std::begin(static_cast<const Derived &>(*this));
+    const auto end = std::end(static_cast<const Derived &>(*this));
+
+    if (begin != end) {
+      auto min = *begin;
+
+      for (auto it = ++begin; it != end; it++) {
+        const auto &val = *it;
+        if (val < min) { min = val; }
+      }
+
+      return { min };
+    }
+
+    return std::nullopt;
+  }
 
   template<typename Collection, typename Predicate>
-  [[nodiscard]] auto partition(Predicate &&predicate) const -> std::tuple<Collection, Collection>;
+  [[nodiscard]] auto partition(Predicate &&predicate) const -> std::tuple<Collection, Collection> {
+    Collection coll1{};
+    Collection coll2{};
+
+    for (const auto &x : static_cast<const Derived &>(*this)) {
+      if (predicate(x)) {
+        coll1.insert(std::end(coll1), x);
+      } else {
+        coll2.insert(std::end(coll2), x);
+      }
+    }
+
+    return { coll1, coll2 };
+  }
 
   [[nodiscard]] auto product() const -> value_type {
     value_type result = static_cast<value_type>(1);
@@ -104,7 +174,10 @@ public:
     return result;
   }
 
-  [[nodiscard]] auto sum() const -> value_type;
+  [[nodiscard]] auto sum() const -> value_type {
+    return std::accumulate(
+      static_cast<const Derived &>(*this).begin(), static_cast<const Derived &>(*this).end(), value_type{});
+  }
 
   [[nodiscard]] auto rev() const -> rev_iterator<Derived>;
 
