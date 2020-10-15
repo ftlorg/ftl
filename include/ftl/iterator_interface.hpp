@@ -145,7 +145,7 @@ public:
     Collection coll1{};
     Collection coll2{};
 
-    for (auto &&x : static_cast<const Derived &>(*this)) {
+    for (const auto &x : static_cast<const Derived &>(*this)) {
       if (predicate(x)) {
         coll1.insert(std::end(coll1), x);
       } else {
