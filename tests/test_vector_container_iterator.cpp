@@ -328,3 +328,19 @@ TEST_CASE(TEST_TAG "sum", TEST_TAG) {
 
   REQUIRE(sum == 11);
 }
+
+TEST_CASE(TEST_TAG "collect to sorted std::vector", TEST_TAG) {
+  ftl::vector<int> vec = { 2, 3, 4, 1, 5 };
+
+  auto mapped_vec = vec.iter().collect_sorted<ftl::vector<int>>();
+
+  REQUIRE(mapped_vec == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const to sorted std::vector", TEST_TAG) {
+  const ftl::vector<int> vec = { 2, 3, 4, 1, 5 };
+
+  auto mapped_vec = vec.iter().collect_sorted<ftl::vector<int>>();
+
+  REQUIRE(mapped_vec == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
