@@ -210,8 +210,6 @@ TEST_CASE(TEST_TAG "operator-- const", TEST_TAG) {
   const auto min = vec.iter().min();
   REQUIRE_FALSE(min.has_value());
 }
-  REQUIRE(arr[4] == *iter);
-}
 
 TEST_CASE(TEST_TAG "find", TEST_TAG) {
   const ftl::vector<int> arr = { 1, 2, 3, 4, 5 };

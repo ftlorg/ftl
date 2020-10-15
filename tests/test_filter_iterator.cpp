@@ -136,7 +136,6 @@ TEST_CASE(TEST_TAG "filter min", TEST_TAG) {
   REQUIRE(min.has_value() == true);
   REQUIRE(min.value() == 0);
 }
-}
 
 TEST_CASE(TEST_TAG "find", TEST_TAG) {
   constexpr std::size_t size = 5;
