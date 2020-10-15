@@ -264,6 +264,28 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   REQUIRE(5 == *iter);
 }
 
+TEST_CASE(TEST_TAG "any", TEST_TAG) {
+  ftl::forward_list<std::string> list = { { "red", "green", "blue" } };
+
+  REQUIRE(list.iter().any([](const auto &x) { return x == "red"; }) == true);
+  REQUIRE(list.iter().any([](const auto &x) { return x == "purple"; }) == false);
+}
+
+TEST_CASE(TEST_TAG "min", TEST_TAG) {
+  const ftl::forward_list<int> list = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
+
+  const auto min = list.iter().min();
+  REQUIRE(min.has_value() == true);
+  REQUIRE(min.value() == -1);
+}
+
+TEST_CASE(TEST_TAG "min empty", TEST_TAG) {
+  const ftl::forward_list<int> list = {};
+
+  const auto min = list.iter().min();
+  REQUIRE_FALSE(min.has_value());
+}
+
 TEST_CASE(TEST_TAG "find", TEST_TAG) {
   const ftl::forward_list<int> list = { 1, 2, 3, 4, 5 };
 

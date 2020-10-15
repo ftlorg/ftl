@@ -310,6 +310,13 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   REQUIRE(std::pair<const int, std::string>{ 3, "blue" } == *iter);
 }
 
+TEST_CASE(TEST_TAG "any", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  REQUIRE(map.iter().any([](const auto &x) { return x.second == "red"; }) == true);
+  REQUIRE(map.iter().any([](const auto &x) { return x.second == "purple"; }) == false);
+}
+
 TEST_CASE(TEST_TAG "find", TEST_TAG) {
   const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
 

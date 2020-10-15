@@ -110,6 +110,34 @@ TEST_CASE(TEST_TAG "chain enumerate and filter", TEST_TAG) {
   REQUIRE(mapped_arr == ftl::vector<int>{ 4, 5 });
 }
 
+TEST_CASE(TEST_TAG "filter any", TEST_TAG) {
+  ftl::forward_list<std::string> vec = { { "red", "green", "blue" } };
+
+  REQUIRE(
+    vec.iter().filter([](const auto &x) { return x != "green"; }).any([](const auto &x) { return x == "red"; }) == true);
+  REQUIRE(
+    vec.iter().filter([](const auto &x) { return x != "green"; }).any([](const auto &x) { return x == "green"; }) == false);
+}
+
+TEST_CASE(TEST_TAG "map filter any", TEST_TAG) {
+  ftl::forward_list<int> vec = { { 1, 2, 3 } };
+
+  REQUIRE(vec.iter()
+            .map([](const auto &x) { return 2 * x; })
+            .filter([](const auto &x) { return x % 2 != 0; })
+            .any([](const auto &x) { return x % 2 == 0; })
+          == false);
+}
+
+TEST_CASE(TEST_TAG "filter min", TEST_TAG) {
+  ftl::list<int> list = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
+
+  const auto min = list.iter().filter([](const auto &x) { return x != -1; }).min();
+  REQUIRE(min.has_value() == true);
+  REQUIRE(min.value() == 0);
+}
+}
+
 TEST_CASE(TEST_TAG "find", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };

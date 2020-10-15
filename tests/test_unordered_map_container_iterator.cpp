@@ -327,6 +327,13 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   REQUIRE(iter != map.iter().end());
 }
 
+TEST_CASE(TEST_TAG "any", TEST_TAG) {
+  const ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  REQUIRE(map.iter().any([](const auto &x) { return x.second == "red"; }) == true);
+  REQUIRE(map.iter().any([](const auto &x) { return x.second == "purple"; }) == false);
+}
+
 TEST_CASE(TEST_TAG "find", TEST_TAG) {
   const ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
 

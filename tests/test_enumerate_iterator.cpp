@@ -175,3 +175,28 @@ TEST_CASE(TEST_TAG "find element not in array", TEST_TAG) {
   REQUIRE_FALSE(element.has_value());
   REQUIRE(element == std::nullopt);
 }
+
+TEST_CASE(TEST_TAG "enumerate any", TEST_TAG) {
+  ftl::list<std::string> arr = { { "red", "green", "blue" } };
+
+  REQUIRE(arr.iter().enumerate().any([](const auto &x) { return std::get<1>(x) == "red"; }) == true);
+  REQUIRE(arr.iter().enumerate().any([](const auto &x) { return std::get<1>(x) == "green"; }) == true);
+  REQUIRE(arr.iter().enumerate().any([](const auto &x) { return std::get<1>(x) == "blue"; }) == true);
+}
+
+TEST_CASE(TEST_TAG "enumerate filter any", TEST_TAG) {
+  ftl::list<std::string> arr = { { "red", "green", "blue" } };
+
+  REQUIRE(arr.iter().enumerate().filter([](const auto& x){return std::get<1>(x) != "green";}).any([](const auto &x) { return std::get<1>(x) == "red"; }) == true);
+  REQUIRE(arr.iter().enumerate().filter([](const auto& x){return std::get<1>(x) != "green";}).any([](const auto &x) { return std::get<1>(x) == "green"; }) == false);
+  REQUIRE(arr.iter().enumerate().filter([](const auto& x){return std::get<1>(x) != "green";}).any([](const auto &x) { return std::get<1>(x) == "blue"; }) == true);
+}
+
+TEST_CASE(TEST_TAG "enumerate min", TEST_TAG) {
+  constexpr std::size_t size = 8;
+  ftl::array<int, size> arr = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
+
+  const auto min = arr.iter().enumerate().min();
+  REQUIRE(min.has_value() == true);
+  REQUIRE(min.value() == std::make_tuple<std::size_t, int>(0, 3));
+}

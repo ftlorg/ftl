@@ -40,29 +40,27 @@ TEST_CASE(TEST_TAG "collect to std::vector", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "collect const to std::vector", TEST_TAG) {
-  constexpr std::size_t size = 5;
-  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+  const ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
 
-  auto mapped_arr = arr.iter().collect<ftl::vector<int>>();
+  auto mapped_vec = vec.iter().collect<ftl::vector<int>>();
 
-  REQUIRE(mapped_arr == std::vector<int>{ 1, 2, 3, 4, 5 });
+  REQUIRE(mapped_vec == std::vector<int>{ 1, 2, 3, 4, 5 });
 }
 
 TEST_CASE(TEST_TAG "collect to std::list", TEST_TAG) {
   ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
 
-  auto mapped_arr = vec.iter().collect<std::list<int>>();
+  auto mapped_vec = vec.iter().collect<std::list<int>>();
 
-  REQUIRE(mapped_arr == std::list<int>{ 1, 2, 3, 4, 5 });
+  REQUIRE(mapped_vec == std::list<int>{ 1, 2, 3, 4, 5 });
 }
 
 TEST_CASE(TEST_TAG "collect const to std::list", TEST_TAG) {
-  constexpr std::size_t size = 5;
-  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+  const ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
 
-  auto mapped_arr = arr.iter().collect<std::list<int>>();
+  auto mapped_vec = vec.iter().collect<std::list<int>>();
 
-  REQUIRE(mapped_arr == std::list<int>{ 1, 2, 3, 4, 5 });
+  REQUIRE(mapped_vec == std::list<int>{ 1, 2, 3, 4, 5 });
 }
 
 TEST_CASE(TEST_TAG "collect const to ftl::vector", TEST_TAG) {
@@ -79,26 +77,26 @@ TEST_CASE(TEST_TAG "collect const to ftl::vector", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "count", TEST_TAG) {
-  ftl::vector<int> arr = { 1, 2, 3, 4, 5 };
+  ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
 
-  REQUIRE(5 == arr.iter().count());
+  REQUIRE(5 == vec.iter().count());
 }
 
 TEST_CASE(TEST_TAG "count const", TEST_TAG) {
-  const ftl::vector<int> arr = { 1, 2, 3, 4, 5 };
+  const ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
 
-  REQUIRE(5 == arr.iter().count());
+  REQUIRE(5 == vec.iter().count());
 }
 
 TEST_CASE(TEST_TAG "begin", TEST_TAG) {
-  ftl::vector<int> arr = { 1, 2, 3, 4, 5 };
+  ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
 
-  auto iter = arr.iter().begin();
+  auto iter = vec.iter().begin();
 
-  REQUIRE(arr[0] == *iter);
+  REQUIRE(vec[0] == *iter);
 
   ++iter;
-  REQUIRE(arr[1] == *iter);
+  REQUIRE(vec[1] == *iter);
 }
 
 TEST_CASE(TEST_TAG "begin const", TEST_TAG) {
@@ -132,40 +130,86 @@ TEST_CASE(TEST_TAG "cbegin const", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "operator++", TEST_TAG) {
-  ftl::vector<int> arr = { 1, 2, 3, 4, 5 };
+  ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
 
-  auto iter = arr.iter();
-  REQUIRE(arr[0] == *iter);
-
-  ++iter;
-  REQUIRE(arr[1] == *iter);
+  auto iter = vec.iter();
+  REQUIRE(vec[0] == *iter);
 
   ++iter;
-  REQUIRE(arr[2] == *iter);
+  REQUIRE(vec[1] == *iter);
 
   ++iter;
-  REQUIRE(arr[3] == *iter);
+  REQUIRE(vec[2] == *iter);
 
   ++iter;
-  REQUIRE(arr[4] == *iter);
+  REQUIRE(vec[3] == *iter);
+
+  ++iter;
+  REQUIRE(vec[4] == *iter);
 }
 
 TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
-  const ftl::vector<int> arr = { 1, 2, 3, 4, 5 };
+  const ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
 
-  auto iter = arr.iter();
-  REQUIRE(arr[0] == *iter);
-
-  ++iter;
-  REQUIRE(arr[1] == *iter);
+  auto iter = vec.iter();
+  REQUIRE(vec[0] == *iter);
 
   ++iter;
-  REQUIRE(arr[2] == *iter);
+  REQUIRE(vec[1] == *iter);
 
   ++iter;
-  REQUIRE(arr[3] == *iter);
+  REQUIRE(vec[2] == *iter);
 
   ++iter;
+  REQUIRE(vec[3] == *iter);
+
+  ++iter;
+  REQUIRE(vec[4] == *iter);
+}
+
+TEST_CASE(TEST_TAG "any", TEST_TAG) {
+  ftl::vector<std::string> vec = { { "red", "green", "blue" } };
+
+  REQUIRE(vec.iter().any([](const auto &x) { return x == "red"; }) == true);
+  REQUIRE(vec.iter().any([](const auto &x) { return x == "purple"; }) == false);
+}
+
+TEST_CASE(TEST_TAG "operator--", TEST_TAG) {
+  ftl::vector<int> vec = { { 1, 2, 3, 4, 5 } };
+
+  auto iter = vec.iter() + 4;
+  REQUIRE(vec[4] == *iter);
+  REQUIRE(vec[3] == *(--iter));
+  REQUIRE(vec[2] == *(--iter));
+  REQUIRE(vec[1] == *(--iter));
+  REQUIRE(vec[0] == *(--iter));
+}
+
+TEST_CASE(TEST_TAG "operator-- const", TEST_TAG) {
+  const ftl::vector<int> vec = { { 1, 2, 3, 4, 5 } };
+
+  auto iter = vec.iter() + 4;
+  REQUIRE(vec[4] == *iter);
+  REQUIRE(vec[3] == *(--iter));
+  REQUIRE(vec[2] == *(--iter));
+  REQUIRE(vec[1] == *(--iter));
+  REQUIRE(vec[0] == *(--iter));
+}
+
+ TEST_CASE(TEST_TAG "min", TEST_TAG) {
+  const ftl::vector<int> vec = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
+
+  const auto min = vec.iter().min();
+  REQUIRE(min.has_value() == true);
+  REQUIRE(min.value() == -1);
+}
+
+ TEST_CASE(TEST_TAG "min empty", TEST_TAG) {
+  const ftl::vector<int> vec = {};
+
+  const auto min = vec.iter().min();
+  REQUIRE_FALSE(min.has_value());
+}
   REQUIRE(arr[4] == *iter);
 }
 

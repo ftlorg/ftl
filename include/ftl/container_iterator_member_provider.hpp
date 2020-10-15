@@ -111,8 +111,15 @@ struct container_iterator_member_provider<Iter, std::forward_iterator_tag>
 template<typename Iter>
 struct container_iterator_member_provider<Iter, std::bidirectional_iterator_tag>
   : public container_iterator_member_provider<Iter, std::forward_iterator_tag> {
-  auto operator--() const -> Iter & {
-    return --static_cast<const Iter &>(*this).current_;
+
+  auto operator--() const -> const Iter & {
+    --static_cast<const Iter &>(*this).current_;
+    return static_cast<const Iter &>(*this);
+  }
+
+  auto operator--() -> Iter & {
+    --static_cast<Iter &>(*this).current_;
+    return static_cast<Iter &>(*this);
   }
 
   auto operator--(int) -> Iter {
@@ -139,15 +146,23 @@ struct container_iterator_member_provider<Iter, std::random_access_iterator_tag>
   }
 
   constexpr auto operator+=(typename std::iterator_traits<Iter>::size_type n) -> Iter & {
-    static_cast<Iter &>(*this).current_ += n;
+    static_cast<Iter &>(*this).current_ += static_cast<typename std::iterator_traits<Iter>::difference_type>(n);
     return static_cast<Iter &>(*this);
   }
 
-  [[nodiscard]] friend constexpr auto operator+(const Iter &lhs, typename std::iterator_traits<Iter>::size_type n) -> Iter {
+  [[nodiscard]] friend constexpr auto operator+(Iter &lhs, typename std::iterator_traits<Iter>::size_type n) -> Iter {
     return lhs += n;
   }
 
-  [[nodiscard]] friend constexpr auto operator+(typename std::iterator_traits<Iter>::size_type n, const Iter &rhs) -> Iter {
+  [[nodiscard]] friend constexpr auto operator+(Iter &&lhs, typename std::iterator_traits<Iter>::size_type n) -> Iter {
+    return lhs += n;
+  }
+
+  [[nodiscard]] friend constexpr auto operator+(typename std::iterator_traits<Iter>::size_type n, Iter &rhs) -> Iter {
+    return rhs += n;
+  }
+
+  [[nodiscard]] friend constexpr auto operator+(typename std::iterator_traits<Iter>::size_type n, Iter &&rhs) -> Iter {
     return rhs += n;
   }
 
