@@ -269,7 +269,6 @@ TEST_CASE(TEST_TAG "product", TEST_TAG) {
 
   REQUIRE(product == 8);
 }
-}
 
 TEST_CASE(TEST_TAG "filter collect sorted", TEST_TAG) {
   ftl::vector<int> vec = { 1, 5, 12, 6};
