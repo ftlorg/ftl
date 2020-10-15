@@ -168,7 +168,11 @@ public:
     return { coll1, coll2 };
   }
 
-  [[nodiscard]] auto product() const -> value_type;
+  [[nodiscard]] auto product() const -> value_type {
+    auto result = static_cast<value_type>(1);
+    for (const auto &element : static_cast<const Derived &>(*this)) { result *= element; }
+    return result;
+  }
 
   [[nodiscard]] auto sum() const -> value_type {
     return std::accumulate(
