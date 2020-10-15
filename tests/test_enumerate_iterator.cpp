@@ -257,3 +257,43 @@ TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
   auto element = arr.iter().enumerate().all([](const auto &x) { return std::get<1>(x) > 0; });
   REQUIRE(element);
 }
+
+TEST_CASE(TEST_TAG "enumerate partition", TEST_TAG) {
+  ftl::list<int> list = { { 1, 3, 2, 0, 2, 5, 7, 8 } };
+
+  const auto is_even = [](const auto &x) { return std::get<1>(x) % 2 == 0; };
+  auto [coll1, coll2] = list.iter().enumerate().partition<ftl::list<std::tuple<std::size_t, int>>>(is_even);
+
+  REQUIRE(coll1.size() == 4);
+  REQUIRE(coll2.size() == 4);
+}
+
+TEST_CASE(TEST_TAG "enumerate partition first empty", TEST_TAG) {
+  ftl::list<int> list = { { 1, 3, 9, 5 } };
+
+  const auto is_even = [](const auto &x) { return std::get<1>(x) % 2 == 0; };
+  auto [coll1, coll2] = list.iter().enumerate().partition<ftl::list<std::tuple<std::size_t, int>>>(is_even);
+
+  REQUIRE(coll1.empty() == true);
+  REQUIRE(coll2.size() == 4);
+}
+
+TEST_CASE(TEST_TAG "enumerate partition second empty", TEST_TAG) {
+  ftl::list<int> list = { { 8, 2, 4, 0 } };
+
+  const auto is_even = [](const auto &x) { return std::get<1>(x) % 2 == 0; };
+  auto [coll1, coll2] = list.iter().enumerate().partition<ftl::list<std::tuple<std::size_t, int>>>(is_even);
+
+  REQUIRE(coll1.size() == 4);
+  REQUIRE(coll2.empty() == true);
+}
+
+TEST_CASE(TEST_TAG "enumerate partition no criteria met", TEST_TAG) {
+  ftl::list<int> list = { { 1, 2, 3, 4 } };
+
+  const auto has_seven = [](const auto &x) { return std::get<1>(x) == 7; };
+  auto [coll1, coll2] = list.iter().enumerate().partition<ftl::list<std::tuple<std::size_t, int>>>(has_seven);
+
+  REQUIRE(coll1.empty() == true);
+  REQUIRE(coll2.size() == 4);
+}
