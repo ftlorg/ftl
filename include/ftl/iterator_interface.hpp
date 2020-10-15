@@ -68,6 +68,11 @@ public:
     return from_iterator_trait<Derived, Collection>::from_iter(static_cast<const Derived &>(*this));
   }
 
+  template<typename Collection>
+  [[nodiscard]] auto collect_sorted() const -> Collection {
+    return from_iterator_trait<Derived, Collection>::from_iter_sorted(static_cast<const Derived &>(*this));
+  }
+
   [[nodiscard]] constexpr auto count() const -> typename std::iterator_traits<Derived>::size_type {
     return static_cast<typename std::iterator_traits<Derived>::size_type>(
       std::distance(static_cast<const Derived &>(*this).begin(), static_cast<const Derived &>(*this).end()));
@@ -84,7 +89,7 @@ public:
 
   template<typename Predicate>
   [[nodiscard]] auto find(Predicate &&predicate) const -> std::optional<value_type> {
-    for (const auto& elem : static_cast<const Derived &>(*this)) {
+    for (const auto &elem : static_cast<const Derived &>(*this)) {
       if (predicate(elem)) { return std::optional<value_type>(elem); }
     }
     return std::nullopt;
