@@ -329,6 +329,7 @@ TEST_CASE(TEST_TAG "sum", TEST_TAG) {
   REQUIRE(sum == 11);
 }
 
+
 TEST_CASE(TEST_TAG "collect into ftl::vector", TEST_TAG) {
   ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
   ftl::vector<int> vec_result;
@@ -344,3 +345,12 @@ TEST_CASE(TEST_TAG "collect const into ftl::vector", TEST_TAG) {
 
   REQUIRE(vec_result == ftl::vector<int>{ 1, 2, 3, 4, 5 });
 }
+
+TEST_CASE(TEST_TAG "product", TEST_TAG) {
+  const ftl::vector<int> arr = { 2, 4, 5 };
+
+  auto product = arr.iter().product();
+
+  REQUIRE(product == 40);
+}
+
