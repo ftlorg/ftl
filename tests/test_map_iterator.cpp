@@ -156,6 +156,32 @@ TEST_CASE(TEST_TAG "map min", TEST_TAG) {
   REQUIRE(min.value() == 0);
 }
 
+TEST_CASE(TEST_TAG "find", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto element
+    = arr.iter().map([](const auto &x) { return x * x; }).map([](const auto &x) { return 2 * x; }).find([](const auto &x) {
+        return x > 15;
+      });
+
+  REQUIRE(element.has_value());
+  REQUIRE(element.value() == 18);
+}
+
+TEST_CASE(TEST_TAG "find element not in array", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto element
+    = arr.iter().map([](const auto &x) { return x * x; }).map([](const auto &x) { return 2 * x; }).find([](const auto &x) {
+        return x % 2;
+      });
+
+  REQUIRE_FALSE(element.has_value());
+  REQUIRE(element == std::nullopt);
+}
+
 TEST_CASE(TEST_TAG "map max", TEST_TAG) {
   const ftl::forward_list<int> list = { { 3, 1, 12, 0, -1, 4, 4, 7 } };
 

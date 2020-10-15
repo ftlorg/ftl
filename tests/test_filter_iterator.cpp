@@ -228,3 +228,26 @@ TEST_CASE(TEST_TAG "filter partition no criteria met", TEST_TAG) {
   int i = 0;
   for (const auto &e : coll2) { REQUIRE(e == ++i); }
 }
+
+TEST_CASE(TEST_TAG "find", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto element = arr.iter().filter([](const auto &x) { return x % 2 == 0; }).find([](const auto &elem) { return elem > 2; });
+                      
+
+  REQUIRE(element.has_value());
+  REQUIRE(element.value() == 4);
+}
+
+TEST_CASE(TEST_TAG "find element not in array", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto element
+    = arr.iter().filter([](const auto &x) { return x % 2 == 0; }).find([](const auto &elem) { return elem > 10; });
+
+
+  REQUIRE_FALSE(element.has_value());
+  REQUIRE(element == std::nullopt);
+}

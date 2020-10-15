@@ -186,6 +186,22 @@ TEST_CASE(TEST_TAG "min empty", TEST_TAG) {
   REQUIRE_FALSE(min.has_value());
 }
 
+TEST_CASE(TEST_TAG "find", TEST_TAG) {
+  const ftl::list<int> list = { 1, 2, 3, 4, 5 };
+
+  auto element = list.iter().find([](const auto &number) { return number == 3; });
+  REQUIRE(element.has_value());
+  REQUIRE(element.value() == 3);
+}
+
+TEST_CASE(TEST_TAG "find element not in list", TEST_TAG) {
+  const ftl::list<int> list = { 1, 2, 3, 4, 5 };
+
+  auto element = list.iter().find([](const auto &number) { return number == 10; });
+  REQUIRE_FALSE(element.has_value());
+  REQUIRE(element == std::nullopt);
+}
+
 TEST_CASE(TEST_TAG "max", TEST_TAG) {
   const ftl::list<int> list = { { 3, 1, 12, 0, -1, 4, 4, 7 } };
 

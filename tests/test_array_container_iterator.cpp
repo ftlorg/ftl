@@ -205,6 +205,26 @@ TEST_CASE(TEST_TAG "operator+=", TEST_TAG) {
   REQUIRE(arr[4] == *iter);
 }
 
+TEST_CASE(TEST_TAG "find", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto elem = arr.iter().find([](const auto &element) { return element % 2 == 0; });
+
+  REQUIRE(elem.has_value());
+  REQUIRE(elem.value() == 2);
+}
+
+TEST_CASE(TEST_TAG "find element not in array", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 7, 3, 11, 5 } };
+
+  auto elem = arr.iter().find([](const auto &element) { return element % 2 == 0; });
+
+  REQUIRE_FALSE(elem.has_value());
+  REQUIRE(elem == std::nullopt);
+}
+
 
 TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
   constexpr std::size_t size = 5;

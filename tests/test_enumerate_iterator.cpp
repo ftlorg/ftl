@@ -158,6 +158,24 @@ TEST_CASE(TEST_TAG "enumerate collect to std::vector const", TEST_TAG) {
           });
 }
 
+TEST_CASE(TEST_TAG "find", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto element = arr.iter().enumerate().find([](const auto &x) { return std::get<1>(x) == 1; });
+  REQUIRE(element.has_value());
+  REQUIRE(element.value() == std::tuple<std::size_t, int>{ 0, 1 });
+}
+
+TEST_CASE(TEST_TAG "find element not in array", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto element = arr.iter().enumerate().find([](const auto &x) { return std::get<0>(x) == 10; });
+  REQUIRE_FALSE(element.has_value());
+  REQUIRE(element == std::nullopt);
+}
+
 TEST_CASE(TEST_TAG "enumerate any", TEST_TAG) {
   ftl::list<std::string> arr = { { "red", "green", "blue" } };
 

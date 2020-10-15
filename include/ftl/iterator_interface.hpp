@@ -82,7 +82,12 @@ public:
   }
 
   template<typename Predicate>
-  [[nodiscard]] auto find(Predicate &&predicate) const -> std::optional<value_type>;
+  [[nodiscard]] auto find(Predicate &&predicate) const -> std::optional<value_type> {
+    for (const auto& elem : static_cast<const Derived &>(*this)) {
+      if (predicate(elem)) { return std::optional<value_type>(elem); }
+    }
+    return std::nullopt;
+  }
 
   [[nodiscard]] auto flatten() const -> flatten_iterator<Derived>;
 
