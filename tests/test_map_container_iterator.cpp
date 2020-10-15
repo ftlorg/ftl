@@ -202,32 +202,32 @@ TEST_CASE(TEST_TAG "map inspect map collect const", TEST_TAG) {
   REQUIRE(mapped_map == ftl::map<int, std::string>{ { 1, "redabcabc" }, { 2, "greenabcabc" }, { 3, "blueabcabc" } });
 }
 
-// TODO: Fix this code
-// TEST_CASE(TEST_TAG "enumerate map collect", TEST_TAG) {
-//  ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
-//
-//  for (const auto &e : map.iter().enumerate()) { INFO(std::get<0>(e)); }
-//
-//  auto mapped_map = map.iter()
-//                      .enumerate()
-//                      .map([](const auto &entry) {
-//                        const auto &index = std::get<0>(entry);
-//                        const auto &former_entry = std::get<1>(entry);
-//
-//                        return std::pair<const std::size_t, std::pair<const int, std::string>>{
-//                          index,
-//                          { former_entry.first, former_entry.second + "abc" },
-//                        };
-//                      })
-//                      .collect<ftl::map<std::size_t, std::pair<const int, std::string>>>();
-//
-//  REQUIRE(mapped_map
-//          == ftl::map<std::size_t, std::pair<const int, std::string>>{
-//            { 0, { 1, "redabc" } },
-//            { 1, { 2, "greenabc" } },
-//            { 2, { 3, "blueabc" } },
-//          });
-//}
+
+ TEST_CASE(TEST_TAG "enumerate map collect", TEST_TAG) {
+  ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  for (const auto &e : map.iter().enumerate()) { INFO(std::get<0>(e)); }
+
+  auto mapped_map = map.iter()
+                      .enumerate()
+                      .map([](const auto &entry) {
+                        const auto &index = std::get<0>(entry);
+                        const auto &former_entry = std::get<1>(entry);
+
+                        return std::pair<const std::size_t, std::pair<const int, std::string>>{
+                          index,
+                          { former_entry.first, former_entry.second + "abc" },
+                        };
+                      })
+                      .collect<ftl::map<std::size_t, std::pair<const int, std::string>>>();
+
+  REQUIRE(mapped_map
+          == ftl::map<std::size_t, std::pair<const int, std::string>>{
+            { 0, { 1, "redabc" } },
+            { 1, { 2, "greenabc" } },
+            { 2, { 3, "blueabc" } },
+          });
+}
 
 
 TEST_CASE(TEST_TAG "count", TEST_TAG) {
@@ -308,4 +308,85 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
 
   ++iter;
   REQUIRE(std::pair<const int, std::string>{ 3, "blue" } == *iter);
+}
+
+TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  auto element = map.iter().all([](const auto &elem) { return elem.second.size() >= 3; });
+
+  REQUIRE(element);
+}
+
+TEST_CASE(TEST_TAG "not all elements satisfy predicate", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  auto element = map.iter().all([](const auto &elem) { return elem.first == 3; });
+
+  REQUIRE_FALSE(element);
+}
+
+TEST_CASE(TEST_TAG "any", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  REQUIRE(map.iter().any([](const auto &x) { return x.second == "red"; }) == true);
+  REQUIRE(map.iter().any([](const auto &x) { return x.second == "purple"; }) == false);
+}
+
+TEST_CASE(TEST_TAG "partition", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  const auto is_even = [](const auto &x) { return x.first % 2 == 0; };
+  auto [coll1, coll2] = map.iter().partition<ftl::vector<std::pair<int, std::string>>>(is_even);
+
+  REQUIRE(coll1.size() == 1);
+  REQUIRE(coll2.size() == 2);
+}
+
+TEST_CASE(TEST_TAG "partition first empty", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 3, "green" }, { 5, "blue" } };
+
+  const auto is_even = [](const auto &x) { return x.first % 2 == 0; };
+  auto [coll1, coll2] = map.iter().partition<ftl::vector<std::pair<int, std::string>>>(is_even);
+
+  REQUIRE(coll1.empty() == true);
+  REQUIRE(coll2.size() == 3);
+}
+
+TEST_CASE(TEST_TAG "partition second empty", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 2, "red" }, { 4, "green" }, { 6, "blue" } };
+
+  const auto is_even = [](const auto &x) { return x.first % 2 == 0; };
+  auto [coll1, coll2] = map.iter().partition<ftl::vector<std::pair<int, std::string>>>(is_even);
+
+  REQUIRE(coll1.size() == 3);
+  REQUIRE(coll2.empty() == true);
+}
+
+TEST_CASE(TEST_TAG "partition no criteria met", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  const auto has_seven = [](const auto &x) { return x.first == 7; };
+  auto [coll1, coll2] = map.iter().partition<ftl::vector<std::pair<int, std::string>>>(has_seven);
+
+  REQUIRE(coll1.empty() == true);
+
+  int i = 0;
+  for (const auto &e : coll2) { REQUIRE(e.first == ++i); }
+}
+
+TEST_CASE(TEST_TAG "find", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  auto element = map.iter().find([](const auto &elem) { return elem.first == 3; });
+  REQUIRE(element.has_value());
+  REQUIRE(element.value() == std::pair<const int, std::string>{ 3, "blue" });
+}
+
+TEST_CASE(TEST_TAG "find element not in map", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+
+  auto element = map.iter().find([](const auto &elem) { return elem.first == 10; });
+  REQUIRE_FALSE(element.has_value());
+  REQUIRE(element == std::nullopt);
 }
