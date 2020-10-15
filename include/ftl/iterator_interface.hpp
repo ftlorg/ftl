@@ -104,7 +104,23 @@ public:
     return { static_cast<const Derived &>(*this), std::forward<Callable>(callable) };
   }
 
-  [[nodiscard]] auto max() const -> std::optional<value_type>;
+  [[nodiscard]] auto max() const -> std::optional<value_type> {
+    const auto begin = std::begin(static_cast<const Derived &>(*this));
+    const auto end = std::end(static_cast<const Derived &>(*this));
+
+    if (begin != end) {
+      auto max = *begin;
+
+      for (auto it = ++begin; it != end; it++) {
+        const auto &val = *it;
+        if (val > max) { max = val; }
+      }
+
+      return { max };
+    }
+
+    return std::nullopt;
+  }
 
   [[nodiscard]] auto min() const -> std::optional<value_type> {
     const auto begin = std::begin(static_cast<const Derived &>(*this));
