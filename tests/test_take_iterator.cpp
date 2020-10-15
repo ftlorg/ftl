@@ -240,6 +240,14 @@ TEST_CASE(TEST_TAG "sum", TEST_TAG) {
   REQUIRE(sum == 10);
 }
 
+TEST_CASE(TEST_TAG "product", TEST_TAG) {
+  ftl::list<int> list = { 1, 2, 3, 4, 5 };
+
+  auto product = list.iter().take(4).product();
+
+  REQUIRE(product == 24);
+}
+
 TEST_CASE(TEST_TAG "take fold", TEST_TAG) {
   const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
 

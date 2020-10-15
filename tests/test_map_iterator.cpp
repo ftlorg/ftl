@@ -287,6 +287,15 @@ TEST_CASE(TEST_TAG "sum", TEST_TAG) {
   REQUIRE(sum == 110);
 }
 
+TEST_CASE(TEST_TAG "product", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto product = arr.iter().map([](const auto &x) { return x * x; }).map([](const auto &x) { return 2 * x; }).product();
+
+  REQUIRE(product == 460800);
+}
+
 TEST_CASE(TEST_TAG "map fold", TEST_TAG) {
   const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
 
