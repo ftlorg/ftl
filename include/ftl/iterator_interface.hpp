@@ -169,7 +169,7 @@ public:
   }
 
   [[nodiscard]] auto product() const -> value_type {
-    value_type result = static_cast<value_type>(1);
+    auto result = static_cast<value_type>(1);
     for (const auto &element : static_cast<const Derived &>(*this)) { result *= element; }
     return result;
   }
