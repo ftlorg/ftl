@@ -328,8 +328,6 @@ TEST_CASE(TEST_TAG "sum", TEST_TAG) {
 
   REQUIRE(sum == 11);
 }
-  REQUIRE(arr[4] == *iter);
-}
 
 TEST_CASE(TEST_TAG "collect into ftl::vector", TEST_TAG) {
   ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
