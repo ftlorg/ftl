@@ -8,6 +8,7 @@
 
 #include <optional>
 
+#include <ftl/flatten_iterator.hpp>
 #include <ftl/array.hpp>
 #include <ftl/deque.hpp>
 #include <ftl/forward_list.hpp>

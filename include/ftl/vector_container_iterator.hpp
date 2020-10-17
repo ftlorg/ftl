@@ -42,6 +42,8 @@ public:
     : current_{ std::move(current) }, begin_{ std::move(begin) }, end_{ std::move(end) } {
   }
 
+  vector_container_iterator() = default;
+
 private:
 
   mutable std_vector_container_iterator current_;

@@ -22,8 +22,8 @@ public:
   using const_pointer = const value_type *;
   using const_reference = const value_type &;
   using allocator_type = Allocator;
-  using iterator = ftl::vector_container_iterator<T>;
-  using const_iterator = ftl::vector_container_const_iterator<T>;
+  using ftl_iterator = ftl::vector_container_iterator<T>;
+  using ftl_const_iterator = ftl::vector_container_const_iterator<T>;
 
   vector() = default;
 
@@ -41,12 +41,12 @@ public:
   }
 
 
-  [[nodiscard]] constexpr auto iter() noexcept -> iterator {
-    return into_iterator_trait<ftl::vector<T, Allocator>, iterator>::into_iter(*this);
+  [[nodiscard]] constexpr auto iter() noexcept -> ftl_iterator {
+    return into_iterator_trait<ftl::vector<T, Allocator>, ftl_iterator>::into_iter(*this);
   }
 
-  [[nodiscard]] constexpr auto iter() const noexcept -> const_iterator {
-    return into_iterator_trait<ftl::vector<T, Allocator>, const_iterator>::into_iter(*this);
+  [[nodiscard]] constexpr auto iter() const noexcept -> ftl_const_iterator {
+    return into_iterator_trait<ftl::vector<T, Allocator>, ftl_const_iterator>::into_iter(*this);
   }
 };
 
@@ -59,15 +59,15 @@ template<typename T, typename Allocator = std::allocator<T>>
 
 template<typename Item, typename Allocator>
 struct ftl::into_iterator_trait<ftl::vector<Item, Allocator>, ftl::vector_container_iterator<Item>> {
-  using iterator = typename ftl::vector<Item, Allocator>::iterator;
+  using ftl_iterator = typename ftl::vector<Item, Allocator>::ftl_iterator;
   [[nodiscard]] constexpr static auto into_iter(ftl::vector<Item, Allocator> &vec) {
-    return iterator{ vec.begin(), vec.begin(), vec.end() };
+    return ftl_iterator{ vec.begin(), vec.begin(), vec.end() };
   }
 };
 
 template<typename Item, typename Allocator>
 struct ftl::into_iterator_trait<ftl::vector<Item, Allocator>, ftl::vector_container_const_iterator<Item>> {
-  using const_iterator = typename ftl::vector<Item, Allocator>::const_iterator;
-  [[nodiscard]] constexpr static auto into_iter(const ftl::vector<Item, Allocator> &vec) { return const_iterator{ vec.begin(), vec.begin(), vec.end() } ;
+  using ftl_const_iterator = typename ftl::vector<Item, Allocator>::ftl_const_iterator;
+  [[nodiscard]] constexpr static auto into_iter(const ftl::vector<Item, Allocator> &vec) { return ftl_const_iterator{ vec.begin(), vec.begin(), vec.end() } ;
   }
 };

@@ -14,6 +14,7 @@
 #include <set>
 #include <unordered_map>
 #include <functional>
+#include <ftl/is_container.hpp>
 
 namespace ftl {
 
@@ -25,6 +26,9 @@ class filter_iterator;
 
 template<typename Iter>
 class enumerate_iterator;
+
+template<typename Iter, bool is_container = ftl::contains_container<typename std::iterator_traits<Iter>::value_type>::value>
+class flatten_iterator;
 
 template<typename Iter, typename Callable>
 class inspect_iterator;
@@ -205,6 +209,32 @@ struct std::iterator_traits<ftl::enumerate_iterator<Iter>> {
   using const_pointer = typename Iter::const_pointer;
   using const_reference = typename Iter::const_reference;
   using inherited_iterator_category = typename Iter::iterator_category;
+  using iterator_category = inherited_iterator_category;
+};
+
+template<typename Iter>
+struct std::iterator_traits<ftl::flatten_iterator<Iter, false>> {
+  using difference_type = typename Iter::difference_type;
+  using size_type = typename Iter::size_type;
+  using value_type = typename Iter::value_type::value_type;
+  using pointer = typename Iter::value_type::pointer;
+  using reference = typename Iter::value_type::reference;
+  using const_pointer = typename Iter::value_type::const_pointer;
+  using const_reference = typename Iter::value_type::const_reference;
+  using inherited_iterator_category = std::forward_iterator_tag;
+  using iterator_category = inherited_iterator_category;
+};
+
+template<typename Iter>
+struct std::iterator_traits<ftl::flatten_iterator<Iter, true>> {
+  using difference_type = typename Iter::difference_type;
+  using size_type = typename Iter::size_type;
+  using value_type = typename std::iterator_traits<ftl::flatten_iterator<typename Iter::value_type::ftl_iterator>>::value_type;
+  using pointer = typename std::iterator_traits<ftl::flatten_iterator<typename Iter::value_type::ftl_iterator>>::pointer;
+  using reference = typename std::iterator_traits<ftl::flatten_iterator<typename Iter::value_type::ftl_iterator>>::reference;
+  using const_pointer = typename std::iterator_traits<ftl::flatten_iterator<typename Iter::value_type::ftl_iterator>>::const_pointer;
+  using const_reference = typename std::iterator_traits<ftl::flatten_iterator<typename Iter::value_type::ftl_iterator>>::const_reference;
+  using inherited_iterator_category = std::forward_iterator_tag;
   using iterator_category = inherited_iterator_category;
 };
 

@@ -43,6 +43,8 @@ public:
     : current_{ begin }, begin_{ std::move(begin) }, end_{ std::move(end) } {
   }
 
+  constexpr array_container_const_iterator() = default;
+
   constexpr array_container_const_iterator(std_array_container_iterator current,
     std_array_container_iterator begin,
     std_array_container_iterator end)
@@ -51,8 +53,8 @@ public:
 
 private:
   mutable std_array_container_iterator current_;
-  std_array_container_iterator const begin_;
-  std_array_container_iterator const end_;
+  std_array_container_iterator begin_;
+  std_array_container_iterator end_;
 };
 
 }// namespace ftl

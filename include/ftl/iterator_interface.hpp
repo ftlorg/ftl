@@ -8,6 +8,7 @@
 
 #include <ftl/from_iterator_trait.hpp>
 #include <ftl/iterator_traits.hpp>
+#include <ftl/is_container.hpp>
 #include <algorithm>
 #include <memory>
 #include <cassert>
@@ -26,8 +27,8 @@ class map_iterator;
 template<typename Iter, typename Callable>
 class filter_iterator;
 
-template<typename Iter>
-class flatten_iterator : public iterator_interface<flatten_iterator<Iter>> {};
+template<typename Iter, bool is_container>
+class flatten_iterator;
 
 template<typename Iter>
 class enumerate_iterator;
@@ -84,13 +85,18 @@ public:
 
   template<typename Predicate>
   [[nodiscard]] auto find(Predicate &&predicate) const -> std::optional<value_type> {
-    for (const auto& elem : static_cast<const Derived &>(*this)) {
+    for (const auto &elem : static_cast<const Derived &>(*this)) {
       if (predicate(elem)) { return std::optional<value_type>(elem); }
     }
     return std::nullopt;
   }
 
-  [[nodiscard]] auto flatten() const -> flatten_iterator<Derived>;
+  [[nodiscard]] auto flatten() const
+    -> flatten_iterator<Derived> {
+    return flatten_iterator<Derived> {
+      static_cast<const Derived &>(*this)
+    };
+  }
 
   template<typename Operator>
   [[nodiscard]] auto fold(value_type initial, Operator &&op) const -> value_type;

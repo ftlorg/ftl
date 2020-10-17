@@ -42,6 +42,8 @@ public:
     : current_{ begin }, begin_{ begin }, end_{ end } {
   }
 
+  constexpr array_container_iterator() = default;
+
   constexpr array_container_iterator(std_array_container_iterator current,
     std_array_container_iterator begin,
     std_array_container_iterator end)

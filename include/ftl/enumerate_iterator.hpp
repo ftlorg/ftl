@@ -6,10 +6,8 @@
 
 #pragma once
 
-#include <ftl/iterator_interface.hpp>
-#include <ftl/inspect_iterator.hpp>
-#include <ftl/map_iterator.hpp>
 #include <ftl/iterator_traits.hpp>
+#include <ftl/iterator_member_provider.hpp>
 #include <tuple>
 #include <utility>
 
