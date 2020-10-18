@@ -106,6 +106,7 @@ struct iterator_member_provider<Iter, std::forward_iterator_tag>
 template<typename Iter>
 struct iterator_member_provider<Iter, std::bidirectional_iterator_tag>
   : public iterator_member_provider<Iter, std::forward_iterator_tag> {
+
   auto operator--() -> Iter & {
     --static_cast<Iter &>(*this).iterator_;
     return static_cast<Iter &>(*this);
@@ -120,6 +121,14 @@ struct iterator_member_provider<Iter, std::bidirectional_iterator_tag>
     auto tmp = static_cast<Iter &>(*this);
 
     --static_cast<Iter &>(*this);
+
+    return tmp;
+  }
+
+  auto operator--(int) const -> Iter {
+    auto tmp = static_cast<const Iter &>(*this);
+
+    --static_cast<const Iter &>(*this);
 
     return tmp;
   }
@@ -142,10 +151,6 @@ struct iterator_member_provider<Iter, std::random_access_iterator_tag>
   constexpr auto operator+=(typename std::iterator_traits<Iter>::size_type n) -> Iter & {
     static_cast<Iter &>(*this).iterator_ += n;
     return static_cast<Iter &>(*this);
-  }
-
-  [[nodiscard]] friend constexpr auto operator+(Iter &lhs, typename std::iterator_traits<Iter>::size_type n) -> Iter {
-    return lhs += n;
   }
 
   [[nodiscard]] friend constexpr auto operator+(Iter &&lhs, typename std::iterator_traits<Iter>::size_type n) -> Iter {

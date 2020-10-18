@@ -269,3 +269,19 @@ TEST_CASE(TEST_TAG "inspect fold", TEST_TAG) {
 
   REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
 }
+}
+TEST_CASE(TEST_TAG "inspect collect into std::vector", TEST_TAG) {
+  ftl::list<int> list = { 1, 2, 3, 4, 5 };
+  std::vector<int> vec;
+  list.iter().inspect([]([[maybe_unused]] const auto &x) {}).collect_into(vec);
+
+  REQUIRE(vec == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "inspect collect into std::vector const", TEST_TAG) {
+  const ftl::list<int> list = { 1, 2, 3, 4, 5 };
+  std::vector<int> vec;
+  list.iter().inspect([]([[maybe_unused]] const auto &x) {}).collect_into(vec);
+
+  REQUIRE(vec == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
