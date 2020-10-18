@@ -81,3 +81,31 @@ struct ftl::into_iterator_trait<ftl::map<Key, T, Compare, Allocator>,
     return { map.begin(), map.end() };
   }
 };
+
+template<typename Iter,
+  class Key,
+  class Item,
+  class Compare,
+  class Allocator>
+struct ftl::from_iterator_trait<Iter, ftl::map<Key, Item, Compare, Allocator>> {
+  [[nodiscard]] constexpr static auto from_iter(const Iter &iter) -> ftl::map<Key, Item, Compare, Allocator> {
+    return ftl::map<Key, Item, Compare, Allocator>{ iter.begin(), iter.end() };
+  }
+
+  constexpr static auto from_iter_into_collection(const Iter &iter, ftl::map<Key, Item, Compare, Allocator> &collection)
+    -> void {
+    collection.insert(iter.begin(), iter.end());
+  }
+};
+
+template<typename Iter, class Key, class Item, class Compare, class Allocator>
+struct ftl::from_iterator_trait<Iter, std::map<Key, Item, Compare, Allocator>> {
+  [[nodiscard]] constexpr static auto from_iter(const Iter &iter) -> std::map<Key, Item, Compare, Allocator> {
+    return std::map<Key, Item, Compare, Allocator>{ iter.begin(), iter.end() };
+  }
+
+  constexpr static auto from_iter_into_collection(const Iter &iter, std::map<Key, Item, Compare, Allocator> &collection)
+    -> void {
+    collection.insert(iter.begin(), iter.end());
+  }
+};

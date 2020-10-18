@@ -46,6 +46,38 @@ TEST_CASE(TEST_TAG "collect const", TEST_TAG) {
   REQUIRE(mapped_map == ftl::map<int, std::string>{ { 1, "red" }, { 2, "green" }, { 3, "blue" } });
 }
 
+TEST_CASE(TEST_TAG "collect into std::vector", TEST_TAG) {
+  ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+  std::vector<std::pair<int, std::string>> vec;
+  map.iter().collect_into(vec);
+
+  REQUIRE(vec == std::vector<std::pair<int, std::string>>{ { 1, "red" }, { 2, "green" }, { 3, "blue" } });
+}
+
+TEST_CASE(TEST_TAG "collect const into std::vector", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+  std::vector<std::pair<int, std::string>> vec;
+  map.iter().collect_into(vec);
+
+  REQUIRE(vec == std::vector<std::pair<int, std::string>>{ { 1, "red" }, { 2, "green" }, { 3, "blue" } });
+}
+
+TEST_CASE(TEST_TAG "collect into std::map", TEST_TAG) {
+  ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+  std::map<int, std::string> map_result;
+  map.iter().collect_into(map_result);
+
+  REQUIRE(map_result == std::map<int, std::string>{ { 1, "red" }, { 2, "green" }, { 3, "blue" } });
+}
+
+TEST_CASE(TEST_TAG "collect const into std::map", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+  std::map<int, std::string> map_result;
+  map.iter().collect_into(map_result);
+
+  REQUIRE(map_result == std::map<int, std::string>{ { 1, "red" }, { 2, "green" }, { 3, "blue" } });
+}
+
 TEST_CASE(TEST_TAG "map collect", TEST_TAG) {
   ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
 

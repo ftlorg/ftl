@@ -71,6 +71,42 @@ TEST_CASE(TEST_TAG "collect const", TEST_TAG) {
   REQUIRE(mapped_arr2 == ftl::array<int, size2>{ { 1, 2, 3 } });
 }
 
+TEST_CASE(TEST_TAG "collect into std::vector", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+  std::vector<int> vec;
+  arr.iter().collect_into(vec);
+
+  REQUIRE(vec == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const into std::vector", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+  std::vector<int> vec{ 10, 20 };
+  arr.iter().collect_into(vec);
+
+  REQUIRE(vec == std::vector<int>{ 10, 20, 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect into std::list", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+  std::list<int> list = {};
+  arr.iter().collect_into(list);
+
+  REQUIRE(list == std::list<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const into std::list", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+  std::list<int> list = {};
+  arr.iter().collect_into(list);
+
+  REQUIRE(list == std::list<int>{ 1, 2, 3, 4, 5 });
+}
+
 TEST_CASE(TEST_TAG "count", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
