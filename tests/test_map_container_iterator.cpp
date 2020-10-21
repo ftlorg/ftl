@@ -235,7 +235,7 @@ TEST_CASE(TEST_TAG "map inspect map collect const", TEST_TAG) {
 }
 
 
- TEST_CASE(TEST_TAG "enumerate map collect", TEST_TAG) {
+TEST_CASE(TEST_TAG "enumerate map collect", TEST_TAG) {
   ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
 
   for (const auto &e : map.iter().enumerate()) { INFO(std::get<0>(e)); }
@@ -421,4 +421,12 @@ TEST_CASE(TEST_TAG "find element not in map", TEST_TAG) {
   auto element = map.iter().find([](const auto &elem) { return elem.first == 10; });
   REQUIRE_FALSE(element.has_value());
   REQUIRE(element == std::nullopt);
+}
+
+TEST_CASE(TEST_TAG "fold", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" }, { 4, "purple" }, { 5, "pink" } };
+
+  const auto sum = map.iter().fold(0, [](auto acc, const auto &x) { return acc += x.first; });
+
+  REQUIRE(sum == map.iter().count() * (1 + 5) / 2);
 }

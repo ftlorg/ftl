@@ -89,7 +89,7 @@ public:
 
   template<typename Predicate>
   [[nodiscard]] auto find(Predicate &&predicate) const -> std::optional<value_type> {
-    for (const auto& elem : static_cast<const Derived &>(*this)) {
+    for (const auto &elem : static_cast<const Derived &>(*this)) {
       if (predicate(elem)) { return std::optional<value_type>(elem); }
     }
     return std::nullopt;
@@ -97,8 +97,14 @@ public:
 
   [[nodiscard]] auto flatten() const -> flatten_iterator<Derived>;
 
-  template<typename Operator>
-  [[nodiscard]] auto fold(value_type initial, Operator &&op) const -> value_type;
+  template<typename Initial, typename Operator>
+  [[nodiscard]] auto fold(const Initial &initial, Operator &&op) const -> Initial {
+    auto init = initial;
+
+    for (auto &&x : static_cast<const Derived &>(*this)) { op(std::ref(init), x); }
+
+    return init;
+  }
 
   template<typename Predicate>
   [[nodiscard]] auto all(Predicate &&predicate) const -> bool {
