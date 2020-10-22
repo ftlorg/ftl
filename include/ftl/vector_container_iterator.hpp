@@ -9,6 +9,7 @@
 #include <ftl/iterator_interface.hpp>
 #include <ftl/iterator_member_provider.hpp>
 #include <ftl/iterator_traits.hpp>
+#include <ftl/vector_container_const_iterator.hpp>
 
 namespace ftl {
 
@@ -37,15 +38,19 @@ public:
   using std_vector_container_iterator =
     typename std::iterator_traits<ftl::vector_container_iterator<Item>>::std_vector_container_iterator;
 
-  constexpr vector_container_iterator(std_vector_container_iterator current, std_vector_container_iterator begin,
+  constexpr vector_container_iterator(std_vector_container_iterator current,
+    std_vector_container_iterator begin,
     std_vector_container_iterator end)
     : current_{ std::move(current) }, begin_{ std::move(begin) }, end_{ std::move(end) } {
   }
 
   vector_container_iterator() = default;
 
-private:
+  operator vector_container_const_iterator<Item>() {
+    return { current_, begin_, end_ };
+  }
 
+private:
   mutable std_vector_container_iterator current_;
   std_vector_container_iterator begin_;
   std_vector_container_iterator end_;
