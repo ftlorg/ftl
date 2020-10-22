@@ -435,3 +435,20 @@ TEST_CASE(TEST_TAG "fold", TEST_TAG) {
 
   REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
 }
+
+TEST_CASE(TEST_TAG "for_each", TEST_TAG) {
+  const ftl::forward_list<int> list = { { 1, 2, 3, 4, 5 } };
+
+  int sum = 0;
+  list.iter().for_each([&sum](const auto &x) { sum += x; });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "for_each with side-effects", TEST_TAG) {
+  ftl::forward_list<int> list = { { 1, 2, 3, 4, 5 } };
+
+  list.iter().for_each([](auto &x) { x = 1; });
+
+  REQUIRE(list.iter().sum() == 5);
+}

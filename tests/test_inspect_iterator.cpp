@@ -285,3 +285,14 @@ TEST_CASE(TEST_TAG "inspect collect into std::vector const", TEST_TAG) {
 
   REQUIRE(vec == std::vector<int>{ 1, 2, 3, 4, 5 });
 }
+
+TEST_CASE(TEST_TAG "inspect for_each", TEST_TAG) {
+  const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
+
+  int sum = 0;
+  list.iter().inspect([](const auto &x) { INFO(x); }).for_each([&sum](const auto &x) {
+    return sum += x;
+  });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
+}

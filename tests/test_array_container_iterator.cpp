@@ -411,3 +411,22 @@ TEST_CASE(TEST_TAG "fold", TEST_TAG) {
 
   REQUIRE(sum == arr.iter().count() * (1 + 5) / 2);
 }
+
+TEST_CASE(TEST_TAG "for_each", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  int sum = 0;
+  arr.iter().for_each([&sum](const auto &x) { sum += x; });
+
+  REQUIRE(sum == arr.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "for_each with side-effects", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  arr.iter().for_each([](auto &x) { x = 1; });
+
+  REQUIRE(arr.iter().sum() == 5);
+}
