@@ -34,8 +34,8 @@ public:
 
   flatten_iterator(Iter iterator) : iterator_{ std::move(iterator) } {
     if (iterator_ != iterator_.end()) {
-      typename std::iterator_traits<Iter>::value_type::ftl_const_iterator iter = (*iterator_).iter();
-      inner_iterator_ = std::move(iter);
+      inner_iterator_
+        = static_cast<typename std::iterator_traits<Iter>::value_type::ftl_const_iterator>((*iterator_).iter());
     }
   }
 
@@ -70,8 +70,8 @@ private:
   auto preincrement_impl() -> flatten_iterator<Iter> & {
     if (++inner_iterator_ == inner_iterator_.end()) {
       if (++iterator_ != iterator_.end()) {
-        typename std::iterator_traits<Iter>::value_type::ftl_const_iterator iter = (*iterator_).iter();
-        inner_iterator_ = std::move(iter);
+        inner_iterator_
+          = static_cast<typename std::iterator_traits<Iter>::value_type::ftl_const_iterator>((*iterator_).iter());
       }
     }
     return *this;
@@ -80,8 +80,8 @@ private:
   auto const_preincrement_impl() const -> const flatten_iterator<Iter> & {
     if (++inner_iterator_ == inner_iterator_.end()) {
       if (++iterator_ != iterator_.end()) {
-        static_cast<typename std::iterator_traits<Iter>::value_type::ftl_const_iterator>((*iterator_).iter());
-        inner_iterator_ = std::move(iter);
+        inner_iterator_
+          = static_cast<typename std::iterator_traits<Iter>::value_type::ftl_const_iterator>((*iterator_).iter());
       }
     }
     return *this;
