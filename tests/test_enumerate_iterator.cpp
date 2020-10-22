@@ -316,13 +316,21 @@ TEST_CASE(TEST_TAG "enumerate partition no criteria met", TEST_TAG) {
   REQUIRE(coll2.size() == 4);
 }
 
-TEST_CASE(TEST_TAG "enumerate collect to sorted std::vector", TEST_TAG) {
+TEST_CASE(TEST_TAG "enumerate fold", TEST_TAG) {
+  const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
+
+  const auto sum = list.iter().enumerate().fold(0, [](auto acc, const auto &x) { return acc += std::get<1>(x); });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "enumerate collect into std::vector", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+  std::vector<std::tuple<std::size_t, int>> vec;
+  arr.iter().enumerate().collect_into(vec);
 
-  auto mapped_arr = arr.iter().enumerate().collect_sorted<std::vector<std::tuple<std::size_t, int>>>();
-
-  REQUIRE(mapped_arr
+  REQUIRE(vec
           == std::vector<std::tuple<std::size_t, int>>{
             { 0, 1 },
             { 1, 2 },
@@ -332,18 +340,27 @@ TEST_CASE(TEST_TAG "enumerate collect to sorted std::vector", TEST_TAG) {
           });
 }
 
-TEST_CASE(TEST_TAG "enumerate const collect to sorted std::vector", TEST_TAG) {
+TEST_CASE(TEST_TAG "enumerate collect into std::vector const", TEST_TAG) {
   constexpr std::size_t size = 5;
-  const ftl::array<int, size> arr = { { 5, 1, 4, 2, 3 } };
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+  std::vector<std::tuple<std::size_t, int>> vec;
+  arr.iter().enumerate().collect_into(vec);
 
-  auto mapped_arr = arr.iter().enumerate().collect_sorted<std::vector<std::tuple<std::size_t, int>>>();
-
-  REQUIRE(mapped_arr
+  REQUIRE(vec
           == std::vector<std::tuple<std::size_t, int>>{
-            { 0, 5 },
-            { 1, 1 },
-            { 2, 4 },
-            { 3, 2 },
-            { 4, 3 },
+            { 0, 1 },
+            { 1, 2 },
+            { 2, 3 },
+            { 3, 4 },
+            { 4, 5 },
           });
+}
+
+TEST_CASE(TEST_TAG "enumerate for_each", TEST_TAG) {
+  const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
+
+  int sum = 0;
+  list.iter().enumerate().for_each([&sum](const auto &x) { return sum += std::get<1>(x); });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
 }

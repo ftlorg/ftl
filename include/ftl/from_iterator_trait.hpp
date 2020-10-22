@@ -18,7 +18,11 @@ namespace ftl {
 template<typename T, typename U>
 struct from_iterator_trait {
   [[nodiscard]] constexpr static auto from_iter(const T &iter) -> U {
-    return U { iter.begin(), iter.end() };
+    return U{ iter.begin(), iter.end() };
+  }
+
+  constexpr static auto from_iter_into_collection(const T &iter, U &collection) -> void {
+    collection.insert(collection.cend(), iter.begin(), iter.end());
   }
 
   [[nodiscard]] constexpr static auto from_iter_sorted(const T &iter) -> U {

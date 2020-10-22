@@ -265,3 +265,21 @@ TEST_CASE(TEST_TAG "product", TEST_TAG) {
 
   REQUIRE(product == 24);
 }
+
+TEST_CASE(TEST_TAG "take fold", TEST_TAG) {
+  const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
+
+  const auto sum
+    = list.iter().take(5).fold(0, [](auto acc, const auto &x) { return acc += x; });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "take for_each", TEST_TAG) {
+  const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
+
+  int sum = 0;
+  list.iter().take(5).for_each([&sum](const auto &x) { return sum += x; });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
+}
