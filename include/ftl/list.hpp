@@ -74,6 +74,10 @@ struct ftl::from_iterator_trait<T, std::list<Item, Allocator>> {
     return std::list<Item, Allocator>{ iter.begin(), iter.end() };
   }
 
+  constexpr static auto from_iter_into_collection(const T &iter, std::list<Item, Allocator> &collection) -> void {
+    collection.insert(collection.cend(), iter.begin(), iter.end());
+  }
+
   [[nodiscard]] constexpr static auto from_iter_sorted(const T &iter) -> std::list<Item, Allocator> {
     std::list<Item, Allocator> collection{ iter.begin(), iter.end() };
     collection.sort();

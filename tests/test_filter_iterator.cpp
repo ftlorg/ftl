@@ -311,7 +311,6 @@ TEST_CASE(TEST_TAG "filter for_each", TEST_TAG) {
 
   REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
 }
-}
 
 TEST_CASE(TEST_TAG "filter collect sorted", TEST_TAG) {
   ftl::vector<int> vec = { 1, 5, 12, 6};
