@@ -69,19 +69,6 @@ struct ftl::into_iterator_trait<ftl::list<Item, Allocator>, typename ftl::list<I
 };
 
 template<typename T, typename Item, typename Allocator>
-struct ftl::from_iterator_trait<T, ftl::list<Item, Allocator>> {
-  [[nodiscard]] constexpr static auto from_iter(const T &iter) -> ftl::list<Item, Allocator> {
-    return ftl::list<Item, Allocator>{ iter.begin(), iter.end() };
-  }
-
-  [[nodiscard]] constexpr static auto from_iter_sorted(const T &iter) -> ftl::list<Item, Allocator> {
-    ftl::list<Item, Allocator> collection{ iter.begin(), iter.end() };
-    std::sort(collection.begin(), collection.end());
-    return collection;
-  }
-};
-
-template<typename T, typename Item, typename Allocator>
 struct ftl::from_iterator_trait<T, std::list<Item, Allocator>> {
   [[nodiscard]] constexpr static auto from_iter(const T &iter) -> std::list<Item, Allocator> {
     return std::list<Item, Allocator>{ iter.begin(), iter.end() };
