@@ -385,3 +385,12 @@ TEST_CASE(TEST_TAG "fold", TEST_TAG) {
 
   REQUIRE(sum == set.iter().count() * (1 + 5) / 2);
 }
+
+TEST_CASE(TEST_TAG "for_each", TEST_TAG) {
+  const ftl::set<int> set = { { 1, 2, 3, 4, 5 } };
+
+  int sum = 0;
+  set.iter().for_each([&sum](const auto &x) { sum += x; });
+
+  REQUIRE(sum == set.iter().count() * (1 + 5) / 2);
+}

@@ -430,3 +430,12 @@ TEST_CASE(TEST_TAG "fold", TEST_TAG) {
 
   REQUIRE(sum == map.iter().count() * (1 + 5) / 2);
 }
+
+TEST_CASE(TEST_TAG "for_each", TEST_TAG) {
+  const ftl::map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" }, { 4, "purple" }, { 5, "pink" } };
+
+  int sum = 0;
+  map.iter().for_each([&sum](const auto &x) { sum += x.first; });
+
+  REQUIRE(sum == map.iter().count() * (1 + 5) / 2);
+}

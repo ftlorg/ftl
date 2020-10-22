@@ -117,7 +117,7 @@ public:
 
   template<typename Callable>
   auto for_each(Callable &&callable) const -> void {
-    for (const auto &element : static_cast<const Derived &>(*this)) { callable(elemenet); }
+    for (const auto &element : static_cast<const Derived &>(*this)) { callable(element); }
   }
 
   template<typename Callable>

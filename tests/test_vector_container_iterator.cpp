@@ -347,10 +347,18 @@ TEST_CASE(TEST_TAG "collect const into ftl::vector", TEST_TAG) {
 }
 
 TEST_CASE(TEST_TAG "product", TEST_TAG) {
-  const ftl::vector<int> arr = { 2, 4, 5 };
+  const ftl::vector<int> vec = { 2, 4, 5 };
 
-  auto product = arr.iter().product();
+  auto product = vec.iter().product();
 
   REQUIRE(product == 40);
 }
 
+TEST_CASE(TEST_TAG "for_each", TEST_TAG) {
+  const ftl::vector<int> vec = { { 1, 2, 3, 4, 5 } };
+
+  int sum = 0;
+  vec.iter().for_each([&sum](const auto &x) { sum += x; });
+
+  REQUIRE(sum == vec.iter().count() * (1 + 5) / 2);
+}
