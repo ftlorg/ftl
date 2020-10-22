@@ -69,8 +69,9 @@ public:
   }
 
   template<typename Collection>
-  auto collect_into(Collection& collection) const -> void {
-    return from_iterator_trait<Derived, Collection>::from_iter_into_collection(static_cast<const Derived &>(*this), collection);
+  auto collect_into(Collection &collection) const -> void {
+    return from_iterator_trait<Derived, Collection>::from_iter_into_collection(
+      static_cast<const Derived &>(*this), collection);
   }
 
   [[nodiscard]] constexpr auto count() const -> typename std::iterator_traits<Derived>::size_type {
@@ -115,7 +116,9 @@ public:
   }
 
   template<typename Callable>
-  auto for_each(Callable &&callable) const -> void;
+  auto for_each(Callable &&callable) const -> void {
+    for (const auto &element : static_cast<const Derived &>(*this)) { callable(elemenet); }
+  }
 
   template<typename Callable>
   [[nodiscard]] auto inspect(Callable &&callable) const -> inspect_iterator<Derived, Callable> {
