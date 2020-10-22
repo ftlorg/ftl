@@ -352,3 +352,11 @@ TEST_CASE(TEST_TAG "for_each", TEST_TAG) {
 
   REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
 }
+
+TEST_CASE(TEST_TAG "for_each with side-effects", TEST_TAG) {
+  ftl::list<int> list = { { 1, 2, 3, 4, 5 } };
+
+  list.iter().for_each([](auto &x) { x = 1; });
+
+  REQUIRE(list.iter().sum() == 5);
+}
