@@ -256,3 +256,12 @@ TEST_CASE(TEST_TAG "take fold", TEST_TAG) {
 
   REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
 }
+
+TEST_CASE(TEST_TAG "take for_each", TEST_TAG) {
+  const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
+
+  int sum = 0;
+  list.iter().take(5).for_each([&sum](const auto &x) { return sum += x; });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
+}
