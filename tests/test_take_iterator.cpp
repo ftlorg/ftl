@@ -240,6 +240,24 @@ TEST_CASE(TEST_TAG "sum", TEST_TAG) {
   REQUIRE(sum == 10);
 }
 
+TEST_CASE(TEST_TAG "take collect sorted", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 3, 2, 1, 4, 5 } };
+
+  auto mapped_arr = arr.iter().take(5).collect_sorted<ftl::array<int, size>>();
+
+  REQUIRE(mapped_arr == ftl::array<int, size>{ { 1, 2, 3, 4, 5 } });
+}
+
+TEST_CASE(TEST_TAG "take const collect sorted", TEST_TAG) {
+  constexpr std::size_t size = 3;
+  const ftl::array<int, size> arr = { { 3, 1, 2 } };
+
+  auto mapped_arr = arr.iter().take(3).collect_sorted<ftl::array<int, 3>>();
+
+  REQUIRE(mapped_arr == ftl::array<int, 3>{ { 1, 2, 3 } });
+}
+
 TEST_CASE(TEST_TAG "product", TEST_TAG) {
   ftl::list<int> list = { 1, 2, 3, 4, 5 };
 

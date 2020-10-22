@@ -315,3 +315,12 @@ TEST_CASE(TEST_TAG "map for_each", TEST_TAG) {
 
   REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
 }
+
+TEST_CASE(TEST_TAG "collect sorted", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto result = arr.iter().map([](const auto &x) { return x * x; }).map([](const auto &x) { return 2 * x; }).collect_sorted<std::vector<int>>();
+
+  REQUIRE(result == std::vector<int>{2, 8, 18, 32, 50});
+}

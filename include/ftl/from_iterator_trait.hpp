@@ -5,7 +5,7 @@
 //          https://www.boost.org/LICENSE_1_0.txt)
 
 #pragma once
-
+#include <algorithm>
 namespace ftl {
 
 /**
@@ -23,6 +23,12 @@ struct from_iterator_trait {
 
   constexpr static auto from_iter_into_collection(const T &iter, U &collection) -> void {
     collection.insert(collection.cend(), iter.begin(), iter.end());
+  }
+
+  [[nodiscard]] constexpr static auto from_iter_sorted(const T &iter) -> U {
+    U collection{ iter.begin(), iter.end() };
+    std::sort(collection.begin(), collection.end());
+    return collection;
   }
 };
 

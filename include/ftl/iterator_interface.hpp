@@ -69,6 +69,11 @@ public:
   }
 
   template<typename Collection>
+  [[nodiscard]] auto collect_sorted() const -> Collection {
+    return from_iterator_trait<Derived, Collection>::from_iter_sorted(static_cast<const Derived &>(*this));
+  }
+
+  template<typename Collection>
   auto collect_into(Collection &collection) const -> void {
     return from_iterator_trait<Derived, Collection>::from_iter_into_collection(
       static_cast<const Derived &>(*this), collection);
