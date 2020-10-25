@@ -290,16 +290,14 @@ TEST_CASE(TEST_TAG "inspect for_each", TEST_TAG) {
   const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
 
   int sum = 0;
-  list.iter().inspect([](const auto &x) { INFO(x); }).for_each([&sum](const auto &x) {
-    return sum += x;
-  });
+  list.iter().inspect([](const auto &x) { INFO(x); }).for_each([&sum](const auto &x) { return sum += x; });
 
   REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
 }
 
 TEST_CASE(TEST_TAG "inspect collect sorted", TEST_TAG) {
   const ftl::list<int> list = { 5, 1, 2, 3, 4 };
-  std::vector<int> vec = list.iter().inspect([]([[maybe_unused]] const auto &x) {}).collect_sorted<std::vector<int>>();
+  std::vector<int> vec = list.iter().inspect([](const auto &x) { INFO(x); }).collect_sorted<std::vector<int>>();
 
   REQUIRE(vec == std::vector<int>{ 1, 2, 3, 4, 5 });
 }
