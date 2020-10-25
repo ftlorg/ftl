@@ -36,12 +36,12 @@ public:
   deque(std::deque<T> deq) : std::deque<T, Allocator>(std::move(deq)) {
   }
 
-  [[nodiscard]] constexpr auto iter() noexcept -> iterator {
-    return into_iterator_trait<ftl::deque<T, Allocator>, iterator>::into_iter(*this);
+  [[nodiscard]] constexpr auto iter() noexcept -> ftl_iterator {
+    return into_iterator_trait<ftl::deque<T, Allocator>, ftl_iterator>::into_iter(*this);
   }
 
-  [[nodiscard]] constexpr auto iter() const noexcept -> const_iterator {
-    return into_iterator_trait<ftl::deque<T, Allocator>, const_iterator>::into_iter(*this);
+  [[nodiscard]] constexpr auto iter() const noexcept -> ftl_const_iterator {
+    return into_iterator_trait<ftl::deque<T, Allocator>, ftl_const_iterator>::into_iter(*this);
   }
 };
 

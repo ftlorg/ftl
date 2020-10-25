@@ -46,6 +46,12 @@ public:
     : current_{ current }, begin_{ begin }, end_{ end } {
   }
 
+  constexpr set_container_iterator() = default;
+
+  constexpr operator set_container_const_iterator<Key>() const {
+    return { current_, begin_, end_ };
+  }
+
 private:
   mutable std_set_container_iterator current_;
   std_set_container_iterator begin_;

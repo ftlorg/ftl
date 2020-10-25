@@ -48,6 +48,8 @@ public:
     : current_{ current }, begin_{ std::move(begin) }, end_{ std::move(end) } {
   }
 
+  forward_list_container_const_iterator() = default;
+
 private:
   mutable std_forward_list_container_const_iterator current_;
   std_forward_list_container_const_iterator begin_;

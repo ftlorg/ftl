@@ -8,6 +8,7 @@
 
 #include <iterator>
 #include <vector>
+#include <deque>
 #include <forward_list>
 #include <list>
 #include <map>
@@ -41,6 +42,12 @@ class vector_container_const_iterator;
 
 template<typename Item>
 class vector_container_iterator;
+
+template<typename Item>
+class deque_container_const_iterator;
+
+template<typename Item>
+class deque_container_iterator;
 
 template<typename Key, typename T, typename Item>
 class map_container_iterator;
@@ -104,6 +111,32 @@ struct std::iterator_traits<ftl::vector_container_iterator<Item>> {
   using iterator_category = std::random_access_iterator_tag;
   using size_type = std::size_t;
   using std_vector_container_iterator = typename std::vector<value_type>::iterator;
+};
+
+template<typename Item>
+struct std::iterator_traits<ftl::deque_container_const_iterator<Item>> {
+  using difference_type = std::ptrdiff_t;
+  using value_type = typename std::remove_cv_t<Item>;
+  using pointer = value_type *;
+  using reference = value_type &;
+  using const_pointer = const value_type *;
+  using const_reference = const value_type &;
+  using iterator_category = std::random_access_iterator_tag;
+  using size_type = std::size_t;
+  using std_deque_container_iterator = typename std::deque<value_type>::const_iterator;
+};
+
+template<typename Item>
+struct std::iterator_traits<ftl::deque_container_iterator<Item>> {
+  using difference_type = std::ptrdiff_t;
+  using value_type = typename std::remove_cv_t<Item>;
+  using pointer = value_type *;
+  using reference = value_type &;
+  using const_pointer = const value_type *;
+  using const_reference = const value_type &;
+  using iterator_category = std::random_access_iterator_tag;
+  using size_type = std::size_t;
+  using std_deque_container_iterator = typename std::deque<value_type>::iterator;
 };
 
 template<typename Iter, typename Callable>

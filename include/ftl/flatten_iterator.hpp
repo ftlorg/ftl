@@ -116,7 +116,7 @@ public:
   using value_type = typename std::iterator_traits<flatten_iterator<Iter>>::value_type;
 
   flatten_iterator(Iter iterator) : iterator_{ std::move(iterator) } {
-    if (iterator_ != iterator_.end()) inner_iterator_ = (*iterator_).iter();
+    if (iterator_ != iterator_.end()) inner_iterator_  = (*iterator_).iter();
   }
 
   flatten_iterator() = default;
@@ -138,7 +138,6 @@ private:
     return { iterator_.cend() };
   }
 
-  // TODO: Think about return type
   [[nodiscard]] constexpr auto deref_impl() -> value_type {
     return *inner_iterator_;
   }

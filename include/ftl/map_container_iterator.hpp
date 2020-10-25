@@ -48,7 +48,6 @@ public:
   }
 
 private:
-
   mutable std_map_container_iterator current_;
   std_map_container_iterator begin_;
   std_map_container_iterator end_;

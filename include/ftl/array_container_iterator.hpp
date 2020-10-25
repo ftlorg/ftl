@@ -7,10 +7,8 @@
 #pragma once
 
 #include <ftl/iterator_interface.hpp>
-#include <ftl/enumerate_iterator.hpp>
-#include <ftl/map_iterator.hpp>
-#include <ftl/inspect_iterator.hpp>
 #include <ftl/container_iterator_member_provider.hpp>
+#include <ftl/array_container_const_iterator.hpp>
 
 namespace ftl {
 
@@ -42,12 +40,17 @@ public:
     : current_{ begin }, begin_{ begin }, end_{ end } {
   }
 
-  constexpr array_container_iterator() = default;
 
   constexpr array_container_iterator(std_array_container_iterator current,
     std_array_container_iterator begin,
     std_array_container_iterator end)
     : current_{ current }, begin_{ begin }, end_{ end } {
+  }
+
+  constexpr array_container_iterator() = default;
+
+  constexpr operator array_container_const_iterator<Item, N>() const {
+    return { current_, begin_, end_ };
   }
 
 private:
