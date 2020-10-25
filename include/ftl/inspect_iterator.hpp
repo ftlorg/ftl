@@ -61,7 +61,7 @@ private:
   }
 
   [[nodiscard]] constexpr auto const_deref_impl() const -> decltype(std::declval<const Iter &>().operator*()) {
-    callable_(*static_cast<const Iter &>(iterator_));
+    callable_(*iterator_);
     return *static_cast<const Iter &>(iterator_);
   }
 
