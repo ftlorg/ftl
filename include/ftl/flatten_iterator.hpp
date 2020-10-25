@@ -31,11 +31,13 @@ public:
   using iterator_category = typename std::iterator_traits<flatten_iterator<Iter>>::inherited_iterator_category;
   using size_type = typename std::iterator_traits<flatten_iterator<Iter>>::size_type;
   using value_type = typename std::iterator_traits<flatten_iterator<Iter>>::value_type;
+  using container_type = typename std::iterator_traits<Iter>::value_type;
+  using container_iterator_type = typename container_type::ftl_const_iterator;
 
   flatten_iterator(Iter iterator) : iterator_{ std::move(iterator) } {
     if (iterator_ != iterator_.end()) {
       container_ = *iterator_;
-      inner_iterator_ = static_cast<typename std::iterator_traits<Iter>::value_type::ftl_const_iterator>(container_.iter());
+      inner_iterator_ = static_cast<container_iterator_type>(container_.iter());
     }
   }
 
@@ -71,8 +73,7 @@ private:
     if (++inner_iterator_ == inner_iterator_.end()) {
       if (++iterator_ != iterator_.end()) {
         container_ = *iterator_;
-        inner_iterator_
-          = static_cast<typename std::iterator_traits<Iter>::value_type::ftl_const_iterator>(container_.iter());
+        inner_iterator_ = static_cast<container_iterator_type>(container_.iter());
       }
     }
     return *this;
@@ -82,16 +83,15 @@ private:
     if (++inner_iterator_ == inner_iterator_.end()) {
       if (++iterator_ != iterator_.end()) {
         container_ = *iterator_;
-        inner_iterator_
-          = static_cast<typename std::iterator_traits<Iter>::value_type::ftl_const_iterator>(container_.iter());
+        inner_iterator_ = static_cast<container_iterator_type>(container_.iter());
       }
     }
     return *this;
   }
 
-  mutable Iter iterator_;
-  mutable ftl::flatten_iterator<typename std::iterator_traits<Iter>::value_type::ftl_const_iterator> inner_iterator_;
-  typename std::iterator_traits<Iter>::value_type container_;
+  Iter iterator_;
+  ftl::flatten_iterator<container_iterator_type> inner_iterator_;
+  container_type container_;
 };
 
 template<typename Iter>
@@ -117,6 +117,8 @@ public:
   using iterator_category = typename std::iterator_traits<flatten_iterator<Iter>>::inherited_iterator_category;
   using size_type = typename std::iterator_traits<flatten_iterator<Iter>>::size_type;
   using value_type = typename std::iterator_traits<flatten_iterator<Iter>>::value_type;
+  using container_type = typename std::iterator_traits<Iter>::value_type;
+  using container_iterator_type = typename container_type::ftl_const_iterator;
 
   flatten_iterator(Iter iterator) : iterator_{ std::move(iterator) } {
     if (iterator_ != iterator_.end()) {
@@ -172,9 +174,9 @@ private:
     return *this;
   }
 
-  mutable Iter iterator_;
-  mutable typename std::iterator_traits<Iter>::value_type::ftl_const_iterator inner_iterator_;
-  typename std::iterator_traits<Iter>::value_type container_;
+  Iter iterator_;
+  container_iterator_type inner_iterator_;
+  container_type container_;
 };
 
 }// namespace ftl
