@@ -428,10 +428,43 @@ TEST_CASE(TEST_TAG "find element not in list", TEST_TAG) {
   REQUIRE(element == std::nullopt);
 }
 
+TEST_CASE(TEST_TAG "collect to sorted std::forward_list", TEST_TAG) {
+  ftl::forward_list<int> list = { 1, 2, 3, 4, 5 };
+
+  auto mapped_list = list.iter().collect_sorted<std::forward_list<int>>();
+
+  REQUIRE(mapped_list == std::forward_list<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const to sorted std::forward_list", TEST_TAG) {
+  const ftl::forward_list<int> list = { 3, 4, 5, 1, 2 };
+
+  auto mapped_list = list.iter().collect_sorted<std::forward_list<int>>();
+
+  REQUIRE(mapped_list == std::forward_list<int>{ 1, 2, 3, 4, 5 });
+}
+
 TEST_CASE(TEST_TAG "fold", TEST_TAG) {
   const ftl::forward_list<int> list = { 1, 2, 3, 4, 5 };
 
   const auto sum = list.iter().fold(0, [](auto acc, const auto &x) { return acc += x; });
 
   REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "for_each", TEST_TAG) {
+  const ftl::forward_list<int> list = { { 1, 2, 3, 4, 5 } };
+
+  int sum = 0;
+  list.iter().for_each([&sum](const auto &x) { sum += x; });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "for_each with side-effects", TEST_TAG) {
+  ftl::forward_list<int> list = { { 1, 2, 3, 4, 5 } };
+
+  list.iter().for_each([](auto &x) { x = 1; });
+
+  REQUIRE(list.iter().sum() == 5);
 }

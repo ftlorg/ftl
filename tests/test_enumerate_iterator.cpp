@@ -355,3 +355,12 @@ TEST_CASE(TEST_TAG "enumerate collect into std::vector const", TEST_TAG) {
             { 4, 5 },
           });
 }
+
+TEST_CASE(TEST_TAG "enumerate for_each", TEST_TAG) {
+  const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
+
+  int sum = 0;
+  list.iter().enumerate().for_each([&sum](const auto &x) { return sum += std::get<1>(x); });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
+}
