@@ -71,6 +71,42 @@ TEST_CASE(TEST_TAG "collect const", TEST_TAG) {
   REQUIRE(mapped_arr2 == ftl::array<int, size2>{ { 1, 2, 3 } });
 }
 
+TEST_CASE(TEST_TAG "collect into std::vector", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+  std::vector<int> vec;
+  arr.iter().collect_into(vec);
+
+  REQUIRE(vec == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const into std::vector", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+  std::vector<int> vec{ 10, 20 };
+  arr.iter().collect_into(vec);
+
+  REQUIRE(vec == std::vector<int>{ 10, 20, 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect into std::list", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+  std::list<int> list = {};
+  arr.iter().collect_into(list);
+
+  REQUIRE(list == std::list<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const into std::list", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+  std::list<int> list = {};
+  arr.iter().collect_into(list);
+
+  REQUIRE(list == std::list<int>{ 1, 2, 3, 4, 5 });
+}
+
 TEST_CASE(TEST_TAG "count", TEST_TAG) {
   constexpr std::size_t size = 5;
   ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
@@ -365,4 +401,86 @@ TEST_CASE(TEST_TAG "sum", TEST_TAG) {
   auto sum = arr.iter().sum();
 
   REQUIRE(sum == 30);
+}
+
+TEST_CASE(TEST_TAG "fold", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  const auto sum = arr.iter().fold(0, [](auto acc, const auto &x) { return acc += x; });
+
+  REQUIRE(sum == arr.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "for_each", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  int sum = 0;
+  arr.iter().for_each([&sum](const auto &x) { sum += x; });
+
+  REQUIRE(sum == arr.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "for_each with side-effects", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  arr.iter().for_each([](auto &x) { x = 1; });
+
+  REQUIRE(arr.iter().sum() == 5);
+}
+
+TEST_CASE(TEST_TAG "collect to sorted std::vector", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 5, 1, 4, 2, 3 } };
+
+  auto mapped_arr = arr.iter().collect_sorted<std::vector<int>>();
+
+  REQUIRE(mapped_arr == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const to sorted std::vector", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 5, 1, 4, 2, 3 } };
+
+  auto mapped_arr = arr.iter().collect_sorted<std::vector<int>>();
+
+  REQUIRE(mapped_arr == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect to sorted std::list", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 5, 1, 4, 2, 3 } };
+
+  auto mapped_arr = arr.iter().collect_sorted<std::list<int>>();
+
+  REQUIRE(mapped_arr == std::list<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const to sorted std::list", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 5, 1, 4, 2, 3 } };
+
+  auto mapped_arr = arr.iter().collect_sorted<std::list<int>>();
+
+  REQUIRE(mapped_arr == std::list<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect to sorted std::deque", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  ftl::array<int, size> arr = { { 5, 1, 4, 2, 3 } };
+
+  auto mapped_arr = arr.iter().collect_sorted<std::deque<int>>();
+
+  REQUIRE(mapped_arr == std::deque<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const to sorted std::deque", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 5, 1, 4, 2, 3 } };
+
+  auto mapped_arr = arr.iter().collect_sorted<std::deque<int>>();
+
+  REQUIRE(mapped_arr == std::deque<int>{ 1, 2, 3, 4, 5 });
 }

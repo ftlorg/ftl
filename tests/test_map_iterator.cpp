@@ -295,3 +295,32 @@ TEST_CASE(TEST_TAG "product", TEST_TAG) {
 
   REQUIRE(product == 460800);
 }
+
+TEST_CASE(TEST_TAG "map fold", TEST_TAG) {
+  const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
+
+  const auto sum
+    = list.iter().map([](const auto &x) { return x; }).fold(0, [](auto acc, const auto &x) { return acc += x; });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "map for_each", TEST_TAG) {
+  const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
+
+  int sum = 0;
+  list.iter().map([](const auto &x) { return x; }).for_each([&sum](const auto &x) {
+    return sum += x;
+  });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "collect sorted", TEST_TAG) {
+  constexpr std::size_t size = 5;
+  const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
+
+  auto result = arr.iter().map([](const auto &x) { return x * x; }).map([](const auto &x) { return 2 * x; }).collect_sorted<std::vector<int>>();
+
+  REQUIRE(result == std::vector<int>{2, 8, 18, 32, 50});
+}

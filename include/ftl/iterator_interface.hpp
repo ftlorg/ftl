@@ -69,6 +69,17 @@ public:
     return from_iterator_trait<Derived, Collection>::from_iter(static_cast<const Derived &>(*this));
   }
 
+  template<typename Collection>
+  [[nodiscard]] auto collect_sorted() const -> Collection {
+    return from_iterator_trait<Derived, Collection>::from_iter_sorted(static_cast<const Derived &>(*this));
+  }
+
+  template<typename Collection>
+  auto collect_into(Collection &collection) const -> void {
+    return from_iterator_trait<Derived, Collection>::from_iter_into_collection(
+      static_cast<const Derived &>(*this), collection);
+  }
+
   [[nodiscard]] constexpr auto count() const -> typename std::iterator_traits<Derived>::size_type {
     return static_cast<typename std::iterator_traits<Derived>::size_type>(
       std::distance(static_cast<const Derived &>(*this).begin(), static_cast<const Derived &>(*this).end()));
@@ -98,8 +109,14 @@ public:
     };
   }
 
-  template<typename Operator>
-  [[nodiscard]] auto fold(value_type initial, Operator &&op) const -> value_type;
+  template<typename Initial, typename Operator>
+  [[nodiscard]] auto fold(const Initial &initial, Operator &&op) const -> Initial {
+    auto init = initial;
+
+    for (auto &&x : static_cast<const Derived &>(*this)) { op(std::ref(init), x); }
+
+    return init;
+  }
 
   template<typename Predicate>
   [[nodiscard]] auto all(Predicate &&predicate) const -> bool {
@@ -110,7 +127,9 @@ public:
   }
 
   template<typename Callable>
-  auto for_each(Callable &&callable) const -> void;
+  auto for_each(Callable &&callable) const -> void {
+    for (auto &&element : static_cast<const Derived &>(*this)) { callable(element); }
+  }
 
   template<typename Callable>
   [[nodiscard]] auto inspect(Callable &&callable) const -> inspect_iterator<Derived, Callable> {

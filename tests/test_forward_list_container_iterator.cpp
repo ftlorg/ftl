@@ -37,6 +37,38 @@ TEST_CASE(TEST_TAG "collect const to std::list", TEST_TAG) {
   REQUIRE(mapped_list == std::list<int>{ 1, 2, 3, 4, 5 });
 }
 
+TEST_CASE(TEST_TAG "collect into std::vector", TEST_TAG) {
+  ftl::forward_list<int> list = { 1, 2, 3, 4, 5 };
+  std::vector<int> vec;
+  list.iter().collect_into(vec);
+
+  REQUIRE(vec == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const into std::vector", TEST_TAG) {
+  const ftl::forward_list<int> list = { 1, 2, 3, 4, 5 };
+  std::vector<int> vec;
+  list.iter().collect_into(vec);
+
+  REQUIRE(vec == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect into std::list", TEST_TAG) {
+  ftl::forward_list<int> list = { 1, 2, 3, 4, 5 };
+  std::list<int> list_result;
+  list.iter().collect_into(list_result);
+
+  REQUIRE(list_result == std::list<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const into std::list", TEST_TAG) {
+  const ftl::forward_list<int> list = { 1, 2, 3, 4, 5 };
+  std::list<int> list_result;
+  list.iter().collect_into(list_result);
+
+  REQUIRE(list_result == std::list<int>{ 1, 2, 3, 4, 5 });
+}
+
 TEST_CASE(TEST_TAG "collect const", TEST_TAG) {
   const ftl::forward_list<int> list = { 1, 2, 3, 4, 5 };
 
@@ -394,4 +426,45 @@ TEST_CASE(TEST_TAG "find element not in list", TEST_TAG) {
   auto element = list.iter().find([](const auto &number) { return number == 0; });
   REQUIRE_FALSE(element.has_value());
   REQUIRE(element == std::nullopt);
+}
+
+TEST_CASE(TEST_TAG "collect to sorted std::forward_list", TEST_TAG) {
+  ftl::forward_list<int> list = { 1, 2, 3, 4, 5 };
+
+  auto mapped_list = list.iter().collect_sorted<std::forward_list<int>>();
+
+  REQUIRE(mapped_list == std::forward_list<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const to sorted std::forward_list", TEST_TAG) {
+  const ftl::forward_list<int> list = { 3, 4, 5, 1, 2 };
+
+  auto mapped_list = list.iter().collect_sorted<std::forward_list<int>>();
+
+  REQUIRE(mapped_list == std::forward_list<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "fold", TEST_TAG) {
+  const ftl::forward_list<int> list = { 1, 2, 3, 4, 5 };
+
+  const auto sum = list.iter().fold(0, [](auto acc, const auto &x) { return acc += x; });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "for_each", TEST_TAG) {
+  const ftl::forward_list<int> list = { { 1, 2, 3, 4, 5 } };
+
+  int sum = 0;
+  list.iter().for_each([&sum](const auto &x) { sum += x; });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "for_each with side-effects", TEST_TAG) {
+  ftl::forward_list<int> list = { { 1, 2, 3, 4, 5 } };
+
+  list.iter().for_each([](auto &x) { x = 1; });
+
+  REQUIRE(list.iter().sum() == 5);
 }

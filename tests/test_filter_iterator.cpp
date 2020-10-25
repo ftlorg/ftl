@@ -11,7 +11,7 @@ TEST_CASE(TEST_TAG "filter collect", TEST_TAG) {
   auto f_vec = vec.iter()
                  .filter([](const auto &x) { return x % 2 == 0; })
                  .filter([](const auto &x) { return x % 3 == 0; })
-                 .collect<std::vector<int>>();
+                 .collect<ftl::vector<int>>();
 
   REQUIRE(f_vec == ftl::vector<int>{ 6, 12 });
 }
@@ -22,9 +22,31 @@ TEST_CASE(TEST_TAG "const filter collect", TEST_TAG) {
   auto f_vec = vec.iter()
                  .filter([](const auto &x) { return x % 2 == 0; })
                  .filter([](const auto &x) { return x % 3 == 0; })
-                 .collect<std::vector<int>>();
+                 .collect<ftl::vector<int>>();
 
   REQUIRE(f_vec == ftl::vector<int>{ 6, 12 });
+}
+
+TEST_CASE(TEST_TAG "filter collect into", TEST_TAG) {
+  ftl::vector<int> vec = { 1, 5, 6, 12 };
+  ftl::vector<int> vec_result;
+  vec.iter()
+    .filter([](const auto &x) { return x % 2 == 0; })
+    .filter([](const auto &x) { return x % 3 == 0; })
+    .collect_into(vec_result);
+
+  REQUIRE(vec_result == ftl::vector<int>{ 6, 12 });
+}
+
+TEST_CASE(TEST_TAG "const filter collect into", TEST_TAG) {
+  const ftl::vector<int> vec = { 1, 5, 6, 12 };
+  ftl::vector<int> vec_result;
+  vec.iter()
+    .filter([](const auto &x) { return x % 2 == 0; })
+    .filter([](const auto &x) { return x % 3 == 0; })
+    .collect_into(vec_result);
+
+  REQUIRE(vec_result == ftl::vector<int>{ 6, 12 });
 }
 
 TEST_CASE(TEST_TAG "const filter collect to empty", TEST_TAG) {
@@ -234,7 +256,7 @@ TEST_CASE(TEST_TAG "find", TEST_TAG) {
   ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
 
   auto element = arr.iter().filter([](const auto &x) { return x % 2 == 0; }).find([](const auto &elem) { return elem > 2; });
-                      
+
 
   REQUIRE(element.has_value());
   REQUIRE(element.value() == 4);
@@ -268,4 +290,46 @@ TEST_CASE(TEST_TAG "product", TEST_TAG) {
   auto product = arr.iter().filter([](const auto &x) { return x % 2 == 0; }).product();
 
   REQUIRE(product == 8);
+}
+
+TEST_CASE(TEST_TAG "filter fold", TEST_TAG) {
+  const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
+
+  const auto sum
+    = list.iter().filter([](const auto &x) { return x >= 0; }).fold(0, [](auto acc, const auto &x) { return acc += x; });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "filter for_each", TEST_TAG) {
+  const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
+
+  int sum = 0;
+  list.iter().filter([](const auto &x) { return x >= 0; }).for_each([&sum](const auto &x) {
+    return sum += x;
+  });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "filter collect sorted", TEST_TAG) {
+  ftl::vector<int> vec = { 1, 5, 12, 6};
+
+  auto f_vec = vec.iter()
+                 .filter([](const auto &x) { return x % 2 == 0; })
+                 .filter([](const auto &x) { return x % 3 == 0; })
+                 .collect_sorted<std::vector<int>>();
+
+  REQUIRE(f_vec == ftl::vector<int>{ 6, 12 });
+}
+
+TEST_CASE(TEST_TAG "const filter collect sorted", TEST_TAG) {
+  const ftl::vector<int> vec = { 12, 1, 2, 3, 4, 5, 6 };
+
+  auto f_vec = vec.iter()
+                 .filter([](const auto &x) { return x % 2 == 0; })
+                 .filter([](const auto &x) { return x % 3 == 0; })
+                 .collect_sorted<std::vector<int>>();
+
+  REQUIRE(f_vec == ftl::vector<int>{ 6, 12 });
 }

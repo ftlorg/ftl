@@ -377,3 +377,20 @@ TEST_CASE(TEST_TAG "partition no criteria met", TEST_TAG) {
   int i = 0;
   for (const auto &e : coll2) { REQUIRE(e == ++i); }
 }
+
+TEST_CASE(TEST_TAG "fold", TEST_TAG) {
+  const ftl::set<int> set = { 1, 2, 3, 4, 5, 5 };
+
+  const auto sum = set.iter().fold(0, [](auto acc, const auto &x) { return acc += x; });
+
+  REQUIRE(sum == set.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "for_each", TEST_TAG) {
+  const ftl::set<int> set = { { 1, 2, 3, 4, 5 } };
+
+  int sum = 0;
+  set.iter().for_each([&sum](const auto &x) { sum += x; });
+
+  REQUIRE(sum == set.iter().count() * (1 + 5) / 2);
+}

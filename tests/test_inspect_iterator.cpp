@@ -103,7 +103,7 @@ TEST_CASE(TEST_TAG "inspect count const", TEST_TAG) {
 TEST_CASE(TEST_TAG "preincrement", TEST_TAG) {
   ftl::list<int> list = { 1, 2, 3, 4, 5 };
 
-  auto iter = list.iter().inspect([]([[maybe_unused]] const auto &x) {});
+  auto iter = list.iter().inspect([](const auto &x) { INFO(x); });
   REQUIRE(*iter == 1);
 
   ++iter;
@@ -122,7 +122,7 @@ TEST_CASE(TEST_TAG "preincrement", TEST_TAG) {
 TEST_CASE(TEST_TAG "preincrement const", TEST_TAG) {
   const ftl::list<int> list = { 1, 2, 3, 4, 5 };
 
-  auto iter = list.iter().inspect([]([[maybe_unused]] const auto &x) {});
+  auto iter = list.iter().inspect([](const auto &x) { INFO(x); });
   REQUIRE(*iter == 1);
 
   ++iter;
@@ -141,7 +141,7 @@ TEST_CASE(TEST_TAG "preincrement const", TEST_TAG) {
 TEST_CASE(TEST_TAG "inspect collect to std::vector", TEST_TAG) {
   ftl::list<int> list = { 1, 2, 3, 4, 5 };
 
-  auto mapped_list = list.iter().inspect([]([[maybe_unused]] const auto &x) {}).collect<std::vector<int>>();
+  auto mapped_list = list.iter().inspect([](const auto &x) { INFO(x); }).collect<std::vector<int>>();
 
   REQUIRE(mapped_list == std::vector<int>{ 1, 2, 3, 4, 5 });
 }
@@ -149,7 +149,7 @@ TEST_CASE(TEST_TAG "inspect collect to std::vector", TEST_TAG) {
 TEST_CASE(TEST_TAG "inspect collect to std::vector const", TEST_TAG) {
   const ftl::list<int> list = { 1, 2, 3, 4, 5 };
 
-  auto mapped_list = list.iter().inspect([]([[maybe_unused]] const auto &x) {}).collect<std::vector<int>>();
+  auto mapped_list = list.iter().inspect([](const auto &x) { INFO(x); }).collect<std::vector<int>>();
 
   REQUIRE(mapped_list == std::vector<int>{ 1, 2, 3, 4, 5 });
 }
@@ -259,4 +259,45 @@ TEST_CASE(TEST_TAG "inspect partition no criteria met", TEST_TAG) {
 
   int i = 0;
   for (const auto &e : coll2) { REQUIRE(e == ++i); }
+}
+
+TEST_CASE(TEST_TAG "inspect fold", TEST_TAG) {
+  const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
+
+  const auto sum
+    = list.iter().inspect([](const auto &x) { INFO(x); }).fold(0, [](auto acc, const auto &x) { return acc += x; });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "inspect collect into std::vector", TEST_TAG) {
+  ftl::list<int> list = { 1, 2, 3, 4, 5 };
+  std::vector<int> vec;
+  list.iter().inspect([](const auto &x) { INFO(x); }).collect_into(vec);
+
+  REQUIRE(vec == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "inspect collect into std::vector const", TEST_TAG) {
+  const ftl::list<int> list = { 1, 2, 3, 4, 5 };
+  std::vector<int> vec;
+  list.iter().inspect([](const auto &x) { INFO(x); }).collect_into(vec);
+
+  REQUIRE(vec == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "inspect for_each", TEST_TAG) {
+  const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
+
+  int sum = 0;
+  list.iter().inspect([](const auto &x) { INFO(x); }).for_each([&sum](const auto &x) { return sum += x; });
+
+  REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "inspect collect sorted", TEST_TAG) {
+  const ftl::list<int> list = { 5, 1, 2, 3, 4 };
+  std::vector<int> vec = list.iter().inspect([](const auto &x) { INFO(x); }).collect_sorted<std::vector<int>>();
+
+  REQUIRE(vec == std::vector<int>{ 1, 2, 3, 4, 5 });
 }

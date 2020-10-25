@@ -329,10 +329,43 @@ TEST_CASE(TEST_TAG "sum", TEST_TAG) {
   REQUIRE(sum == 11);
 }
 
-TEST_CASE(TEST_TAG "product", TEST_TAG) {
-  const ftl::vector<int> arr = { 2, 4, 5 };
+TEST_CASE(TEST_TAG "collect to sorted std::vector", TEST_TAG) {
+  ftl::vector<int> vec = { 2, 3, 4, 1, 5 };
 
-  auto product = arr.iter().product();
+  auto mapped_vec = vec.iter().collect_sorted<ftl::vector<int>>();
+
+  REQUIRE(mapped_vec == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const to sorted std::vector", TEST_TAG) {
+  const ftl::vector<int> vec = { 2, 3, 4, 1, 5 };
+
+  auto mapped_vec = vec.iter().collect_sorted<ftl::vector<int>>();
+
+  REQUIRE(mapped_vec == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "product", TEST_TAG) {
+  const ftl::vector<int> vec = { 2, 4, 5 };
+
+  auto product = vec.iter().product();
 
   REQUIRE(product == 40);
+}
+
+TEST_CASE(TEST_TAG "for_each", TEST_TAG) {
+  const ftl::vector<int> vec = { { 1, 2, 3, 4, 5 } };
+
+  int sum = 0;
+  vec.iter().for_each([&sum](const auto &x) { sum += x; });
+
+  REQUIRE(sum == vec.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "for_each with side-effects", TEST_TAG) {
+  ftl::vector<int> vec = { { 1, 2, 3, 4, 5 } };
+
+  vec.iter().for_each([](auto &x) { x = 1; });
+
+  REQUIRE(vec.iter().sum() == 5);
 }

@@ -37,6 +37,38 @@ TEST_CASE(TEST_TAG "collect const to std::list", TEST_TAG) {
   REQUIRE(mapped_list == std::list<int>{ 1, 2, 3, 4, 5 });
 }
 
+TEST_CASE(TEST_TAG "collect into std::vector", TEST_TAG) {
+  ftl::list<int> list = { 1, 2, 3, 4, 5 };
+  std::vector<int> vec;
+  list.iter().collect_into(vec);
+
+  REQUIRE(vec == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const into std::vector", TEST_TAG) {
+  const ftl::list<int> list = { 1, 2, 3, 4, 5 };
+  std::vector<int> vec;
+  list.iter().collect_into(vec);
+
+  REQUIRE(vec == std::vector<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect into std::list", TEST_TAG) {
+  ftl::list<int> list = { 1, 2, 3, 4, 5 };
+  std::list<int> list_result;
+  list.iter().collect_into(list_result);
+
+  REQUIRE(list_result == std::list<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const into std::list", TEST_TAG) {
+  const ftl::list<int> list = { 1, 2, 3, 4, 5 };
+  std::list<int> list_result;
+  list.iter().collect_into(list_result);
+
+  REQUIRE(list_result == std::list<int>{ 1, 2, 3, 4, 5 });
+}
+
 TEST_CASE(TEST_TAG "collect const", TEST_TAG) {
   const ftl::list<int> list = { 1, 2, 3, 4, 5 };
 
@@ -302,4 +334,20 @@ TEST_CASE(TEST_TAG "partition no criteria met", TEST_TAG) {
 
   int i = 0;
   for (const auto &e : coll2) { REQUIRE(e == ++i); }
+}
+
+TEST_CASE(TEST_TAG "collect to sorted std::list", TEST_TAG) {
+  ftl::list<int> list = { 2, 3, 4, 1, 5 };
+
+  auto mapped_list = list.iter().collect_sorted<std::list<int>>();
+
+  REQUIRE(mapped_list == std::list<int>{ 1, 2, 3, 4, 5 });
+}
+
+TEST_CASE(TEST_TAG "collect const to sorted std::list", TEST_TAG) {
+  const ftl::list<int> list = { 2, 3, 4, 1, 5 };
+
+  auto mapped_list = list.iter().collect_sorted<std::list<int>>();
+
+  REQUIRE(mapped_list == std::list<int>{ 1, 2, 3, 4, 5 });
 }

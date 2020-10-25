@@ -327,6 +327,24 @@ TEST_CASE(TEST_TAG "operator++ const", TEST_TAG) {
   REQUIRE(iter != map.iter().end());
 }
 
+TEST_CASE(TEST_TAG "collect into std::map_unordered", TEST_TAG) {
+  ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+  ftl::unordered_map<int, std::string> map_result = {};
+
+  map.iter().collect_into(map_result);
+
+  REQUIRE(map_result == map);
+}
+
+TEST_CASE(TEST_TAG "collect const to std::map_unordered", TEST_TAG) {
+  const ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
+  ftl::unordered_map<int, std::string> map_result = {};
+
+  map.iter().collect_into(map_result);
+
+  REQUIRE(map_result == map);
+}
+
 TEST_CASE(TEST_TAG "all elements satisfy predicate", TEST_TAG) {
   const ftl::unordered_map<int, std::string> map = { { 1, "red" }, { 2, "green" }, { 3, "blue" } };
 
@@ -404,4 +422,23 @@ TEST_CASE(TEST_TAG "find element not in map", TEST_TAG) {
   auto element = map.iter().find([](const auto &x) { return x.first > 5; });
   REQUIRE_FALSE(element.has_value());
   REQUIRE(element == std::nullopt);
+}
+
+TEST_CASE(TEST_TAG "fold", TEST_TAG) {
+  const ftl::unordered_map<int, std::string> map
+    = { { 1, "red" }, { 2, "green" }, { 3, "blue" }, { 4, "purple" }, { 5, "pink" } };
+
+  const auto sum = map.iter().fold(0, [](auto acc, const auto &x) { return acc += x.first; });
+
+  REQUIRE(sum == map.iter().count() * (1 + 5) / 2);
+}
+
+TEST_CASE(TEST_TAG "for_each", TEST_TAG) {
+  const ftl::unordered_map<int, std::string> map
+    = { { 1, "red" }, { 2, "green" }, { 3, "blue" }, { 4, "purple" }, { 5, "pink" } };
+
+  int sum = 0;
+  map.iter().for_each([&sum](const auto &x) { sum += x.first; });
+
+  REQUIRE(sum == map.iter().count() * (1 + 5) / 2);
 }
