@@ -255,7 +255,7 @@ struct std::iterator_traits<ftl::flatten_iterator<Iter, false>> {
   using const_pointer = typename Iter::value_type::const_pointer;
   using const_reference = typename Iter::value_type::const_reference;
   using inherited_iterator_category = std::forward_iterator_tag;
-  using iterator_category = inherited_iterator_category;
+  using iterator_category = std::forward_iterator_tag;
 };
 
 template<typename Iter>
@@ -268,7 +268,7 @@ struct std::iterator_traits<ftl::flatten_iterator<Iter, true>> {
   using const_pointer = typename std::iterator_traits<ftl::flatten_iterator<typename Iter::value_type::ftl_iterator>>::const_pointer;
   using const_reference = typename std::iterator_traits<ftl::flatten_iterator<typename Iter::value_type::ftl_iterator>>::const_reference;
   using inherited_iterator_category = std::forward_iterator_tag;
-  using iterator_category = inherited_iterator_category;
+  using iterator_category = std::forward_iterator_tag;
 };
 
 template<typename Iter>
