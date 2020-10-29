@@ -12,21 +12,21 @@ namespace ftl {
  * This trait must be specialized for iterator types
  * that can be converted into a collection.
  *
- * @tparam T The iterator type which is being converted to a collection.
- * @tparam U The type of a collection to which we want to convert from a given T.
+ * @tparam Iter The iterator type which is being converted to a collection.
+ * @tparam Collection The type of a collection to which we want to convert from a given T.
  */
-template<typename T, typename U>
+template<typename Iter, typename Collection>
 struct from_iterator_trait {
-  [[nodiscard]] constexpr static auto from_iter(const T &iter) -> U {
-    return U{ iter.begin(), iter.end() };
+  [[nodiscard]] constexpr static auto from_iter(const Iter &iter) -> Collection {
+    return Collection{ iter.begin(), iter.end() };
   }
 
-  constexpr static auto from_iter_into_collection(const T &iter, U &collection) -> void {
+  constexpr static auto from_iter_into_collection(const Iter &iter, Collection &collection) -> void {
     collection.insert(collection.cend(), iter.begin(), iter.end());
   }
 
-  [[nodiscard]] constexpr static auto from_iter_sorted(const T &iter) -> U {
-    U collection{ iter.begin(), iter.end() };
+  [[nodiscard]] constexpr static auto from_iter_sorted(const Iter &iter) -> Collection {
+    Collection collection{ iter.begin(), iter.end() };
     std::sort(collection.begin(), collection.end());
     return collection;
   }
