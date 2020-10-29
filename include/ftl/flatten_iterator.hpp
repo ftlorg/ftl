@@ -133,11 +133,13 @@ public:
   using container_iterator_type = typename container_type::ftl_const_iterator;
 
   flatten_iterator(Iter iterator) : iterator_{ std::move(iterator) } {
-    if constexpr (Iter::is_container_iterator){
-      inner_iterator_ = static_cast<container_iterator_type>((*iterator_).iter());
-    } else {
-      container_ = *iterator_;
-      inner_iterator_ = static_cast<container_iterator_type>(container_.iter());
+    if (iterator_ != iterator_.end()) {
+      if constexpr (Iter::is_container_iterator) {
+        inner_iterator_ = static_cast<container_iterator_type>((*iterator_).iter());
+      } else {
+        container_ = *iterator_;
+        inner_iterator_ = static_cast<container_iterator_type>(container_.iter());
+      }
     }
   }
 
