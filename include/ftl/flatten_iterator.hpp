@@ -36,8 +36,12 @@ public:
 
   flatten_iterator(Iter iterator) : iterator_{ std::move(iterator) } {
     if (iterator_ != iterator_.end()) {
-      container_ = *iterator_;
-      inner_iterator_ = static_cast<container_iterator_type>(container_.iter());
+      if constexpr (Iter::is_container_iterator){
+        inner_iterator_ = static_cast<container_iterator_type>((*iterator_).iter());
+      } else {
+        container_ = *iterator_;
+        inner_iterator_ = static_cast<container_iterator_type>(container_.iter());
+      }
     }
   }
 
@@ -72,8 +76,12 @@ private:
   auto preincrement_impl() -> flatten_iterator<Iter> & {
     if (++inner_iterator_ == inner_iterator_.end()) {
       if (++iterator_ != iterator_.end()) {
-        container_ = *iterator_;
-        inner_iterator_ = static_cast<container_iterator_type>(container_.iter());
+        if constexpr (Iter::is_container_iterator){
+          inner_iterator_ = static_cast<container_iterator_type>((*iterator_).iter());
+        } else {
+          container_ = *iterator_;
+          inner_iterator_ = static_cast<container_iterator_type>(container_.iter());
+        }
       }
     }
     return *this;
@@ -82,8 +90,12 @@ private:
   auto const_preincrement_impl() const -> const flatten_iterator<Iter> & {
     if (++inner_iterator_ == inner_iterator_.end()) {
       if (++iterator_ != iterator_.end()) {
-        container_ = *iterator_;
-        inner_iterator_ = static_cast<container_iterator_type>(container_.iter());
+        if constexpr (Iter::is_container_iterator){
+          inner_iterator_ = static_cast<container_iterator_type>((*iterator_).iter());
+        } else {
+          container_ = *iterator_;
+          inner_iterator_ = static_cast<container_iterator_type>(container_.iter());
+        }
       }
     }
     return *this;
@@ -157,8 +169,12 @@ private:
   auto preincrement_impl() -> flatten_iterator<Iter> & {
     if (++inner_iterator_ == inner_iterator_.end()) {
       if (++iterator_ != iterator_.end()) {
-        container_ = *iterator_;
-        inner_iterator_ = container_.iter();
+        if constexpr (Iter::is_container_iterator){
+          inner_iterator_ = static_cast<container_iterator_type>((*iterator_).iter());
+        } else {
+          container_ = *iterator_;
+          inner_iterator_ = static_cast<container_iterator_type>(container_.iter());
+        }
       }
     }
     return *this;
@@ -167,8 +183,12 @@ private:
   auto const_preincrement_impl() const -> const flatten_iterator<Iter> & {
     if (++inner_iterator_ == inner_iterator_.end()) {
       if (++iterator_ != iterator_.end()) {
-        container_ = *iterator_;
-        inner_iterator_ = container_.iter();
+        if constexpr (Iter::is_container_iterator){
+          inner_iterator_ = static_cast<container_iterator_type>((*iterator_).iter());
+        } else {
+          container_ = *iterator_;
+          inner_iterator_ = static_cast<container_iterator_type>(container_.iter());
+        }
       }
     }
     return *this;

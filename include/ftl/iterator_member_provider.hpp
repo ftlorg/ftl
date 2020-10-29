@@ -12,6 +12,7 @@ namespace ftl {
 
 template<typename Iter, typename IterCategory = void>
 struct iterator_member_provider {
+  static constexpr bool is_container_iterator = false;
   [[nodiscard]] auto operator*() const -> decltype(auto) {
     return static_cast<const Iter &>(*this).const_deref_impl();
   }
