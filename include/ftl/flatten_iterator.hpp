@@ -32,7 +32,7 @@ template<typename Iter>
 struct flatten_iterator_members<Iter, level::one, false> {
   using container_type = typename std::iterator_traits<Iter>::value_type;
   using container_iterator_type = typename container_type::ftl_const_iterator;
-  container_iterator_type inner_iterator_;
+  ftl::flatten_iterator<container_iterator_type> inner_iterator_;
   container_type container_;
 };
 
@@ -40,7 +40,7 @@ template<typename Iter>
 struct flatten_iterator_members<Iter, level::one, true> {
   using container_type = typename std::iterator_traits<Iter>::value_type;
   using container_iterator_type = typename container_type::ftl_const_iterator;
-  container_iterator_type inner_iterator_;
+  ftl::flatten_iterator<container_iterator_type> inner_iterator_;
 };
 
 template<typename Iter>
@@ -69,9 +69,8 @@ public:
   using container_type = typename std::iterator_traits<Iter>::value_type;
   using container_iterator_type = typename container_type::ftl_const_iterator;
 
-  flatten_iterator(Iter iterator) : iterator_{ std::move(iterator) }
-  {
-    
+  flatten_iterator(Iter iterator) : iterator_{ std::move(iterator) } {
+
     if (iterator_ != iterator_.end()) {
       if constexpr (Iter::is_container_iterator) {
         members_.inner_iterator_ = static_cast<container_iterator_type>((*iterator_).iter());
@@ -101,7 +100,6 @@ private:
     return { iterator_.cend() };
   }
 
-  // TODO: Think about return type
   [[nodiscard]] constexpr auto deref_impl() -> value_type {
     return *iterator_;
   }
@@ -299,6 +297,7 @@ private:
     ++iterator_;
     return *this;
   }
+
   Iter iterator_;
 };
 
