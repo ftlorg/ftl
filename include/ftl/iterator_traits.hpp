@@ -28,7 +28,7 @@ class filter_iterator;
 template<typename Iter>
 class enumerate_iterator;
 
-template<typename Iter, level is_container = ftl::contains_container<typename std::iterator_traits<Iter>::value_type>::value>
+template<typename Iter, bool is_container = ftl::is_container<typename std::iterator_traits<Iter>::value_type>::value>
 class flatten_iterator;
 
 template<typename Iter, typename Callable>
@@ -246,7 +246,7 @@ struct std::iterator_traits<ftl::enumerate_iterator<Iter>> {
 };
 
 template<typename Iter>
-struct std::iterator_traits<ftl::flatten_iterator<Iter, ftl::level::zero>> {
+struct std::iterator_traits<ftl::flatten_iterator<Iter, false>> {
   using difference_type = typename Iter::difference_type;
   using size_type = typename Iter::size_type;
   using value_type = typename Iter::value_type;
@@ -259,20 +259,7 @@ struct std::iterator_traits<ftl::flatten_iterator<Iter, ftl::level::zero>> {
 };
 
 template<typename Iter>
-struct std::iterator_traits<ftl::flatten_iterator<Iter, ftl::level::one>> {
-  using difference_type = typename Iter::difference_type;
-  using size_type = typename Iter::size_type;
-  using value_type = typename Iter::value_type::value_type;
-  using pointer = typename Iter::value_type::pointer;
-  using reference = typename Iter::value_type::reference;
-  using const_pointer = typename Iter::value_type::const_pointer;
-  using const_reference = typename Iter::value_type::const_reference;
-  using inherited_iterator_category = std::forward_iterator_tag;
-  using iterator_category = std::forward_iterator_tag;
-};
-
-template<typename Iter>
-struct std::iterator_traits<ftl::flatten_iterator<Iter, ftl::level::two>> {
+struct std::iterator_traits<ftl::flatten_iterator<Iter, true>> {
   using difference_type = typename Iter::difference_type;
   using size_type = typename Iter::size_type;
   using value_type = typename std::iterator_traits<ftl::flatten_iterator<typename Iter::value_type::ftl_iterator>>::value_type;
