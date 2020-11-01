@@ -9,12 +9,12 @@
 namespace ftl {
 
 template<typename Iter,
-  bool value_type_contains_container = ftl::contains_container<typename std::iterator_traits<Iter>::value_type>::value,
+  level value_type_contains_container = ftl::contains_container<typename std::iterator_traits<Iter>::value_type>::value,
   bool is_container_iterator = Iter::is_container_iterator>
 struct flatten_iterator_members {};
 
 template<typename Iter>
-struct flatten_iterator_members<Iter, true, false> {
+struct flatten_iterator_members<Iter, level::two, false> {
   using container_type = typename std::iterator_traits<Iter>::value_type;
   using container_iterator_type = typename container_type::ftl_const_iterator;
   ftl::flatten_iterator<container_iterator_type> inner_iterator_;
@@ -22,14 +22,14 @@ struct flatten_iterator_members<Iter, true, false> {
 };
 
 template<typename Iter>
-struct flatten_iterator_members<Iter, true, true> {
+struct flatten_iterator_members<Iter, level::two, true> {
   using container_type = typename std::iterator_traits<Iter>::value_type;
   using container_iterator_type = typename container_type::ftl_const_iterator;
   ftl::flatten_iterator<container_iterator_type> inner_iterator_;
 };
 
 template<typename Iter>
-struct flatten_iterator_members<Iter, false, false> {
+struct flatten_iterator_members<Iter, level::one, false> {
   using container_type = typename std::iterator_traits<Iter>::value_type;
   using container_iterator_type = typename container_type::ftl_const_iterator;
   container_iterator_type inner_iterator_;
@@ -37,14 +37,14 @@ struct flatten_iterator_members<Iter, false, false> {
 };
 
 template<typename Iter>
-struct flatten_iterator_members<Iter, false, true> {
+struct flatten_iterator_members<Iter, level::one, true> {
   using container_type = typename std::iterator_traits<Iter>::value_type;
   using container_iterator_type = typename container_type::ftl_const_iterator;
   container_iterator_type inner_iterator_;
 };
 
 template<typename Iter>
-class flatten_iterator<Iter, true> final
+class flatten_iterator<Iter, level::two> final
   : public iterator_interface<flatten_iterator<Iter>>
   , public iterator_member_provider<flatten_iterator<Iter>,
       typename std::iterator_traits<flatten_iterator<Iter>>::iterator_category> {
@@ -142,7 +142,7 @@ private:
 };
 
 template<typename Iter>
-class flatten_iterator<Iter, false> final
+class flatten_iterator<Iter, level::one> final
   : public iterator_interface<flatten_iterator<Iter>>
   , public iterator_member_provider<flatten_iterator<Iter>,
       typename std::iterator_traits<flatten_iterator<Iter>>::iterator_category> {
@@ -234,6 +234,72 @@ private:
   }
   Iter iterator_;
   flatten_iterator_members<Iter> members_;
+};
+
+template<typename Iter>
+class flatten_iterator<Iter, level::zero> final
+  : public iterator_interface<flatten_iterator<Iter>>
+  , public iterator_member_provider<flatten_iterator<Iter>,
+      typename std::iterator_traits<flatten_iterator<Iter>>::iterator_category> {
+
+  friend iterator_member_provider<flatten_iterator<Iter>, std::random_access_iterator_tag>;
+  friend iterator_member_provider<flatten_iterator<Iter>, std::bidirectional_iterator_tag>;
+  friend iterator_member_provider<flatten_iterator<Iter>, std::forward_iterator_tag>;
+  friend iterator_member_provider<flatten_iterator<Iter>, std::input_iterator_tag>;
+  friend iterator_member_provider<flatten_iterator<Iter>>;
+  friend iterator_interface<flatten_iterator<Iter>>;
+
+public:
+  using difference_type = typename std::iterator_traits<flatten_iterator<Iter>>::difference_type;
+  using pointer = typename std::iterator_traits<flatten_iterator<Iter>>::pointer;
+  using reference = typename std::iterator_traits<flatten_iterator<Iter>>::reference;
+  using const_pointer = typename std::iterator_traits<flatten_iterator<Iter>>::const_pointer;
+  using const_reference = typename std::iterator_traits<flatten_iterator<Iter>>::const_reference;
+  using inherited_iterator_category = typename std::iterator_traits<flatten_iterator<Iter>>::iterator_category;
+  using iterator_category = typename std::iterator_traits<flatten_iterator<Iter>>::inherited_iterator_category;
+  using size_type = typename std::iterator_traits<flatten_iterator<Iter>>::size_type;
+  using value_type = typename std::iterator_traits<flatten_iterator<Iter>>::value_type;
+
+  flatten_iterator(Iter iterator) : iterator_{ std::move(iterator) } {
+  }
+
+  flatten_iterator() = default;
+
+private:
+  [[nodiscard]] constexpr auto begin_impl() const noexcept -> flatten_iterator<Iter> {
+    return { iterator_.cbegin() };
+  }
+
+  [[nodiscard]] constexpr auto cbegin_impl() const noexcept -> flatten_iterator<Iter> {
+    return { iterator_.cbegin() };
+  }
+
+  [[nodiscard]] constexpr auto end_impl() const noexcept -> flatten_iterator<Iter> {
+    return { iterator_.cend() };
+  }
+
+  [[nodiscard]] constexpr auto cend_impl() const noexcept -> flatten_iterator<Iter> {
+    return { iterator_.cend() };
+  }
+
+  [[nodiscard]] constexpr auto deref_impl() -> value_type {
+    return *iterator_;
+  }
+
+  [[nodiscard]] constexpr auto const_deref_impl() const -> value_type {
+    return *iterator_;
+  }
+
+  auto preincrement_impl() -> flatten_iterator<Iter> & {
+    ++iterator_;
+    return *this;
+  }
+
+  auto const_preincrement_impl() const -> const flatten_iterator<Iter> & {
+    ++iterator_;
+    return *this;
+  }
+  Iter iterator_;
 };
 
 }// namespace ftl

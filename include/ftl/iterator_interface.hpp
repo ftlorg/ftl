@@ -27,7 +27,7 @@ class map_iterator;
 template<typename Iter, typename Callable>
 class filter_iterator;
 
-template<typename Iter, bool is_container>
+template<typename Iter, level is_container>
 class flatten_iterator;
 
 template<typename Iter>
