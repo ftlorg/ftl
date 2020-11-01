@@ -8,13 +8,11 @@
 
 namespace ftl {
 
-template<typename Iter,
-  bool value_type_contains_container = ftl::is_container<typename std::iterator_traits<Iter>::value_type>::value,
-  bool is_container_iterator = Iter::is_container_iterator>
+template<typename Iter, bool is_container_iterator = Iter::is_container_iterator>
 struct flatten_iterator_members {};
 
 template<typename Iter>
-struct flatten_iterator_members<Iter, true, false> {
+struct flatten_iterator_members<Iter, false> {
   using container_type = typename std::iterator_traits<Iter>::value_type;
   using container_iterator_type = typename container_type::ftl_const_iterator;
   ftl::flatten_iterator<container_iterator_type> inner_iterator_;
@@ -22,7 +20,7 @@ struct flatten_iterator_members<Iter, true, false> {
 };
 
 template<typename Iter>
-struct flatten_iterator_members<Iter, true, true> {
+struct flatten_iterator_members<Iter, true> {
   using container_type = typename std::iterator_traits<Iter>::value_type;
   using container_iterator_type = typename container_type::ftl_const_iterator;
   ftl::flatten_iterator<container_iterator_type> inner_iterator_;
