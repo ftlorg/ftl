@@ -137,3 +137,11 @@ TEST_CASE(TEST_TAG "filter after flatten", TEST_TAG) {
 
   REQUIRE(f_vec == ftl::set<int>{ 1, 2, 3, 4 });
 }
+
+//TEST_CASE(TEST_TAG "flatten vector", TEST_TAG) {
+//  ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
+//
+//  auto f_vec = vec.iter().flatten().collect<std::vector<int>>();
+//
+//  REQUIRE(f_vec == ftl::vector<int>{ 1, 2, 3, 4, 5 });
+//}
