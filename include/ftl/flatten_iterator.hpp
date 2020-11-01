@@ -225,7 +225,7 @@ private:
         if constexpr (Iter::is_container_iterator) {
           members_.inner_iterator_ = static_cast<container_iterator_type>((*iterator_).iter());
         } else {
-          container_ = *iterator_;
+          members_.container_ = *iterator_;
           members_.inner_iterator_ = static_cast<container_iterator_type>(members_.container_.iter());
         }
       }
