@@ -53,7 +53,6 @@ public:
   using container_iterator_type = typename container_type::ftl_const_iterator;
 
   flatten_iterator(Iter iterator) : iterator_{ std::move(iterator) } {
-
     if (iterator_ != iterator_.end()) {
       if constexpr (Iter::is_container_iterator) {
         members_.inner_iterator_ = static_cast<container_iterator_type>((*iterator_).iter());
@@ -84,7 +83,7 @@ private:
   }
 
   [[nodiscard]] constexpr auto deref_impl() -> value_type {
-    return *iterator_;
+    return *members_.inner_iterator_;
   }
 
   [[nodiscard]] constexpr auto const_deref_impl() const -> value_type {
