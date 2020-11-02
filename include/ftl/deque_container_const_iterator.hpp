@@ -35,7 +35,7 @@ public:
   using iterator_category = typename std::iterator_traits<ftl::deque_container_const_iterator<Item>>::iterator_category;
   using size_type = typename std::iterator_traits<ftl::deque_container_const_iterator<Item>>::size_type;
   using std_deque_container_const_iterator =
-    typename std::iterator_traits<ftl::deque_container_const_iterator<Item>>::std_deque_container_iterator;
+    typename std::iterator_traits<ftl::deque_container_const_iterator<Item>>::std_deque_container_const_iterator;
 
   deque_container_const_iterator() = default;
 

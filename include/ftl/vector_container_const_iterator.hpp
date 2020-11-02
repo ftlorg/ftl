@@ -37,17 +37,17 @@ public:
   using iterator_category = typename std::iterator_traits<ftl::vector_container_const_iterator<Item>>::iterator_category;
   using size_type = typename std::iterator_traits<ftl::vector_container_const_iterator<Item>>::size_type;
   using std_vector_container_iterator =
-    typename std::iterator_traits<ftl::vector_container_const_iterator<Item>>::std_vector_container_iterator;
+    typename std::iterator_traits<ftl::vector_container_const_iterator<Item>>::std_vector_container_const_iterator;
 
   constexpr vector_container_const_iterator() = default;
 
-  constexpr vector_container_const_iterator(std_vector_container_iterator current, std_vector_container_iterator begin,
+  constexpr vector_container_const_iterator(std_vector_container_iterator current,
+    std_vector_container_iterator begin,
     std_vector_container_iterator end)
     : current_{ std::move(current) }, begin_{ std::move(begin) }, end_{ std::move(end) } {
   }
 
 private:
-
   mutable std_vector_container_iterator current_{};
   std_vector_container_iterator begin_{};
   std_vector_container_iterator end_{};
