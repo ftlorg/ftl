@@ -50,6 +50,10 @@ public:
     : current_{ current }, begin_{ std::move(begin) }, end_{ std::move(end) } {
   }
 
+  constexpr operator unordered_map_container_const_iterator<Key, T, Item>() const {
+    return { current_, begin_, end_ };
+  }
+
 private:
   mutable std_unordered_map_container_iterator current_;
   std_unordered_map_container_iterator begin_;
