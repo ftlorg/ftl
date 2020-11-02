@@ -48,6 +48,12 @@ public:
     : current_{ current }, begin_{ std::move(begin) }, end_{ std::move(end) } {
   }
 
+  constexpr forward_list_container_iterator() = default;
+
+  constexpr operator forward_list_container_const_iterator<Item>() const {
+    return { current_, begin_, end_ };
+  }
+
 private:
   mutable std_forward_list_container_iterator current_;
   std_forward_list_container_iterator begin_;

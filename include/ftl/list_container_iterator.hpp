@@ -26,7 +26,6 @@ class list_container_iterator final
   friend container_iterator_member_provider<list_container_iterator<Item>, std::input_iterator_tag>;
   friend container_iterator_member_provider<list_container_iterator<Item>>;
   friend iterator_interface<list_container_iterator<Item>>;
-  friend iterator_interface<list_container_iterator<Item>>;
 
 public:
   using difference_type = typename std::iterator_traits<ftl::list_container_iterator<Item>>::difference_type;
@@ -48,6 +47,12 @@ public:
     std_list_container_iterator begin,
     std_list_container_iterator end)
     : current_{ current }, begin_{ std::move(begin) }, end_{ std::move(end) } {
+  }
+
+  constexpr list_container_iterator() = default;
+
+  constexpr operator list_container_const_iterator<Item>() const {
+    return { current_, begin_, end_ };
   }
 
 private:

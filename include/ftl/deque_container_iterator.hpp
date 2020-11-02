@@ -48,6 +48,12 @@ public:
     : current_{ current }, begin_{ begin }, end_{ end } {
   }
 
+  constexpr deque_container_iterator() = default;
+
+  constexpr operator deque_container_const_iterator<Item>() const {
+    return { current_, begin_, end_ };
+  }
+
 private:
   mutable std_deque_container_iterator current_;
   std_deque_container_iterator begin_;

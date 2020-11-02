@@ -46,6 +46,8 @@ public:
     : current_{ current }, begin_{ begin }, end_{ end } {
   }
 
+  set_container_const_iterator() = default;
+
 private:
   mutable std_set_container_const_iterator current_;
   std_set_container_const_iterator begin_;

@@ -47,8 +47,11 @@ public:
     : current_{ current }, begin_{ begin }, end_{ end } {
   }
 
-private:
+  constexpr operator map_container_const_iterator<Key, T, Item>() const {
+    return { current_, begin_, end_ };
+  }
 
+private:
   mutable std_map_container_iterator current_;
   std_map_container_iterator begin_;
   std_map_container_iterator end_;

@@ -37,6 +37,8 @@ public:
   using std_deque_container_const_iterator =
     typename std::iterator_traits<ftl::deque_container_const_iterator<Item>>::std_deque_container_const_iterator;
 
+  deque_container_const_iterator() = default;
+
   deque_container_const_iterator(std_deque_container_const_iterator begin, std_deque_container_const_iterator end)
     : current_{ begin }, begin_{ begin }, end_{ end } {
   }

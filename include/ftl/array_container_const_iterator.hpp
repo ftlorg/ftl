@@ -37,11 +37,13 @@ public:
   using iterator_category = typename std::iterator_traits<ftl::array_container_const_iterator<Item, N>>::iterator_category;
   using size_type = typename std::iterator_traits<ftl::array_container_const_iterator<Item, N>>::size_type;
   using std_array_container_iterator =
-    typename std::iterator_traits<ftl::array_container_const_iterator<Item, N>>::std_array_container_iterator;
+    typename std::iterator_traits<ftl::array_container_const_iterator<Item, N>>::std_array_container_const_iterator;
 
   constexpr array_container_const_iterator(std_array_container_iterator const begin, std_array_container_iterator const end)
     : current_{ begin }, begin_{ std::move(begin) }, end_{ std::move(end) } {
   }
+
+  constexpr array_container_const_iterator() = default;
 
   constexpr array_container_const_iterator(std_array_container_iterator current,
     std_array_container_iterator begin,
