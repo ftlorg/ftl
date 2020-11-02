@@ -3,8 +3,6 @@
 
 namespace ftl {
 
-enum class flatten_level { zero, one, two_or_more };
-
 template<typename T, std::size_t N>
 class array;
 

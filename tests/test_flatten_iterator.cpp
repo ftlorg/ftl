@@ -132,16 +132,15 @@ TEST_CASE(TEST_TAG "filter after flatten", TEST_TAG) {
     ftl::deque<int>{ 3, 4, 5 },
     ftl::deque<int>{ 3, 4, 5 } };
 
-  auto f_vec
-    = vec.iter().flatten().filter([](const auto &element) { return element < 5; }).collect<std::set<int>>();
+  auto f_vec = vec.iter().flatten().filter([](const auto &element) { return element < 5; }).collect<std::set<int>>();
 
   REQUIRE(f_vec == ftl::set<int>{ 1, 2, 3, 4 });
 }
 
-//TEST_CASE(TEST_TAG "flatten vector", TEST_TAG) {
-//  ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
-//
-//  auto f_vec = vec.iter().flatten().collect<std::vector<int>>();
-//
-//  REQUIRE(f_vec == ftl::vector<int>{ 1, 2, 3, 4, 5 });
-//}
+TEST_CASE(TEST_TAG "flatten vector", TEST_TAG) {
+  ftl::vector<int> vec = { 1, 2, 3, 4, 5 };
+
+  auto f_vec = vec.iter().flatten().collect<std::vector<int>>();
+
+  REQUIRE(f_vec == ftl::vector<int>{ 1, 2, 3, 4, 5 });
+}

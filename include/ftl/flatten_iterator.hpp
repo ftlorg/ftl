@@ -9,7 +9,11 @@
 namespace ftl {
 
 template<typename Iter, bool is_container_iterator = Iter::is_container_iterator>
-struct flatten_iterator_members {};
+struct flatten_iterator_members {
+  using container_type = typename std::iterator_traits<Iter>::value_type;
+  using container_iterator_type = typename container_type::ftl_const_iterator;
+  ftl::flatten_iterator<container_iterator_type> inner_iterator_;
+};
 
 template<typename Iter>
 struct flatten_iterator_members<Iter, false> {
@@ -17,13 +21,6 @@ struct flatten_iterator_members<Iter, false> {
   using container_iterator_type = typename container_type::ftl_const_iterator;
   ftl::flatten_iterator<container_iterator_type> inner_iterator_;
   container_type container_;
-};
-
-template<typename Iter>
-struct flatten_iterator_members<Iter, true> {
-  using container_type = typename std::iterator_traits<Iter>::value_type;
-  using container_iterator_type = typename container_type::ftl_const_iterator;
-  ftl::flatten_iterator<container_iterator_type> inner_iterator_;
 };
 
 template<typename Iter>
@@ -52,18 +49,11 @@ public:
   using container_type = typename std::iterator_traits<Iter>::value_type;
   using container_iterator_type = typename container_type::ftl_const_iterator;
 
-  flatten_iterator(Iter iterator) : iterator_{ std::move(iterator) } {
-    if (iterator_ != iterator_.end()) {
-      if constexpr (Iter::is_container_iterator) {
-        members_.inner_iterator_ = static_cast<container_iterator_type>((*iterator_).iter());
-      } else {
-        members_.container_ = *iterator_;
-        members_.inner_iterator_ = static_cast<container_iterator_type>(members_.container_.iter());
-      }
-    }
-  }
-
   flatten_iterator() = default;
+
+  flatten_iterator(Iter iterator) : iterator_{ std::move(iterator) } {
+    if (iterator_ != iterator_.end()) { initialize_members(); }
+  }
 
 private:
   [[nodiscard]] constexpr auto begin_impl() const noexcept -> flatten_iterator<Iter> {
@@ -92,31 +82,27 @@ private:
 
   auto preincrement_impl() -> flatten_iterator<Iter> & {
     if (++members_.inner_iterator_ == members_.inner_iterator_.end()) {
-      if (++iterator_ != iterator_.end()) {
-        if constexpr (Iter::is_container_iterator) {
-          members_.inner_iterator_ = static_cast<container_iterator_type>((*iterator_).iter());
-        } else {
-          members_.container_ = *iterator_;
-          members_.inner_iterator_ = static_cast<container_iterator_type>(members_.container_.iter());
-        }
-      }
+      if (++iterator_ != iterator_.end()) { initialize_members(); }
     }
     return *this;
   }
 
   auto const_preincrement_impl() const -> const flatten_iterator<Iter> & {
     if (++members_.inner_iterator_ == members_.inner_iterator_.end()) {
-      if (++iterator_ != iterator_.end()) {
-        if constexpr (Iter::is_container_iterator) {
-          members_.inner_iterator_ = static_cast<container_iterator_type>((*iterator_).iter());
-        } else {
-          members_.container_ = *iterator_;
-          members_.inner_iterator_ = static_cast<container_iterator_type>(members_.container_.iter());
-        }
-      }
+      if (++iterator_ != iterator_.end()) { initialize_members(); }
     }
     return *this;
   }
+
+  constexpr auto initialize_members() -> void {
+    if constexpr (Iter::is_container_iterator) {
+      members_.inner_iterator_ = static_cast<container_iterator_type>((*iterator_).iter());
+    } else {
+      members_.container_ = *iterator_;
+      members_.inner_iterator_ = static_cast<container_iterator_type>(members_.container_.iter());
+    }
+  }
+
   Iter iterator_;
   flatten_iterator_members<Iter> members_;
 };
