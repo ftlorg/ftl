@@ -8,7 +8,7 @@
 FTL is a C++17-based library that provides a more convenient API for collections processing. The API is heavily inspired by the Rust programming language.
 
 # Basic usage
-Collection processing with FTL is very easy - 
+Collection processing with FTL is very easy. Below you can find a simple example presenting the power of the FTL.
 
 ```cpp
 struct Tree { 
