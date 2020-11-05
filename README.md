@@ -31,10 +31,8 @@ for (const auto& tree: cityTrees) {
 }
 
 // FTL style
-const auto totalVolume = cityTrees
-               .iter()
-               .filter([](const auto &tree) { return tree.kind == Tree::Oak; })
-               .filter([](const auto &tree) { return tree.diameter > 25; })
+const auto totalVolume = cityTrees.iter()
+               .filter([](const auto &tree) { return tree.kind == Tree::Oak && tree.diameter > 25; })
                .map([](const auto &tree) { return tree.volume(); })
                .sum();
 ```
