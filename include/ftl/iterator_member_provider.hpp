@@ -61,6 +61,10 @@ struct iterator_member_provider {
   [[nodiscard]] constexpr auto cend() const noexcept -> Iter {
     return static_cast<const Iter &>(*this).cend_impl();
   }
+
+protected:
+  iterator_member_provider() = default;
+  friend Iter;
 };
 
 template<typename Iter>
@@ -80,6 +84,10 @@ struct iterator_member_provider<Iter, std::input_iterator_tag> : public iterator
   //  constexpr auto operator->() -> typename std::iterator_traits<Iter>::reference {
   //    return *static_cast<Iter &>(*this).iterator_;
   //  }
+
+protected:
+  iterator_member_provider() = default;
+  friend Iter;
 };
 
 template<typename Iter>
@@ -99,6 +107,10 @@ struct iterator_member_provider<Iter, std::output_iterator_tag> : public iterato
   constexpr auto operator->() -> typename std::iterator_traits<Iter>::reference {
     return *static_cast<Iter &>(*this).iterator_;
   }
+
+protected:
+  iterator_member_provider() = default;
+  friend Iter;
 };
 
 template<typename Iter>
@@ -134,6 +146,10 @@ struct iterator_member_provider<Iter, std::bidirectional_iterator_tag>
 
     return tmp;
   }
+
+protected:
+  iterator_member_provider() = default;
+  friend Iter;
 };
 
 template<typename Iter>
@@ -195,6 +211,10 @@ struct iterator_member_provider<Iter, std::random_access_iterator_tag>
   [[nodiscard]] friend constexpr auto operator>=(const Iter &lhs, const Iter &rhs) noexcept -> bool {
     return !(lhs < rhs);
   }
+
+protected:
+  iterator_member_provider() = default;
+  friend Iter;
 };
 
 
