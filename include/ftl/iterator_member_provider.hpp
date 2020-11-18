@@ -62,9 +62,14 @@ struct iterator_member_provider {
     return static_cast<const Iter &>(*this).cend_impl();
   }
 
-protected:
+private:
   iterator_member_provider() = default;
   friend Iter;
+  friend iterator_member_provider<Iter, std::input_iterator_tag>;
+  friend iterator_member_provider<Iter, std::output_iterator_tag>;
+  friend iterator_member_provider<Iter, std::forward_iterator_tag>;
+  friend iterator_member_provider<Iter, std::bidirectional_iterator_tag>;
+  friend iterator_member_provider<Iter, std::random_access_iterator_tag>;
 };
 
 template<typename Iter>
@@ -77,17 +82,13 @@ struct iterator_member_provider<Iter, std::input_iterator_tag> : public iterator
     return !(lhs == rhs);
   }
 
-  //  constexpr auto operator->() const -> typename std::iterator_traits<Iter>::const_reference {
-  //    return *static_cast<Iter &>(*this).iterator_;
-  //  }
-  //
-  //  constexpr auto operator->() -> typename std::iterator_traits<Iter>::reference {
-  //    return *static_cast<Iter &>(*this).iterator_;
-  //  }
-
-protected:
+private:
   iterator_member_provider() = default;
   friend Iter;
+  friend iterator_member_provider<Iter, std::output_iterator_tag>;
+  friend iterator_member_provider<Iter, std::forward_iterator_tag>;
+  friend iterator_member_provider<Iter, std::bidirectional_iterator_tag>;
+  friend iterator_member_provider<Iter, std::random_access_iterator_tag>;
 };
 
 template<typename Iter>
@@ -108,14 +109,23 @@ struct iterator_member_provider<Iter, std::output_iterator_tag> : public iterato
     return *static_cast<Iter &>(*this).iterator_;
   }
 
-protected:
+private:
   iterator_member_provider() = default;
   friend Iter;
+  friend iterator_member_provider<Iter, std::forward_iterator_tag>;
+  friend iterator_member_provider<Iter, std::bidirectional_iterator_tag>;
+  friend iterator_member_provider<Iter, std::random_access_iterator_tag>;
 };
 
 template<typename Iter>
 struct iterator_member_provider<Iter, std::forward_iterator_tag>
-  : public iterator_member_provider<Iter, std::input_iterator_tag> {};
+  : public iterator_member_provider<Iter, std::input_iterator_tag> {
+private:
+  iterator_member_provider() = default;
+  friend Iter;
+  friend iterator_member_provider<Iter, std::bidirectional_iterator_tag>;
+  friend iterator_member_provider<Iter, std::random_access_iterator_tag>;
+};
 
 template<typename Iter>
 struct iterator_member_provider<Iter, std::bidirectional_iterator_tag>
@@ -147,9 +157,10 @@ struct iterator_member_provider<Iter, std::bidirectional_iterator_tag>
     return tmp;
   }
 
-protected:
+private:
   iterator_member_provider() = default;
   friend Iter;
+  friend iterator_member_provider<Iter, std::random_access_iterator_tag>;
 };
 
 template<typename Iter>
@@ -212,7 +223,7 @@ struct iterator_member_provider<Iter, std::random_access_iterator_tag>
     return !(lhs < rhs);
   }
 
-protected:
+private:
   iterator_member_provider() = default;
   friend Iter;
 };

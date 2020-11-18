@@ -72,9 +72,14 @@ struct container_iterator_member_provider {
     };
   }
 
-protected:
+private:
   container_iterator_member_provider() = default;
   friend Iter;
+  friend container_iterator_member_provider<Iter, std::input_iterator_tag>;
+  friend container_iterator_member_provider<Iter, std::output_iterator_tag>;
+  friend container_iterator_member_provider<Iter, std::forward_iterator_tag>;
+  friend container_iterator_member_provider<Iter, std::bidirectional_iterator_tag>;
+  friend container_iterator_member_provider<Iter, std::random_access_iterator_tag>;
 };
 
 template<typename Iter>
@@ -88,9 +93,13 @@ struct container_iterator_member_provider<Iter, std::input_iterator_tag> : publi
     return !(lhs == rhs);
   }
 
-protected:
+private:
   container_iterator_member_provider() = default;
   friend Iter;
+  friend container_iterator_member_provider<Iter, std::output_iterator_tag>;
+  friend container_iterator_member_provider<Iter, std::forward_iterator_tag>;
+  friend container_iterator_member_provider<Iter, std::bidirectional_iterator_tag>;
+  friend container_iterator_member_provider<Iter, std::random_access_iterator_tag>;
 };
 
 template<typename Iter>
@@ -111,14 +120,22 @@ struct container_iterator_member_provider<Iter, std::output_iterator_tag> : publ
     return *static_cast<Iter &>(*this).current_;
   }
 
-protected:
+private:
   container_iterator_member_provider() = default;
   friend Iter;
+  friend container_iterator_member_provider<Iter, std::forward_iterator_tag>;
+  friend container_iterator_member_provider<Iter, std::bidirectional_iterator_tag>;
+  friend container_iterator_member_provider<Iter, std::random_access_iterator_tag>;
 };
 
 template<typename Iter>
 struct container_iterator_member_provider<Iter, std::forward_iterator_tag>
-  : public container_iterator_member_provider<Iter, std::input_iterator_tag> {};
+  : public container_iterator_member_provider<Iter, std::input_iterator_tag> {
+
+private:
+  friend container_iterator_member_provider<Iter, std::bidirectional_iterator_tag>;
+  friend container_iterator_member_provider<Iter, std::random_access_iterator_tag>;
+};
 
 template<typename Iter>
 struct container_iterator_member_provider<Iter, std::bidirectional_iterator_tag>
@@ -142,9 +159,10 @@ struct container_iterator_member_provider<Iter, std::bidirectional_iterator_tag>
     return tmp;
   }
 
-protected:
+private:
   container_iterator_member_provider() = default;
   friend Iter;
+  friend container_iterator_member_provider<Iter, std::random_access_iterator_tag>;
 };
 
 template<typename Iter>
@@ -211,7 +229,7 @@ struct container_iterator_member_provider<Iter, std::random_access_iterator_tag>
     return !(lhs < rhs);
   }
 
-protected:
+private:
   container_iterator_member_provider() = default;
   friend Iter;
 };
