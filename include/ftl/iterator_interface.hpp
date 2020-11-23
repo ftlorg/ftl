@@ -27,7 +27,7 @@ class map_iterator;
 template<typename Iter, typename Callable>
 class filter_iterator;
 
-template<typename Iter, bool IsContainer>
+template<typename Iter, bool is_container>
 class flatten_iterator;
 
 template<typename Iter>
@@ -102,8 +102,11 @@ public:
     return std::nullopt;
   }
 
-  [[nodiscard]] auto flatten() const -> flatten_iterator<Derived> {
-    return flatten_iterator<Derived>{ static_cast<const Derived &>(*this) };
+  [[nodiscard]] auto flatten() const
+    -> flatten_iterator<Derived> {
+    return flatten_iterator<Derived> {
+      static_cast<const Derived &>(*this)
+    };
   }
 
   template<typename Initial, typename Operator>
@@ -206,6 +209,10 @@ public:
   [[nodiscard]] auto take(size_type n) const -> take_iterator<Derived> {
     return { static_cast<const Derived &>(*this), n };
   }
+
+private:
+  iterator_interface() = default;
+  friend Derived;
 };
 
 }// namespace ftl
