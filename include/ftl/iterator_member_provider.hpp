@@ -181,6 +181,10 @@ struct iterator_member_provider<Iter, std::random_access_iterator_tag>
     return static_cast<Iter &>(*this);
   }
 
+  constexpr auto operator+(typename std::iterator_traits<Iter>::size_type n) -> Iter {
+    return Iter{ static_cast<Iter &>(*this).iterator_ + n };
+  }
+
   [[nodiscard]] friend constexpr auto operator+(Iter &&lhs, typename std::iterator_traits<Iter>::size_type n) -> Iter {
     return lhs += n;
   }
@@ -189,14 +193,9 @@ struct iterator_member_provider<Iter, std::random_access_iterator_tag>
     return std::distance(rhs.iterator_, static_cast<const Iter &>(*this).iterator_);
   }
 
-  [[nodiscard]] friend constexpr auto operator+(typename std::iterator_traits<Iter>::size_type n, Iter &rhs) -> Iter {
-    return rhs += n;
+  [[nodiscard]] friend constexpr auto operator+(typename std::iterator_traits<Iter>::size_type n, const Iter &rhs) -> Iter {
+    return rhs + n;
   }
-
-  [[nodiscard]] friend constexpr auto operator+(typename std::iterator_traits<Iter>::size_type n, Iter &&rhs) -> Iter {
-    return rhs += n;
-  }
-
 
   [[nodiscard]] friend constexpr auto operator-(const Iter &lhs, typename std::iterator_traits<Iter>::size_type n) -> Iter {
     return lhs -= n;
