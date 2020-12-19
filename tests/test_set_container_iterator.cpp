@@ -381,7 +381,7 @@ TEST_CASE(TEST_TAG "partition no criteria met", TEST_TAG) {
 TEST_CASE(TEST_TAG "fold", TEST_TAG) {
   const ftl::set<int> set = { 1, 2, 3, 4, 5, 5 };
 
-  const auto sum = set.iter().fold(0, [](auto acc, const auto &x) { return acc += x; });
+  const auto sum = set.iter().fold(0, [](auto acc, const auto &x) { return acc + x; });
 
   REQUIRE(sum == set.iter().count() * (1 + 5) / 2);
 }

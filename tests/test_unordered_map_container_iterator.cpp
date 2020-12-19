@@ -428,7 +428,7 @@ TEST_CASE(TEST_TAG "fold", TEST_TAG) {
   const ftl::unordered_map<int, std::string> map
     = { { 1, "red" }, { 2, "green" }, { 3, "blue" }, { 4, "purple" }, { 5, "pink" } };
 
-  const auto sum = map.iter().fold(0, [](auto acc, const auto &x) { return acc += x.first; });
+  const auto sum = map.iter().fold(0, [](auto acc, const auto &x) { return acc + x.first; });
 
   REQUIRE(sum == map.iter().count() * (1 + 5) / 2);
 }

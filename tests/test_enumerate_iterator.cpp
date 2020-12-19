@@ -319,7 +319,7 @@ TEST_CASE(TEST_TAG "enumerate partition no criteria met", TEST_TAG) {
 TEST_CASE(TEST_TAG "enumerate fold", TEST_TAG) {
   const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
 
-  const auto sum = list.iter().enumerate().fold(0, [](auto acc, const auto &x) { return acc += std::get<1>(x); });
+  const auto sum = list.iter().enumerate().fold(0, [](auto acc, const auto &x) { return acc + std::get<1>(x); });
 
   REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
 }

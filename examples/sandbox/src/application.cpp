@@ -3,15 +3,70 @@
 #include <iostream>
 
 #include <ftl/ftl.hpp>
+#include <tuple>
 
 int Application::exec() {
-  ftl::array<int, 5> arr = { { 1, 2, 3, 4, 5 } };
+  struct Person {
+    int32_t Age;
+    bool Sex;
+    std::string Name;
+    std::string City;
+  };
 
-  [[maybe_unused]] auto mapped_array = arr.iter()
-                        .inspect([](const auto &x) { std::cout << "Before mapping: " << x << std::endl; })
-                        .map([](const auto &x) { return x * x; })
-                        .inspect([](const auto &x) { std::cout << "After mapping: " << x << std::endl; })
-                        .collect<ftl::array<int, 5>>();
+  auto people = ftl::vector<Person>{
+    Person{
+      34,
+      true,
+      "John",
+      "Krakow",
+    },
+    Person{
+      24,
+      true,
+      "Grzegorz",
+      "Rymanow",
+    },
+    Person{
+      26,
+      false,
+      "Magda",
+      "Krakow",
+    },
+    Person{
+      19,
+      false,
+      "Klaudia",
+      "Warszawa",
+    },
+    Person{
+      31,
+      true,
+      "Jan",
+      "Krakow",
+    },
+    Person{
+      27,
+      true,
+      "Bartosz",
+      "Krakow",
+    },
+    Person{
+      18,
+      true,
+      "Jakub",
+      "Krakow",
+    },
+  };
+
+  auto average = std::get<0>(people.iter()
+                               .filter([](const auto &person) { return person.City == "Krakow" && person.Sex == true; })
+                               .map([](const auto &person) { return person.Age; })
+                               .fold(std::make_tuple(0.0, 1.0), [](auto acc, const auto &x) {
+                                 auto &[first, second] = acc.get();
+                                 return std::make_tuple(first + (x - first) / second, second + 1.0);
+                               }));
+
+  std::cout << average << "\n";
 
   return 0;
 }

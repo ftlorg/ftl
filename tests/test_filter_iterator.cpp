@@ -296,7 +296,7 @@ TEST_CASE(TEST_TAG "filter fold", TEST_TAG) {
   const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
 
   const auto sum
-    = list.iter().filter([](const auto &x) { return x >= 0; }).fold(0, [](auto acc, const auto &x) { return acc += x; });
+    = list.iter().filter([](const auto &x) { return x >= 0; }).fold(0, [](auto acc, const auto &x) { return acc + x; });
 
   REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
 }
@@ -305,15 +305,13 @@ TEST_CASE(TEST_TAG "filter for_each", TEST_TAG) {
   const ftl::list<int> list{ { 1, 2, 3, 4, 5 } };
 
   int sum = 0;
-  list.iter().filter([](const auto &x) { return x >= 0; }).for_each([&sum](const auto &x) {
-    return sum += x;
-  });
+  list.iter().filter([](const auto &x) { return x >= 0; }).for_each([&sum](const auto &x) { return sum += x; });
 
   REQUIRE(sum == list.iter().count() * (1 + 5) / 2);
 }
 
 TEST_CASE(TEST_TAG "filter collect sorted", TEST_TAG) {
-  ftl::vector<int> vec = { 1, 5, 12, 6};
+  ftl::vector<int> vec = { 1, 5, 12, 6 };
 
   auto f_vec = vec.iter()
                  .filter([](const auto &x) { return x % 2 == 0; })
