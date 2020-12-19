@@ -39,9 +39,6 @@ class inspect_iterator;
 template<typename Iter>
 class take_iterator;
 
-template<typename Iter>
-class rev_iterator : public iterator_interface<rev_iterator<Iter>> {};
-
 template<typename Derived>
 class iterator_interface {
 public:
@@ -203,8 +200,6 @@ public:
     return std::accumulate(
       static_cast<const Derived &>(*this).begin(), static_cast<const Derived &>(*this).end(), value_type{});
   }
-
-  [[nodiscard]] auto rev() const -> rev_iterator<Derived>;
 
   [[nodiscard]] auto take(size_type n) const -> take_iterator<Derived> {
     return { static_cast<const Derived &>(*this), n };
