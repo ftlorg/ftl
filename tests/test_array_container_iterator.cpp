@@ -407,7 +407,7 @@ TEST_CASE(TEST_TAG "fold", TEST_TAG) {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
 
-  const auto sum = arr.iter().fold(0, [](auto acc, const auto &x) { return acc += x; });
+  const auto sum = arr.iter().fold(0, [](auto acc, const auto &x) { return acc + x; });
 
   REQUIRE(sum == arr.iter().count() * (1 + 5) / 2);
 }

@@ -99,18 +99,15 @@ public:
     return std::nullopt;
   }
 
-  [[nodiscard]] auto flatten() const
-    -> flatten_iterator<Derived> {
-    return flatten_iterator<Derived> {
-      static_cast<const Derived &>(*this)
-    };
+  [[nodiscard]] auto flatten() const -> flatten_iterator<Derived> {
+    return flatten_iterator<Derived>{ static_cast<const Derived &>(*this) };
   }
 
   template<typename Initial, typename Operator>
   [[nodiscard]] auto fold(const Initial &initial, Operator &&op) const -> Initial {
     auto init = initial;
 
-    for (auto &&x : static_cast<const Derived &>(*this)) { op(std::ref(init), x); }
+    for (auto &&x : static_cast<const Derived &>(*this)) { init = op(std::cref(init), x); }
 
     return init;
   }
