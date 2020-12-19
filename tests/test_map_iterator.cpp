@@ -54,6 +54,14 @@ TEST_CASE(TEST_TAG "collect to std::vector", TEST_TAG) {
   REQUIRE(mapped_arr == std::vector<int>{ 1, 4, 9, 16, 25 });
 }
 
+TEST_CASE(TEST_TAG "collect to std::vector with conversion", TEST_TAG) {
+  ftl::vector<int> arr = { 1, 2, 3, 4, 5 };
+
+  auto mapped_arr = arr.iter().map([](const auto &x) { return x * x; }).collect<std::vector<double>>();
+
+  REQUIRE(mapped_arr == std::vector<double>{ 1.0, 4.0, 9.0, 16.0, 25.0 });
+}
+
 TEST_CASE(TEST_TAG "collect const to std::vector", TEST_TAG) {
   constexpr std::size_t size = 5;
   const ftl::array<int, size> arr = { { 1, 2, 3, 4, 5 } };
