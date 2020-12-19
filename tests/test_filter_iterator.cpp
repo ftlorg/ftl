@@ -169,6 +169,25 @@ TEST_CASE(TEST_TAG "map filter any", TEST_TAG) {
           == false);
 }
 
+TEST_CASE(TEST_TAG "map filter any with conversion", TEST_TAG) {
+  ftl::forward_list<int> vec = { { 1, 2, 3 } };
+
+  REQUIRE(vec.iter()
+            .map([](const auto &x) { return 2 * x; })
+            .filter([](const auto &x) { return x % 2 != 0; })
+            .any([](const double x) { return x == 2.0; })
+          == false);
+}
+
+TEST_CASE(TEST_TAG "map any with conversion", TEST_TAG) {
+  ftl::forward_list<int> vec = { { 1, 2, 3 } };
+
+  REQUIRE(vec.iter()
+            .map([](const auto &x) { return 2 * x; })
+            .any([](const double x) { return x == 2.0; })
+          == true);
+}
+
 TEST_CASE(TEST_TAG "filter min", TEST_TAG) {
   ftl::list<int> list = { { 3, 1, 5, 0, -1, 4, 4, 7 } };
 
